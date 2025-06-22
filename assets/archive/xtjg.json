@@ -1,0 +1,1617 @@
+{
+  "questions": [
+    {
+      "uniqueId": "basic_001_mc",
+      "content": "计算机程序和数据通常存储在以下哪个组件中？",
+      "type": "single-choice",
+      "options": ["CPU", "内存", "硬盘", "显卡"],
+      "correct_answer": ["内存"],
+      "analysis": "程序和数据在运行时通常存储在内存中。",
+      "isBuiltin": false
+    },
+    {
+      "uniqueId": "basic_002_mc",
+      "content": "类似于工厂流水线生产的计算机技术是？",
+      "type": "single-choice",
+      "options": ["并行计算", "分布式处理", "流水线技术", "虚拟化技术"],
+      "correct_answer": ["流水线技术"],
+      "analysis": "流水线技术将指令执行分解为多个阶段，类似于流水线。",
+      "isBuiltin": false
+    },
+     {
+      "uniqueId": "pipeline_001_mc",
+      "content": "流水线中执行时间最长的阶段被称为？",
+      "type": "single-choice",
+      "options": ["加速段", "瓶颈段", "缓冲段", "优化段"],
+      "correct_answer": ["瓶颈段"],
+      "analysis": "瓶颈段限制了流水线的整体性能。",
+      "isBuiltin": false
+    },
+    {
+      "uniqueId": "pipeline_002_mc",
+      "content": "指令间存在数据依赖关系被称为？",
+      "type": "single-choice",
+      "options": ["控制相关", "数据相关", "资源相关", "地址相关"],
+      "correct_answer": ["数据相关"],
+      "analysis": "数据相关是指指令间存在数据依赖。",
+      "isBuiltin": false
+    },
+    {
+      "uniqueId": "pipeline_003_mc",
+      "content": "指令A写入数据后，指令B需要读取，这属于哪种数据相关？",
+      "type": "single-choice",
+       "options": ["写后读 (RAW)", "读后写 (WAR)", "写后写 (WAW)", "读后读 (RAR)"],
+      "correct_answer": ["写后读 (RAW)"],
+      "analysis": "写后读是指读取操作依赖于之前的写入操作。",
+      "isBuiltin": false
+    },
+    {
+      "uniqueId": "pipeline_004_mc",
+      "content": "多个指令同时尝试使用同一个硬件资源时，会发生什么冲突？",
+      "type": "single-choice",
+        "options": ["数据冲突", "结构冲突", "控制冲突", "名相关冲突"],
+      "correct_answer": ["结构冲突"],
+      "analysis": "结构冲突是多个指令同时访问同一资源导致的。",
+        "isBuiltin": false
+    },
+    {
+      "uniqueId": "vector_001_mc",
+      "content": "能一次处理多个数据的计算机被称为？",
+      "type": "single-choice",
+        "options": ["标量处理机", "向量处理机", "并行处理机", "分布式处理机"],
+        "correct_answer": ["向量处理机"],
+      "analysis": "向量处理机可以一次处理多个数据。",
+        "isBuiltin": false
+    },
+    {
+        "uniqueId": "vector_002_mc",
+        "content": "将具有依赖关系的指令链接起来处理的技术是？",
+      "type": "single-choice",
+      "options": ["链接技术", "分段技术", "交叉技术", "复用技术"],
+      "correct_answer": ["链接技术"],
+       "analysis": "链接技术用于将具有依赖关系的指令链接起来执行。",
+        "isBuiltin": false
+    },
+    {
+        "uniqueId": "isa_001_mc",
+        "content": "指令集架构定义了软件和什么之间的接口？",
+       "type": "single-choice",
+       "options": ["用户", "硬件", "网络", "操作系统"],
+      "correct_answer": ["硬件"],
+       "analysis": "指令集架构是软硬件之间的桥梁。",
+       "isBuiltin": false
+    },
+     {
+      "uniqueId": "parallel_001_mc",
+      "content": "通过硬件动态安排指令执行的方法是？",
+      "type": "single-choice",
+        "options": ["通过编译器静态安排", "通过硬件动态调度", "通过人工手动调度", "通过操作系统调度"],
+      "correct_answer": ["通过硬件动态调度"],
+       "analysis": "硬件动态调度在运行时动态安排指令执行。",
+       "isBuiltin": false
+    },
+     {
+       "uniqueId": "tomasulo_001_mc",
+       "content": "Tomasulo算法中，用于存储等待执行的指令的是？",
+        "type": "single-choice",
+       "options": ["保留站", "寄存器", "存储器", "公共数据总线"],
+      "correct_answer": ["保留站"],
+        "analysis": "保留站用于存储等待执行的指令。",
+       "isBuiltin": false
+     },
+    {
+        "uniqueId": "tomasulo_002_mc",
+        "content": "Tomasulo算法中，用于广播计算结果的是？",
+        "type": "single-choice",
+       "options": ["保留站", "寄存器", "存储器", "公共数据总线"],
+       "correct_answer": ["公共数据总线"],
+       "analysis": "公共数据总线用于广播计算结果。",
+        "isBuiltin": false
+     },
+    {
+      "uniqueId": "branch_001_mc",
+      "content": "根据历史记录预测分支走向的技术是？",
+      "type": "single-choice",
+        "options": ["静态分支预测", "动态分支预测", "指令级并行", "数据级并行"],
+      "correct_answer": ["动态分支预测"],
+        "analysis": "动态分支预测根据历史信息预测分支走向。",
+       "isBuiltin": false
+    },
+     {
+      "uniqueId": "cache_001_mc",
+      "content": "Cache通常位于CPU和哪个存储器之间？",
+       "type": "single-choice",
+        "options": ["硬盘", "主存", "寄存器", "显存"],
+       "correct_answer": ["主存"],
+      "analysis": "Cache位于CPU和主存之间。",
+      "isBuiltin": false
+    },
+     {
+      "uniqueId": "cache_002_mc",
+      "content": "Cache主要利用程序的哪种特性来提高性能？",
+      "type": "single-choice",
+        "options": ["并行性", "随机性", "局部性", "全局性"],
+        "correct_answer": ["局部性"],
+       "analysis": "Cache利用程序的局部性原理。",
+      "isBuiltin": false
+    },
+     {
+      "uniqueId": "cache_003_mc",
+       "content": "主存中任意块可以映射到Cache任意位置的映射方式是？",
+        "type": "single-choice",
+        "options": ["直接映像", "组相联映像", "全相联映像", "段相联映像"],
+      "correct_answer": ["全相联映像"],
+        "analysis": "全相联映像允许主存任意块映射到Cache任意位置。",
+      "isBuiltin": false
+     },
+     {
+      "uniqueId": "cache_004_mc",
+        "content": "替换最早进入Cache的块的算法是？",
+      "type": "single-choice",
+        "options": ["随机法", "先进先出法 (FIFO)", "最近最少使用法 (LRU)", "最不经常使用法 (LFU)"],
+      "correct_answer": ["先进先出法 (FIFO)"],
+        "analysis": "先进先出法替换最早进入Cache的块。",
+      "isBuiltin": false
+    },
+     {
+        "uniqueId": "cache_005_mc",
+        "content": "写操作只更新Cache，替换时才写回主存的方法是？",
+         "type": "single-choice",
+         "options": ["写直达法", "写回法", "写缓冲法", "写预取法"],
+         "correct_answer": ["写回法"],
+       "analysis": "写回法只更新Cache，替换时才写回主存。",
+        "isBuiltin": false
+     },
+    {
+      "uniqueId": "cache_006_mc",
+      "content": "以下哪种方法不能减少Cache的不命中率？",
+       "type": "single-choice",
+        "options": ["增加Cache容量", "增加Cache块大小", "提高相联度", "使用虚拟Cache"],
+        "correct_answer": ["使用虚拟Cache"],
+        "analysis": "虚拟Cache用于减少命中时间，而不是降低不命中率。",
+      "isBuiltin": false
+    },
+    {
+       "uniqueId": "cache_007_mc",
+        "content": "Cache空间不足以存储所有数据时，会发生哪种不命中？",
+         "type": "single-choice",
+        "options": ["强制不命中", "容量不命中", "冲突不命中", "延迟不命中"],
+       "correct_answer": ["容量不命中"],
+      "analysis": "容量不命中是由于Cache容量不足导致的。",
+       "isBuiltin": false
+    },
+     {
+        "uniqueId": "bus_001_mc",
+         "content": "连接CPU和主存储器的总线被称为？",
+          "type": "single-choice",
+        "options": ["I/O总线", "CPU-存储器总线", "控制总线", "数据总线"],
+        "correct_answer": ["CPU-存储器总线"],
+       "analysis": "CPU-存储器总线连接CPU和主存储器。",
+        "isBuiltin": false
+     },
+    {
+        "uniqueId": "raid_001_mc",
+        "content": "将多个磁盘组合成逻辑存储单元的技术是？",
+         "type": "single-choice",
+        "options": ["Cache", "RAID", "总线", "DMA"],
+         "correct_answer": ["RAID"],
+       "analysis": "RAID通过组合多个磁盘提供冗余和性能提升。",
+        "isBuiltin": false
+    },
+    {
+      "uniqueId": "raid_002_mc",
+      "content": "以下哪个RAID级别不提供数据冗余？",
+       "type": "single-choice",
+        "options": ["RAID 0", "RAID 1", "RAID 5", "RAID 6"],
+        "correct_answer": ["RAID 0"],
+       "analysis": "RAID 0 不提供数据冗余。",
+        "isBuiltin": false
+    },
+      {
+       "uniqueId": "raid_003_mc",
+        "content": "以下哪个RAID级别使用镜像技术提供冗余？",
+        "type": "single-choice",
+        "options": ["RAID 0", "RAID 1", "RAID 5", "RAID 6"],
+        "correct_answer": ["RAID 1"],
+        "analysis": "RAID 1 使用镜像技术提供数据冗余。",
+        "isBuiltin": false
+     },
+     {
+        "uniqueId": "raid_004_mc",
+         "content": "以下哪个RAID级别使用分布式奇偶校验提供冗余？",
+        "type": "single-choice",
+       "options": ["RAID 0", "RAID 1", "RAID 3", "RAID 5"],
+       "correct_answer": ["RAID 5"],
+       "analysis": "RAID 5 使用分布式奇偶校验提供冗余。",
+        "isBuiltin": false
+      },
+     {
+      "uniqueId": "basic_01_mc",
+      "content": "计算机程序和数据都存储在计算机的什么位置？",
+      "type": "single-choice",
+      "options": [
+        "CPU",
+        "内存",
+        "硬盘",
+        "显卡"
+      ],
+      "correct_answer": [
+        "内存"
+      ],
+      "analysis": "程序和数据通常存储在内存中。",
+      "isBuiltin": false
+    },
+     {
+      "uniqueId": "basic_02_mc",
+      "content": "以下哪项技术类似于工厂的流水线生产？",
+      "type": "single-choice",
+      "options": [
+        "并行计算",
+        "分布式处理",
+        "流水线技术",
+        "虚拟化技术"
+      ],
+      "correct_answer": [
+        "流水线技术"
+      ],
+      "analysis": "流水线技术将一个过程分解成多个子过程，类似于流水线生产。",
+      "isBuiltin": false
+    },
+    {
+      "uniqueId": "pipeline_01_mc",
+      "content": "流水线中影响整体速度的最慢的阶段称为？",
+      "type": "single-choice",
+      "options": [
+        "加速段",
+        "瓶颈段",
+        "缓冲段",
+        "优化段"
+      ],
+      "correct_answer": [
+        "瓶颈段"
+      ],
+      "analysis": "瓶颈段是流水线中执行时间最长的阶段。",
+      "isBuiltin": false
+    },
+     {
+      "uniqueId": "pipeline_02_mc",
+      "content": "如果指令A需要用到指令B的结果，这种关系称为？",
+      "type": "single-choice",
+       "options": [
+        "控制相关",
+        "数据相关",
+        "资源相关",
+        "地址相关"
+      ],
+       "correct_answer": [
+        "数据相关"
+      ],
+       "analysis": "数据相关是指指令间存在数据依赖关系。",
+      "isBuiltin": false
+    },
+    {
+      "uniqueId": "pipeline_03_mc",
+      "content": "如果一条指令需要读取另一条指令将要写入的数据，这属于以下哪种数据相关？",
+      "type": "single-choice",
+       "options": [
+         "写后读 (RAW)",
+          "读后写 (WAR)",
+         "写后写 (WAW)",
+         "读后读 (RAR)"
+        ],
+      "correct_answer": [
+         "写后读 (RAW)"
+        ],
+       "analysis": "写后读（RAW）表示读取操作依赖于之前的写入操作。",
+      "isBuiltin": false
+    },
+       {
+       "uniqueId":"pipeline_04_mc",
+        "content":"如果多条指令同时想使用同一个硬件资源，这会导致？",
+         "type":"single-choice",
+        "options":[
+         "数据冲突",
+         "结构冲突",
+         "控制冲突",
+         "名相关冲突"
+        ],
+        "correct_answer":[
+         "结构冲突"
+          ],
+        "analysis":"结构冲突是多个指令同时访问同一资源导致的。",
+       "isBuiltin":false
+       },
+     {
+      "uniqueId": "vector_01_mc",
+      "content": "一次可以处理多个数据的计算机被称为？",
+        "type": "single-choice",
+        "options": [
+            "标量处理机",
+            "向量处理机",
+            "并行处理机",
+            "分布式处理机"
+           ],
+        "correct_answer": [
+          "向量处理机"
+            ],
+        "analysis": "向量处理机可以一次处理多个数据。",
+      "isBuiltin": false
+    },
+    {
+        "uniqueId":"vector_02_mc",
+         "content":"把有依赖关系的指令链接起来一起处理的技术是？",
+        "type":"single-choice",
+        "options":[
+          "链接技术",
+         "分段技术",
+        "交叉技术",
+          "复用技术"
+         ],
+        "correct_answer":[
+          "链接技术"
+          ],
+         "analysis":"链接技术用于将具有依赖关系的指令链接起来执行。",
+        "isBuiltin":false
+      },
+      {
+        "uniqueId":"isa_001_mc",
+        "content":"指令集架构是软件和什么之间的接口？",
+        "type":"single-choice",
+          "options":[
+             "用户",
+             "硬件",
+              "网络",
+            "操作系统"
+           ],
+         "correct_answer":[
+              "硬件"
+           ],
+        "analysis":"指令集架构是软硬件之间的桥梁。",
+       "isBuiltin":false
+      },
+     {
+      "uniqueId": "parallel_01_mc",
+      "content": "在计算机中，动态调度指令的方法是？",
+      "type": "single-choice",
+       "options": [
+          "通过编译器静态安排",
+         "通过硬件动态调度",
+           "通过人工手动调度",
+           "通过操作系统调度"
+       ],
+       "correct_answer": [
+         "通过硬件动态调度"
+         ],
+      "analysis": "硬件动态调度在运行时动态安排指令执行。",
+      "isBuiltin": false
+    },
+    {
+       "uniqueId":"tomasulo_001_mc",
+        "content":"Tomasulo算法中，用来保存等待执行的指令的组件是？",
+         "type":"single-choice",
+          "options":[
+            "保留站",
+           "寄存器",
+           "存储器",
+            "公共数据总线"
+         ],
+         "correct_answer":[
+             "保留站"
+          ],
+          "analysis":"保留站用于存储等待执行的指令。",
+       "isBuiltin":false
+     },
+     {
+        "uniqueId":"tomasulo_002_mc",
+       "content":"在Tomasulo算法中，用于广播计算结果的组件是？",
+        "type":"single-choice",
+          "options":[
+           "保留站",
+          "寄存器",
+          "存储器",
+            "公共数据总线"
+        ],
+        "correct_answer":[
+           "公共数据总线"
+            ],
+         "analysis":"公共数据总线用于广播计算结果。",
+        "isBuiltin":false
+     },
+    {
+     "uniqueId": "branch_001_mc",
+     "content": "根据历史记录预测分支走向的技术是？",
+       "type": "single-choice",
+        "options": [
+           "静态分支预测",
+          "动态分支预测",
+            "指令级并行",
+           "数据级并行"
+          ],
+         "correct_answer": [
+          "动态分支预测"
+           ],
+       "analysis":"动态分支预测根据历史信息预测分支走向。",
+       "isBuiltin":false
+    },
+     {
+      "uniqueId":"cache_001_mc",
+        "content":"Cache位于CPU和哪个存储器之间？",
+        "type":"single-choice",
+         "options":[
+          "硬盘",
+          "主存",
+            "寄存器",
+             "显存"
+         ],
+        "correct_answer":[
+             "主存"
+           ],
+      "analysis":"Cache位于CPU和主存之间。",
+      "isBuiltin":false
+    },
+    {
+      "uniqueId": "cache_002_mc",
+        "content": "Cache主要利用了程序的哪种特性？",
+      "type": "single-choice",
+         "options": [
+           "并行性",
+           "随机性",
+            "局部性",
+           "全局性"
+         ],
+        "correct_answer": [
+           "局部性"
+          ],
+        "analysis":"Cache利用程序的局部性原理。",
+      "isBuiltin": false
+    },
+      {
+      "uniqueId":"cache_003_mc",
+        "content":"允许主存中任意块映射到Cache任意位置的映射方式是？",
+       "type":"single-choice",
+        "options":[
+         "直接映像",
+          "组相联映像",
+         "全相联映像",
+        "段相联映像"
+         ],
+        "correct_answer":[
+          "全相联映像"
+         ],
+        "analysis":"全相联映像允许主存任意块映射到Cache任意位置。",
+       "isBuiltin":false
+      },
+    {
+      "uniqueId": "cache_004_mc",
+        "content":"替换最早进入Cache的块的算法是？",
+      "type": "single-choice",
+        "options": [
+           "随机法",
+            "先进先出法 (FIFO)",
+           "最近最少使用法 (LRU)",
+            "最不经常使用法 (LFU)"
+          ],
+        "correct_answer": [
+          "先进先出法 (FIFO)"
+         ],
+      "analysis":"先进先出法替换最早进入Cache的块。",
+      "isBuiltin": false
+    },
+      {
+        "uniqueId":"cache_005_mc",
+        "content":"写操作只更新Cache，当Cache块被替换时才写回主存的方法是？",
+        "type":"single-choice",
+         "options":[
+          "写直达法",
+         "写回法",
+            "写缓冲法",
+            "写预取法"
+          ],
+         "correct_answer":[
+           "写回法"
+          ],
+        "analysis":"写回法只更新Cache，替换时才写回主存。",
+        "isBuiltin":false
+      },
+    {
+      "uniqueId": "cache_006_mc",
+        "content": "以下哪种方法不能减少Cache的不命中率？",
+       "type": "single-choice",
+        "options": [
+            "增加Cache容量",
+             "增加Cache块大小",
+           "提高相联度",
+           "使用虚拟Cache"
+         ],
+        "correct_answer": [
+           "使用虚拟Cache"
+          ],
+         "analysis":"虚拟Cache用于减少命中时间，而不是降低不命中率。",
+       "isBuiltin": false
+    },
+    {
+         "uniqueId":"cache_007_mc",
+        "content":"如果Cache空间不足以存储所有数据，这被称为？",
+          "type":"single-choice",
+         "options":[
+            "强制不命中",
+              "容量不命中",
+             "冲突不命中",
+           "延迟不命中"
+           ],
+        "correct_answer":[
+           "容量不命中"
+            ],
+         "analysis":"容量不命中是由于Cache容量不足导致的。",
+       "isBuiltin":false
+      },
+     {
+        "uniqueId":"bus_001_mc",
+         "content":"连接CPU和主存储器的总线称为？",
+         "type":"single-choice",
+         "options":[
+          "I/O总线",
+           "CPU-存储器总线",
+          "控制总线",
+           "数据总线"
+           ],
+        "correct_answer":[
+         "CPU-存储器总线"
+         ],
+      "analysis":"CPU-存储器总线连接CPU和主存储器。",
+        "isBuiltin":false
+      },
+     {
+         "uniqueId":"raid_001_mc",
+        "content":"使用多个磁盘组合成一个逻辑存储单元的技术是？",
+        "type":"single-choice",
+          "options":[
+            "Cache",
+             "RAID",
+           "总线",
+            "DMA"
+            ],
+        "correct_answer":[
+          "RAID"
+           ],
+       "analysis":"RAID通过组合多个磁盘提供冗余和性能提升。",
+        "isBuiltin":false
+      },
+     {
+        "uniqueId":"raid_002_mc",
+        "content":"以下哪个RAID级别不提供数据冗余？",
+         "type":"single-choice",
+          "options":[
+           "RAID 0",
+            "RAID 1",
+             "RAID 5",
+            "RAID 6"
+            ],
+           "correct_answer":[
+            "RAID 0"
+             ],
+        "analysis":"RAID 0 不提供数据冗余。",
+        "isBuiltin":false
+      },
+       {
+          "uniqueId":"raid_003_mc",
+            "content":"以下哪个RAID级别使用镜像技术来提供数据冗余？",
+            "type":"single-choice",
+            "options":[
+              "RAID 0",
+               "RAID 1",
+               "RAID 5",
+             "RAID 6"
+              ],
+            "correct_answer":[
+                "RAID 1"
+              ],
+            "analysis":"RAID 1 使用镜像技术提供数据冗余。",
+            "isBuiltin":false
+         },
+     {
+       "uniqueId": "raid_004_mc",
+        "content":"以下哪个RAID级别使用分布式奇偶校验来提供冗余？",
+        "type": "single-choice",
+        "options": [
+           "RAID 0",
+            "RAID 1",
+             "RAID 3",
+           "RAID 5"
+         ],
+       "correct_answer": [
+            "RAID 5"
+           ],
+        "analysis":"RAID 5 使用分布式奇偶校验提供冗余。",
+        "isBuiltin": false
+    },
+        {
+      "uniqueId": "pipeline_05_mc",
+      "content": "以下哪种数据相关类型可能导致“定向技术”需要被使用的场景？",
+      "type": "single-choice",
+        "options": [
+         "写后读 (RAW)",
+         "读后写 (WAR)",
+          "写后写 (WAW)",
+         "控制相关"
+        ],
+        "correct_answer": [
+            "写后读 (RAW)"
+        ],
+      "analysis": "定向技术主要用于解决写后读 (RAW) 数据相关导致的冲突。",
+      "isBuiltin": false
+    },
+      {
+      "uniqueId":"pipeline_06_mc",
+      "content":"以下哪种冲突是由多个指令同时访问同一硬件资源引起的？",
+       "type":"single-choice",
+        "options":[
+          "数据冲突",
+          "结构冲突",
+          "控制冲突",
+          "名相关冲突"
+        ],
+       "correct_answer":[
+           "结构冲突"
+          ],
+       "analysis":"结构冲突指多个指令同时访问同一资源。",
+       "isBuiltin":false
+      },
+    {
+      "uniqueId": "vector_01_mc",
+      "content": "向量处理机与标量处理机的主要区别在于？",
+      "type": "single-choice",
+      "options": [
+        "是否使用流水线技术",
+        "处理的数据类型不同",
+          "每次处理的数据量不同",
+        "是否支持乱序执行"
+      ],
+      "correct_answer": [
+        "每次处理的数据量不同"
+      ],
+       "analysis": "向量处理机一次处理多个数据，而标量处理机一次处理一个数据。",
+      "isBuiltin": false
+    },
+     {
+      "uniqueId": "vector_02_mc",
+      "content": "以下哪项描述了向量处理机中“链接技术”的作用？",
+      "type": "single-choice",
+      "options": [
+          "将长向量分解为段进行处理",
+           "减少功能部件的冲突",
+        "将具有先后写读相关的指令进行流水线处理",
+         "提高存储器的访问速度"
+      ],
+      "correct_answer": [
+        "将具有先后写读相关的指令进行流水线处理"
+      ],
+      "analysis": "链接技术将具有数据依赖的指令链接起来流水线处理，减少等待。",
+      "isBuiltin": false
+    },
+     {
+       "uniqueId":"basic_03_mc",
+        "content":"指令集架构（ISA）的主要作用是什么？",
+         "type":"single-choice",
+         "options":[
+          "定义计算机的硬件结构",
+           "作为软件和硬件之间的接口",
+           "控制计算机的运行速度",
+            "负责编译源代码"
+         ],
+        "correct_answer":[
+          "作为软件和硬件之间的接口"
+          ],
+        "analysis":"指令集架构是软硬件交互的桥梁。",
+       "isBuiltin":false
+    },
+    {
+       "uniqueId":"parallel_01_mc",
+       "content":"基于硬件的动态开发方法和基于软件的静态开发方法的主要区别在于？",
+        "type":"single-choice",
+       "options":[
+         "是否使用流水线技术",
+         "指令调度执行的时刻",
+         "是否进行代码优化",
+          "是否使用编译器"
+       ],
+       "correct_answer":[
+           "指令调度执行的时刻"
+         ],
+       "analysis":"动态方法在运行时调度，静态方法在编译时调度。",
+       "isBuiltin":false
+    },
+     {
+      "uniqueId": "tomasulo_01_mc",
+        "content": "Tomasulo算法通过以下哪种机制来减少写后读 (RAW) 数据冲突？",
+        "type": "single-choice",
+      "options": [
+        "使用定向技术",
+          "使用保留站和公共数据总线（CDB）",
+           "使用分支预测",
+           "使用寄存器重命名"
+       ],
+     "correct_answer": [
+          "使用保留站和公共数据总线（CDB）"
+        ],
+       "analysis": "保留站和CDB是实现乱序执行、减少RAW冲突的关键。",
+       "isBuiltin": false
+     },
+    {
+     "uniqueId": "tomasulo_02_mc",
+      "content":"在Tomasulo算法中，保留站的主要功能是？",
+      "type":"single-choice",
+      "options":[
+        "存储指令的执行结果",
+         "存储已流出但尚未执行的指令",
+         "存储指令的操作数",
+          "存储即将流出的指令"
+        ],
+     "correct_answer":[
+        "存储已流出但尚未执行的指令"
+      ],
+     "analysis":"保留站用于保存等待执行的指令，实现乱序执行。",
+     "isBuiltin":false
+    },
+     {
+      "uniqueId": "tomasulo_03_mc",
+      "content":"在Tomasulo算法中，公共数据总线（CDB）的主要功能是？",
+        "type":"single-choice",
+        "options":[
+          "存储指令的操作数",
+          "广播功能部件的计算结果",
+          "控制指令的执行顺序",
+          "存储指令的执行地址"
+         ],
+        "correct_answer":[
+          "广播功能部件的计算结果"
+         ],
+       "analysis":"公共数据总线广播计算结果给所有需要的地方。",
+      "isBuiltin":false
+     },
+    {
+      "uniqueId": "branch_01_mc",
+        "content": "动态分支预测中，转移历史表的主要作用是？",
+      "type": "single-choice",
+      "options": [
+        "存储分支指令的目标地址",
+          "记录分支指令的历史跳转情况",
+        "提前执行分支指令",
+         "存储程序的执行结果"
+      ],
+      "correct_answer": [
+        "记录分支指令的历史跳转情况"
+      ],
+       "analysis": "转移历史表记录分支指令的历史，用于预测分支走向。",
+      "isBuiltin": false
+    },
+    {
+        "uniqueId":"branch_02_mc",
+        "content":"以下哪项不属于动态分支预测技术？",
+        "type":"single-choice",
+         "options":[
+          "转移历史表",
+          "转移目标缓冲器",
+          "基于硬件的前瞻执行",
+           "静态分支预测"
+         ],
+         "correct_answer":[
+            "静态分支预测"
+           ],
+          "analysis":"静态分支预测是在编译阶段确定分支的走向。",
+         "isBuiltin":false
+    },
+    {
+     "uniqueId": "cache_01_mc",
+      "content": "Cache利用了程序的什么特性来提高性能？",
+       "type": "single-choice",
+       "options": [
+         "程序的并行性",
+         "程序的模块化",
+         "程序的时间局部性和空间局部性",
+          "程序的封装性"
+       ],
+        "correct_answer": [
+        "程序的时间局部性和空间局部性"
+        ],
+       "analysis": "Cache通过利用局部性原理，存储常用的数据，减少访问主存次数。",
+       "isBuiltin": false
+    },
+     {
+       "uniqueId": "cache_02_mc",
+       "content": "以下哪种Cache映射方式具有最高的灵活性和最低的冲突率，但实现复杂，硬件开销大？",
+        "type": "single-choice",
+        "options": [
+            "全相联映像",
+            "直接映像",
+            "组相联映像",
+            "段相联映像"
+        ],
+        "correct_answer": [
+            "全相联映像"
+        ],
+       "analysis": "全相联映像允许主存块映射到Cache的任意位置。",
+      "isBuiltin": false
+    },
+      {
+        "uniqueId":"cache_03_mc",
+         "content":"在直接映射的Cache中，主存地址如何定位到Cache中的块？",
+        "type":"single-choice",
+         "options":[
+          "通过查找目录表",
+           "通过索引直接计算得到",
+           "需要和所有cache块比较",
+             "随机选择"
+         ],
+        "correct_answer":[
+            "通过索引直接计算得到"
+           ],
+        "analysis":"直接映射通过主存地址中的索引位直接定位cache块。",
+        "isBuiltin":false
+    },
+       {
+        "uniqueId":"cache_04_mc",
+        "content":"以下哪种Cache替换算法能够有效利用时间局部性，但实现复杂，硬件开销较大？",
+         "type":"single-choice",
+        "options":[
+           "随机法",
+           "先进先出法（FIFO）",
+            "最近最少使用法（LRU）",
+            "最不经常使用法（LFU）"
+          ],
+        "correct_answer":[
+           "最近最少使用法（LRU）"
+           ],
+         "analysis":"LRU 替换最近最少使用的块，实现较复杂。",
+        "isBuiltin":false
+    },
+    {
+      "uniqueId": "cache_05_mc",
+        "content": "写回法（Write-Back）的主要特点是？",
+       "type": "single-choice",
+       "options": [
+          "写操作同时更新Cache和主存",
+            "写操作只更新Cache，当Cache块被替换时才写回主存",
+          "写操作只更新主存",
+          "写操作不更新任何存储"
+       ],
+        "correct_answer": [
+            "写操作只更新Cache，当Cache块被替换时才写回主存"
+          ],
+        "analysis": "写回法减少了主存写操作，但实现复杂。",
+      "isBuiltin": false
+    },
+      {
+        "uniqueId":"cache_06_mc",
+         "content":"以下哪个公式可以正确计算Cache的平均访问时间？其中Hit Time表示命中时间，Miss Rate表示不命中率，Miss Penalty表示不命中开销。",
+         "type":"single-choice",
+          "options":[
+           "平均访问时间 = Hit Time + Miss Rate",
+           "平均访问时间 = Hit Time + Miss Penalty",
+            "平均访问时间 = Hit Time + Miss Rate * Miss Penalty",
+            "平均访问时间 = Miss Rate * Miss Penalty"
+          ],
+          "correct_answer":[
+             "平均访问时间 = Hit Time + Miss Rate * Miss Penalty"
+            ],
+         "analysis":"该公式考虑了命中和不命中的时间开销。",
+         "isBuiltin":false
+      },
+     {
+      "uniqueId": "cache_07_mc",
+      "content":"以下哪个选项不属于减少Cache命中时间的方法？",
+      "type":"single-choice",
+      "options":[
+        "使用容量小结构简单的Cache",
+        "使用虚拟Cache",
+         "Cache访问流水化",
+         "增加Cache容量"
+        ],
+      "correct_answer":[
+        "增加Cache容量"
+        ],
+       "analysis":"增加cache容量是为了降低不命中率。",
+      "isBuiltin":false
+     },
+       {
+        "uniqueId":"cache_08_mc",
+         "content":"以下哪种Cache不命中是由Cache容量不足引起的？",
+           "type":"single-choice",
+          "options":[
+             "强制不命中",
+              "容量不命中",
+              "冲突不命中",
+            "延迟不命中"
+           ],
+          "correct_answer":[
+              "容量不命中"
+            ],
+           "analysis":"容量不命中是由于Cache容量不足导致的。",
+        "isBuiltin":false
+      },
+    {
+        "uniqueId":"bus_01_mc",
+         "content":"CPU-存储器总线的主要作用是？",
+        "type":"single-choice",
+         "options":[
+           "连接CPU和I/O设备",
+           "连接CPU和主存储器",
+            "连接多个处理器",
+             "连接多个存储设备"
+         ],
+        "correct_answer":[
+           "连接CPU和主存储器"
+         ],
+        "analysis":"CPU-存储器总线用于传输CPU和存储器之间的数据。",
+       "isBuiltin":false
+      },
+      {
+        "uniqueId":"raid_01_mc",
+         "content":"使用RAID技术的主要目的是？",
+        "type":"single-choice",
+          "options":[
+            "增加CPU的处理能力",
+             "提高存储系统的性能和可靠性",
+             "减少存储空间的消耗",
+              "提高网络的传输速度"
+           ],
+           "correct_answer":[
+             "提高存储系统的性能和可靠性"
+            ],
+            "analysis":"RAID通过组合多个磁盘来提高性能和冗余。",
+         "isBuiltin":false
+      },
+     {
+        "uniqueId":"raid_02_mc",
+        "content":"以下哪个RAID级别采用数据条带化但不提供冗余？",
+         "type":"single-choice",
+         "options":[
+          "RAID 1",
+          "RAID 0",
+            "RAID 5",
+           "RAID 6"
+           ],
+          "correct_answer":[
+            "RAID 0"
+            ],
+         "analysis":"RAID 0 仅提供性能提升，不提供冗余。",
+        "isBuiltin":false
+     },
+     {
+      "uniqueId":"raid_03_mc",
+        "content":"以下哪个RAID级别采用镜像技术提供数据冗余？",
+        "type":"single-choice",
+          "options":[
+            "RAID 0",
+            "RAID 1",
+            "RAID 5",
+             "RAID 6"
+            ],
+          "correct_answer":[
+            "RAID 1"
+          ],
+           "analysis":"RAID 1 通过镜像数据实现冗余。",
+        "isBuiltin":false
+      },
+      {
+        "uniqueId": "raid_04_mc",
+        "content": "以下哪个RAID级别使用分布式奇偶校验来提供数据冗余，并且可以容忍一个磁盘的故障？",
+        "type": "single-choice",
+        "options": [
+           "RAID 1",
+          "RAID 3",
+           "RAID 4",
+             "RAID 5"
+          ],
+         "correct_answer": [
+             "RAID 5"
+           ],
+         "analysis": "RAID 5 使用分布式校验来提供容错能力。",
+          "isBuiltin": false
+      },
+     {
+      "uniqueId": "basic_01_mc",
+      "content": "在计算机系统中，如果把重复的工作分成几个小步骤，每个步骤由专门的工具负责，这种方式类似于以下哪种生活场景？",
+        "type": "single-choice",
+        "options": [
+            "一个人完成所有事情",
+            "工厂的流水线生产",
+            "随意堆放物品",
+            "不分工的合作"
+        ],
+        "correct_answer": [
+            "工厂的流水线生产"
+        ],
+        "analysis": "流水线生产将复杂工作分解为简单步骤，类似于计算机中的流水线技术。",
+        "isBuiltin": false
+    },
+     {
+      "uniqueId": "pipeline_01_mc",
+      "content": "如果把工厂的流水线生产应用到计算机处理指令中，这种技术被称为？",
+      "type": "single-choice",
+      "options": [
+        "并行计算",
+         "分布式处理",
+        "流水线技术",
+          "虚拟化技术"
+      ],
+       "correct_answer": [
+        "流水线技术"
+        ],
+         "analysis": "流水线技术是计算机中利用类似工厂流水线的方法处理指令的技术。",
+      "isBuiltin": false
+    },
+    {
+      "uniqueId": "pipeline_02_mc",
+      "content": "在计算机的流水线技术中，如果各段工作时间不完全一样，就会导致部分时间段某些工具闲置，此时流水线中工作时间最长的工具被称为？",
+      "type": "single-choice",
+        "options": [
+            "加速器",
+            "瓶颈",
+            "缓冲器",
+            "调度器"
+        ],
+         "correct_answer": [
+            "瓶颈"
+        ],
+      "analysis": "流水线瓶颈指的是执行时间最长的段，限制了流水线的整体性能。",
+      "isBuiltin": false
+    },
+     {
+      "uniqueId": "pipeline_03_mc",
+      "content": "为了提高流水线效率，可以对上题的瓶颈工具进行优化，以下哪种方法不能有效缓解瓶颈问题？",
+       "type":"single-choice",
+      "options":[
+        "细分瓶颈段",
+           "重复设置瓶颈段",
+          "增加流水线段数",
+        "使用更快的工具"
+      ],
+     "correct_answer":[
+        "增加流水线段数"
+         ],
+      "analysis":"增加流水线段数不一定能解决瓶颈问题，细分或重复设置瓶颈段才是有效缓解方法。",
+      "isBuiltin": false
+     },
+    {
+      "uniqueId": "pipeline_04_mc",
+      "content": "在计算机的流水线中，如果某指令需要读取的数据，正好是前一条指令要写入的数据，这种依赖关系称为？",
+      "type": "single-choice",
+        "options": [
+         "控制相关",
+          "数据相关",
+           "结构冲突",
+         "名相关"
+       ],
+        "correct_answer": [
+          "数据相关"
+         ],
+      "analysis": "数据相关是指指令间存在数据依赖关系。",
+        "isBuiltin": false
+    },
+    {
+      "uniqueId": "pipeline_05_mc",
+      "content": "在上题的数据相关中，具体来说，如果指令A写入数据后，指令B才读取该数据，这种先后顺序称为？",
+      "type": "single-choice",
+       "options": [
+          "写后写 (WAW)",
+           "读后写 (WAR)",
+          "写后读 (RAW)",
+         "读后读 (RAR)"
+       ],
+        "correct_answer": [
+          "写后读 (RAW)"
+         ],
+      "analysis": "写后读（RAW）表示读取操作依赖于之前的写入操作。",
+      "isBuiltin": false
+    },
+      {
+       "uniqueId": "pipeline_06_mc",
+       "content": "如果指令A写入数据后，指令B也要写入同一数据，这属于以下哪种数据相关？",
+       "type": "single-choice",
+       "options": [
+          "写后读 (RAW)",
+         "读后写 (WAR)",
+           "写后写 (WAW)",
+           "读后读(RAR)"
+        ],
+      "correct_answer":[
+            "写后写 (WAW)"
+        ],
+      "analysis": "写后写（WAW）表示多次写入同一数据。",
+      "isBuiltin": false
+      },
+      {
+      "uniqueId":"pipeline_07_mc",
+      "content":"为解决写后读（RAW）的数据相关冲突，以下哪种方法能够使流水线中后面的指令提前拿到数据，减少等待时间？",
+      "type":"single-choice",
+       "options":[
+        "使用停顿",
+          "使用定向技术",
+         "使用分支预测",
+        "使用寄存器重命名"
+       ],
+        "correct_answer":[
+         "使用定向技术"
+          ],
+     "analysis":"定向技术使后面的指令直接从前面的指令的结果中获取数据，减少等待。",
+     "isBuiltin":false
+      },
+    {
+     "uniqueId":"pipeline_08_mc",
+        "content":"在流水线中，如果多个指令尝试同时使用同一个硬件资源（如内存），这属于哪种类型的冲突？",
+        "type":"single-choice",
+        "options":[
+           "数据冲突",
+           "控制冲突",
+            "结构冲突",
+             "名相关冲突"
+        ],
+        "correct_answer":[
+            "结构冲突"
+        ],
+       "analysis":"结构冲突指多个指令同时访问同一资源。",
+        "isBuiltin":false
+    },
+    {
+      "uniqueId": "vector_01_mc",
+      "content": "如果计算机像一个高效的快递分拣中心，它一次能处理多个包裹，而不是一个一个处理，那么这种方式更类似于以下哪种类型的计算机？",
+        "type": "single-choice",
+        "options": [
+            "标量处理机",
+             "向量处理机",
+             "并行处理机",
+             "分布式处理机"
+           ],
+           "correct_answer": [
+            "向量处理机"
+           ],
+      "analysis": "向量处理机一次处理多个数据，提高了数据处理的效率。",
+      "isBuiltin": false
+    },
+    {
+      "uniqueId":"vector_02_mc",
+      "content":"在向量处理机中，有一种技术可以将具有先后写读相关指令链接起来处理，以提高执行效率，这种技术被称为？",
+      "type":"single-choice",
+        "options":[
+          "分段开采技术",
+          "链接技术",
+          "横向处理技术",
+          "纵向处理技术"
+        ],
+      "correct_answer":[
+         "链接技术"
+          ],
+     "analysis":"链接技术将具有数据依赖的指令链接起来流水线处理。",
+     "isBuiltin":false
+      },
+      {
+        "uniqueId":"basic_02_mc",
+        "content":"在计算机系统中，如果把计算机硬件看作一辆汽车，那么指令集架构（ISA）类似于汽车的什么？",
+        "type":"single-choice",
+          "options":[
+             "汽车的轮胎",
+             "汽车的方向盘和仪表盘",
+             "汽车的发动机",
+            "汽车的座位"
+            ],
+          "correct_answer":[
+              "汽车的方向盘和仪表盘"
+            ],
+       "analysis":"指令集架构（ISA）定义了软件控制硬件的方式，类似于驾驶员操作汽车的方向盘和仪表盘。",
+       "isBuiltin":false
+      },
+     {
+        "uniqueId": "parallel_01_mc",
+        "content": "如果计算机想同时处理多条指令，就像多个人同时工作，以下哪种方法是通过硬件在运行时动态分配任务的方式？",
+          "type": "single-choice",
+        "options": [
+            "软件静态编译",
+              "硬件动态调度",
+            "指令集扩展",
+             "人工分配指令"
+           ],
+         "correct_answer": [
+              "硬件动态调度"
+            ],
+        "analysis": "硬件动态调度在运行时检测和调度指令，提高并行度。",
+      "isBuiltin": false
+    },
+     {
+      "uniqueId":"tomasulo_01_mc",
+       "content":"如果把指令执行比作去餐厅吃饭，Tomasulo算法就像？",
+      "type":"single-choice",
+       "options":[
+        "按固定顺序排队点餐",
+         "点餐后等待厨师做好所有菜再吃",
+         "点餐后谁的菜先做好就先吃",
+         "点餐后所有菜一起上"
+        ],
+      "correct_answer":[
+         "点餐后谁的菜先做好就先吃"
+        ],
+      "analysis":"Tomasulo算法实现乱序执行，操作数就绪即可执行。",
+      "isBuiltin":false
+    },
+     {
+       "uniqueId": "tomasulo_02_mc",
+      "content":"在Tomasulo算法中，用来存放已点但未完成的菜的“等待区”类似于哪部分组件？",
+       "type":"single-choice",
+      "options":[
+       "保留站",
+         "公共数据总线（CDB）",
+        "寄存器",
+         "存储器"
+        ],
+       "correct_answer":[
+        "保留站"
+        ],
+      "analysis":"保留站用于存储等待执行的指令。",
+       "isBuiltin":false
+      },
+      {
+         "uniqueId": "tomasulo_03_mc",
+         "content": "在Tomasulo算法中，公共数据总线（CDB）就像？",
+         "type": "single-choice",
+        "options": [
+            "厨房的出餐口",
+             "餐厅的菜单",
+             "服务员的传菜记录",
+             "顾客的餐桌"
+            ],
+           "correct_answer": [
+            "厨房的出餐口"
+            ],
+          "analysis": "公共数据总线广播计算结果到需要的地方。",
+        "isBuiltin": false
+      },
+    {
+      "uniqueId": "branch_01_mc",
+        "content":"在计算机程序中，如果遇到分支指令，就像走到岔路口，以下哪种技术可以根据以往的经验提前判断走哪个方向？",
+      "type": "single-choice",
+        "options": [
+          "静态分支预测",
+         "动态分支预测",
+           "指令级并行",
+           "数据级并行"
+        ],
+         "correct_answer": [
+          "动态分支预测"
+          ],
+       "analysis":"动态分支预测根据历史数据预测分支走向。",
+      "isBuiltin": false
+    },
+    {
+       "uniqueId":"branch_02_mc",
+       "content":"在上题的动态分支预测中，如果计算机利用以往在岔路口选择的记录表，这种表被称为？",
+        "type":"single-choice",
+        "options":[
+            "转移历史表",
+            "转移目标缓冲器",
+            "指令缓冲器",
+             "数据缓冲器"
+          ],
+      "correct_answer":[
+          "转移历史表"
+        ],
+      "analysis":"转移历史表记录分支指令的历史跳转情况。",
+      "isBuiltin":false
+    },
+    {
+      "uniqueId": "cache_01_mc",
+      "content": "在计算机系统中，有一个像“临时笔记本”的快速存储器，可以保存CPU经常使用的信息，这个“临时笔记本”指的是？",
+        "type": "single-choice",
+        "options": [
+           "主存",
+           "Cache",
+            "硬盘",
+             "寄存器"
+        ],
+       "correct_answer": [
+          "Cache"
+        ],
+      "analysis": "Cache是CPU和主存之间的高速缓冲存储器。",
+      "isBuiltin": false
+    },
+      {
+      "uniqueId":"cache_02_mc",
+        "content":"Cache之所以能提高计算机速度，主要是因为CPU访问数据时遵循以下哪种特性？",
+        "type":"single-choice",
+         "options":[
+           "随机性",
+            "周期性",
+            "局部性",
+            "并发性"
+           ],
+        "correct_answer":[
+            "局部性"
+          ],
+       "analysis":"Cache利用程序的时间局部性和空间局部性。",
+       "isBuiltin":false
+    },
+    {
+      "uniqueId": "cache_03_mc",
+      "content": "在Cache中，如果主存中的任何一个数据都可以放在Cache的任何位置，这种灵活的放置方式类似于以下哪种场景？",
+        "type": "single-choice",
+        "options": [
+            "图书馆的图书按固定位置摆放",
+             "超市的商品按类别分区摆放",
+            "仓库的货物随意堆放",
+             "停车场的汽车按固定车位停放"
+        ],
+         "correct_answer": [
+            "仓库的货物随意堆放"
+           ],
+       "analysis":"全相联映像允许主存块映射到Cache的任意位置，类似于仓库货物随意堆放。",
+      "isBuiltin": false
+    },
+      {
+        "uniqueId": "cache_04_mc",
+        "content":"如果Cache像超市，每件商品（数据）都必须放在固定的货架位置，这种方式对应哪种映射方式？",
+       "type":"single-choice",
+      "options":[
+          "全相联映像",
+           "直接映像",
+            "组相联映像",
+           "段相联映像"
+        ],
+       "correct_answer":[
+          "直接映像"
+        ],
+       "analysis":"直接映像中，主存块只能映射到Cache的特定位置。",
+       "isBuiltin":false
+      },
+     {
+       "uniqueId": "cache_05_mc",
+       "content": "如果Cache像书店，每次都从最早进入书店的书籍中选择移除，这种替换策略类似于？",
+       "type": "single-choice",
+        "options": [
+            "随机法",
+            "先进先出法（FIFO）",
+            "最近最少使用法（LRU）",
+           "最不经常使用法(LFU)"
+         ],
+       "correct_answer": [
+            "先进先出法（FIFO）"
+          ],
+       "analysis": "FIFO替换算法替换最早进入Cache的块。",
+       "isBuiltin": false
+      },
+      {
+       "uniqueId": "cache_06_mc",
+       "content": "在Cache中，如果每次写数据时，都同时更新“临时笔记本”和主存，就像每次做笔记时都要把内容抄写两遍，这种策略被称为？",
+      "type": "single-choice",
+       "options": [
+         "写回法",
+           "写直达法",
+          "写缓存法",
+        "写预取法"
+        ],
+      "correct_answer": [
+         "写直达法"
+          ],
+       "analysis":"写直达法同时更新Cache和主存。",
+      "isBuiltin": false
+      },
+      {
+         "uniqueId": "cache_07_mc",
+         "content": "为了提升Cache的性能，以下哪种方法不能减少CPU访问数据的时间？",
+         "type": "single-choice",
+          "options": [
+            "增加Cache容量",
+            "减少Cache的访问时间",
+             "降低Cache的不命中率",
+            "减少不命中时的额外开销"
+           ],
+         "correct_answer": [
+             "增加Cache容量"
+            ],
+           "analysis": "增加Cache容量主要降低不命中率，不直接减少CPU访问数据的时间。",
+         "isBuiltin": false
+        },
+     {
+        "uniqueId":"cache_08_mc",
+        "content":"如果Cache的空间不足以存储所有需要的数据，就像书包太小放不下所有书本，这种不命中被称为？",
+         "type":"single-choice",
+        "options":[
+           "强制不命中",
+            "容量不命中",
+            "冲突不命中",
+            "延迟不命中"
+          ],
+        "correct_answer":[
+            "容量不命中"
+           ],
+       "analysis":"容量不命中是由于Cache容量不足导致的。",
+        "isBuiltin":false
+     },
+     {
+        "uniqueId":"bus_01_mc",
+         "content":"在计算机系统中，用于连接CPU和存储器的“信息高速公路”被称为？",
+         "type":"single-choice",
+          "options":[
+             "I/O总线",
+              "CPU-存储器总线",
+            "控制总线",
+             "数据总线"
+            ],
+         "correct_answer":[
+            "CPU-存储器总线"
+           ],
+         "analysis":"CPU-存储器总线用于传输CPU和存储器之间的数据。",
+        "isBuiltin":false
+      },
+    {
+      "uniqueId": "raid_01_mc",
+         "content": "如果想让多个硬盘像一个硬盘一样工作，同时又保证数据安全，以下哪种技术可以实现这种目的？",
+         "type": "single-choice",
+           "options": [
+              "Cache",
+            "RAID",
+            "总线",
+             "DMA"
+          ],
+          "correct_answer": [
+              "RAID"
+            ],
+        "analysis": "RAID 通过组合多个硬盘提高了性能和可靠性。",
+        "isBuiltin": false
+      },
+     {
+        "uniqueId":"raid_02_mc",
+        "content":"如果使用多个硬盘，但数据不重复存储，只是把数据均匀存储在不同的硬盘上，这种类似条形码的技术属于以下哪种RAID级别？",
+        "type":"single-choice",
+         "options":[
+           "RAID 1",
+            "RAID 0",
+            "RAID 5",
+           "RAID 10"
+           ],
+          "correct_answer":[
+              "RAID 0"
+             ],
+         "analysis":"RAID 0采用条带化，不提供数据冗余。",
+        "isBuiltin":false
+      },
+    {
+        "uniqueId":"raid_03_mc",
+         "content":"如果使用多个硬盘，并且每个硬盘都保存了完全相同的数据，就像复制一样，以下哪种RAID级别提供了这种技术？",
+          "type":"single-choice",
+          "options":[
+            "RAID 0",
+             "RAID 1",
+            "RAID 5",
+             "RAID 6"
+             ],
+         "correct_answer":[
+              "RAID 1"
+             ],
+         "analysis":"RAID 1采用镜像技术，提供数据冗余。",
+          "isBuiltin":false
+      },
+     {
+        "uniqueId":"raid_04_mc",
+         "content":"如果使用多个硬盘，并且使用了奇偶校验技术，这种技术使得在少数硬盘损坏时还能恢复数据，这种技术属于哪个RAID级别？",
+         "type":"single-choice",
+          "options":[
+           "RAID 1",
+             "RAID 2",
+              "RAID 3",
+            "RAID 5"
+            ],
+        "correct_answer":[
+              "RAID 5"
+             ],
+       "analysis":"RAID 5 使用分布式校验来提供容错能力。",
+       "isBuiltin":false
+      }
+  ],
+  "sets": [
+    {
+      "id": "xtjg_test_set",
+      "name": "ai整理的ppt题目",
+      "description": "",
+      "questionIds": [
+        "basic_001_mc",
+        "basic_002_mc",
+        "pipeline_001_mc",
+        "pipeline_002_mc",
+        "pipeline_003_mc",
+        "pipeline_004_mc",
+        "vector_001_mc",
+        "vector_002_mc",
+        "isa_001_mc",
+        "parallel_001_mc",
+        "tomasulo_001_mc",
+        "tomasulo_002_mc",
+        "branch_001_mc",
+        "cache_001_mc",
+        "cache_002_mc",
+        "cache_003_mc",
+        "cache_004_mc",
+        "cache_005_mc",
+        "cache_006_mc",
+        "cache_007_mc",
+        "bus_001_mc",
+        "raid_001_mc",
+        "raid_002_mc",
+        "raid_003_mc",
+        "raid_004_mc",
+         "basic_01_mc",
+           "pipeline_01_mc",
+            "pipeline_02_mc",
+            "pipeline_03_mc",
+             "pipeline_04_mc",
+           "pipeline_05_mc",
+           "pipeline_06_mc",
+            "pipeline_07_mc",
+           "pipeline_08_mc",
+            "vector_01_mc",
+             "vector_02_mc",
+              "basic_02_mc",
+             "parallel_01_mc",
+            "tomasulo_01_mc",
+            "tomasulo_02_mc",
+             "tomasulo_03_mc",
+              "branch_01_mc",
+            "branch_02_mc",
+         "cache_01_mc",
+          "cache_02_mc",
+            "cache_03_mc",
+             "cache_04_mc",
+            "cache_05_mc",
+             "cache_06_mc",
+           "cache_07_mc",
+           "cache_08_mc",
+          "bus_01_mc",
+           "raid_01_mc",
+          "raid_02_mc",
+           "raid_03_mc",
+            "raid_04_mc",
+          "pipeline_05_mc",
+        "pipeline_06_mc",
+       "vector_01_mc",
+        "vector_02_mc",
+        "basic_03_mc",
+        "parallel_01_mc",
+         "tomasulo_01_mc",
+          "tomasulo_02_mc",
+           "tomasulo_03_mc",
+           "branch_01_mc",
+            "branch_02_mc",
+        "cache_01_mc",
+        "cache_02_mc",
+         "cache_03_mc",
+         "cache_04_mc",
+        "cache_05_mc",
+        "cache_06_mc",
+        "cache_07_mc",
+        "cache_08_mc",
+        "bus_01_mc",
+        "raid_01_mc",
+          "raid_02_mc",
+         "raid_03_mc",
+          "raid_04_mc"
+      ],
+      "isBuiltin": false
+    }
+  ],
+  "schema": {
+    "question": {
+      "uniqueId": "String (必填，唯一标识符)",
+      "content": "String (必填，题目内容，支持Markdown格式)",
+      "type": "String (必填，可选值：'single-choice'|'multiple-choice'|'short-answer')",
+      "options": "Array<String> (选择题必填，选项列表)",
+      "correct_answer": "Array<String> (必填，正确答案列表)",
+      "analysis": "String (可选，题目解析，支持Markdown格式)",
+      "isBuiltin": "Boolean (可选，是否为内置题目，默认false)"
+    },
+    "set": {
+      "id": "String (必填，唯一标识符)",
+      "name": "String (必填，合集名称)",
+      "description": "String (可选，合集描述)",
+      "questions": "Array<String> (必填，题目ID列表)",
+      "isBuiltin": "Boolean (可选，是否为内置合集，默认false)"
+    }
+  }
+}

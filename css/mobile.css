@@ -1,0 +1,251 @@
+/* ========== 基础布局与色彩 ========== */
+body {
+  margin: 0;
+  padding: 0;
+  background-color: #f8f8f8;
+  font-family: sans-serif;
+  line-height: 1.6; /* 增加行高，改善阅读体验 */
+}
+
+.container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 16px;
+}
+
+.nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: rgba(176, 193, 162, 0.1);
+  border-radius: 4px;
+  padding: 12px;
+  margin-bottom: 20px;
+}
+.nav-title-link {
+  text-decoration: none;
+}
+
+.nav-title {
+  font-weight: bold;
+  font-size: 18px;
+  color: #B0C1A2;
+  transition: color 0.3s ease;
+}
+.nav-title-link:hover .nav-title{
+  color: #91a881;
+}
+
+.logo-container {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  transition: transform 0.3s ease; /* 添加过渡效果 */
+}
+
+.logo {
+  height: 30px;
+  width: auto;
+  transition: transform 0.3s ease;
+}
+
+.logo-container:hover {    transform: scale(1.1); /* 鼠标悬停时放大 */
+}
+
+/* ========== 组件化样式 ========== */
+.btn {
+    display: inline-block;
+    padding: 10px 20px;
+    margin: 4px;  /* 修改这里：添加 margin 值 */
+    border: none;
+    border-radius: 4px;
+    background-color: #B0C1A2;
+    color: #fff;
+    cursor: pointer;
+    font-size: 14px;
+    text-decoration: none;
+    transition: background-color 0.2s ease;
+}
+.btn:focus{
+    outline: 2px solid #91a881;
+    box-shadow: 0 0 8px rgba(145, 168, 129, 0.4);
+}
+.btn:hover {
+    background-color: #91a881;
+}
+
+.card {
+    background: white;
+    border-radius: 8px;
+    padding: 16px;
+    margin: 16px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+/* 控制题目内容中的图片大小 */
+.card p img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin: 10px auto;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+/* 在移动设备上的特殊处理 */
+@media screen and (max-width: 768px) {
+    .card p img {
+        width: 100%;
+        max-width: 500px;
+    }
+}
+
+.title {
+    font-size: 16px;
+    font-weight: bold;
+    color: #B0C1A2;
+    margin-bottom: 8px;
+}
+
+.option-item {
+    display: block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 12px;
+    margin-bottom: 8px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.option-item:hover {
+    background: #fafafa;
+}
+
+.option-item.green {
+    background: #e6ffe6;
+}
+
+.option-item.red {
+    background: #ffe6e6;
+}
+.option-item:focus {
+    outline: 2px solid #91a881;
+    box-shadow: 0 0 8px rgba(145, 168, 129, 0.4);
+}
+.question-header {
+    display: flex;
+    flex-direction: column;
+}
+
+.question-id {
+  font-size: 14px;
+  color: #666;
+  margin-bottom: 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* 简单工具类 */
+.mb-2 { margin-bottom: 8px; }
+.mb-4 { margin-bottom: 16px; }
+.float-right { float: right; }
+
+
+.horizontal-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;  /* 使用 flex 布局 */
+    flex-wrap: wrap; /* 允许换行 */
+    justify-content: flex-start; /* 可以调整对齐方式 */
+}
+
+.horizontal-list .quiz-item {
+    background: #f0f0f0;
+    padding: 10px 16px;
+    border-radius: 4px;
+    margin: 4px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    display: inline-block; /* 重要：使项目以 inline-block 方式排列 */
+    position: relative; /* 为进度条定位 */
+    overflow: hidden;
+
+}
+.horizontal-list .quiz-item-content {
+    z-index: 1;
+    position: relative;
+}
+
+.horizontal-list .quiz-item:hover {
+    background: #e0e0e0;
+}
+.horizontal-list .quiz-item:focus {
+    outline: 2px solid #91a881;
+    box-shadow: 0 0 8px rgba(145, 168, 129, 0.4);
+}
+.quiz-item-progress {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none; /* 防止遮挡点击事件 */
+}
+
+.quiz-item-progress-bar {
+    height: 100%;
+}
+/* ========== 自适配移动端（小屏幕） ========== */
+@media (max-width: 600px) {
+    .container {
+        max-width: 95%;
+        padding: 8px;
+    }
+
+    .nav {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 10px;
+    }
+
+    .nav-title {
+        font-size: 16px;
+        margin-bottom: 8px;
+    }
+    .logo {
+        height: 25px;
+    }
+
+    .btn {
+        font-size: 14px; /* 移动端按钮字体不缩小 */
+        padding: 10px 16px;
+        margin: 4px 0;/* 修改这里：保持按钮间距 */
+        display: inline-block; /* 防止按钮占据整行 */
+    }
+
+    .title {
+        font-size: 16px; /* 移动端标题字体不缩小 */
+    }
+
+    .option-item {
+        padding: 10px;
+        margin-bottom: 6px;
+    }
+    .question-id {
+        font-size: 13px;
+    }
+}
+.note-container.editing {
+    border: 1px dashed #999;
+    background-color:#fafafa;
+}
+.note-container textarea {
+  border: 1px solid #ddd;
+  resize: vertical;
+  outline: none;
+}
+.note-container textarea:focus {
+    border-color: #4CAF50;
+}

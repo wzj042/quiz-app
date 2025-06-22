@@ -1,0 +1,367 @@
+{
+  "questions": [
+    {
+      "uniqueId": "CN01",
+      "content": "假设报文分组传送网络总长度为L位，分组长度为P位，其中头部开销长度为H位，端节点到目的节点之间链路数为h，每个链路上的延迟时间为D秒，数据传输率为bips。信息交换建立连接的时间为S秒。则传送所有数据，电路交换所需时间是()。",
+      "type": "single-choice",
+      "options": [
+        "hD+L/B 秒",
+        "S+hD+L/P 秒",
+        "S+hD+L/B 秒",
+        "S+L/B 秒"
+      ],
+      "correct_answer": [
+        "S+hD+L/B 秒"
+      ],
+      "analysis": "电路交换首先建立连接，然后进行数据传输。因此传送所有数据所需的时间是建立连接时间、链路延迟、发送时间的时间和，即S+hD+L/B。",
+      "knowledge_point": "交换方式"
+    },
+    {
+      "uniqueId": "CN02",
+      "content": "渗透型是()的度量。",
+      "type": "single-choice",
+      "options": [
+        "传送速率",
+        "有效数据",
+        "在其局部内存中容纳的信号",
+        "上述所有的内容"
+      ],
+      "correct_answer": [
+        "在其局部内存中容纳的信号"
+      ],
+      "analysis": "渗透率是对流体媒体容量的度量，带宽又叫频宽，是指在固定时间间隔内可传输的数据量。你也可以将传输速率理解为数据的能力。数值单位为bps表示，即每秒传输之位数。在模拟设备中，频宽通常以信号传输的速度表示为Hertz(Hz)。",
+      "knowledge_point": "计算机网络体系结构/计算机网络概念"
+    },
+    {
+      "uniqueId": "CN03",
+      "content": "数据传输速率是描述数据传输系统的重要指标之一，它的度量标准是()。",
+      "type": "single-choice",
+      "options": [
+        "比特数",
+        "字节数",
+        "帧数",
+        "分组数"
+      ],
+      "correct_answer": [
+        "比特数"
+      ],
+      "analysis": "数据传输速率是描述数据传输系统的重要指标之一，它的度量是每秒钟传输二进制信息的比特数。单位是比特/秒，记为bps或bps。",
+      "knowledge_point": "计算机网络体系结构/计算机网络概念"
+    },
+    {
+      "uniqueId": "CN04",
+      "content": "互联网实现了分布在全世界各地的各类网络的互联，其最基础和核心的协议是()。",
+      "type": "single-choice",
+      "options": [
+        "TCP/IP",
+        "FTP",
+        "HTML",
+        "HTTP"
+      ],
+      "correct_answer": [
+        "TCP/IP"
+      ],
+      "analysis": "",
+      "knowledge_point": "TCP/IP体系结构"
+    },
+    {
+      "uniqueId": "CN05",
+      "content": "计算机网络的层次结构是()。",
+      "type": "single-choice",
+      "options": [
+        "计算机网络的层次结构类型",
+        "计算机网络的各层协议的集合",
+        "计算机网络的层次结构类型和各层协议的集合",
+        "计算机网络的组成结构"
+      ],
+      "correct_answer": [
+        "计算机网络的层次结构类型和各层协议的集合"
+      ],
+      "analysis": "",
+      "knowledge_point": "计算机网络体系结构"
+    },
+    {
+      "uniqueId": "CN06",
+      "content": "在OSI的七层协议中，()层负责检测数据链路层的传输是否有错。",
+      "type": "single-choice",
+      "options": [
+        "物理层",
+        "传输层",
+        "网络层",
+        "数据链路层"
+      ],
+      "correct_answer": [
+        "数据链路层"
+      ],
+      "analysis": "",
+      "knowledge_point": "OSI/RM体系结构"
+    },
+    {
+      "uniqueId": "CN07",
+      "content": "完成路由选择功能是在OSI()模型中。",
+      "type": "single-choice",
+      "options": [
+        "应用层",
+        "表示层",
+        "网络层",
+        "数据链路层"
+      ],
+      "correct_answer": [
+        "网络层"
+      ],
+      "analysis": "",
+      "knowledge_point": "OSI/RM体系结构"
+    },
+    {
+      "uniqueId": "CN08",
+      "content": "TCP/IP协议是Internet中计算机之间通信所必须遵循的一种()。",
+      "type": "single-choice",
+      "options": [
+        "信息资源",
+        "通信协议",
+        "软件",
+        "硬件"
+      ],
+      "correct_answer": [
+        "通信协议"
+      ],
+      "analysis": "",
+      "knowledge_point": "TCP/IP体系结构"
+    },
+    {
+      "uniqueId": "CN09",
+      "content": "在TCP/IP体系结构中，UDP协议工作在()。",
+      "type": "single-choice",
+      "options": [
+        "应用层",
+        "传输层",
+        "网络互联层",
+        "网络接口层"
+      ],
+      "correct_answer": [
+        "传输层"
+      ],
+      "analysis": "",
+      "knowledge_point": "TCP/IP体系结构"
+    },
+    {
+      "uniqueId": "CN10",
+      "content": "计算机网络的目的是()。",
+      "type": "single-choice",
+      "options": [
+        "提高计算机安全",
+        "分布处理",
+        "提高计算机可靠性",
+        "共享软硬件、硬件和数据资源"
+      ],
+      "correct_answer": [
+        "共享软硬件、硬件和数据资源"
+      ],
+      "analysis": "",
+      "knowledge_point": "交换方式"
+    },
+    {
+      "uniqueId": "CN11",
+      "content": "网络协议主要由3个基本要素组成，即()。",
+      "type": "single-choice",
+      "options": [
+        "语义、语法和时序",
+        "语法、数据和时序",
+        "语法、语义和时序",
+        "语法、语义和功能"
+      ],
+      "correct_answer": [
+        "语法、语义和时序"
+      ],
+      "analysis": "网络协议主要由以下三个要素组成：\n语法:即用户数据和控制信息的逻辑序列。\n语义:需要采取何种控制信息，以及完成的动作与做出的响应。\n时序:对事件发生顺序的详细说明。",
+      "knowledge_point": "计算机网络体系结构"
+    },
+    {
+      "uniqueId": "CN12",
+      "content": "在OSI参考模型中，分组报头在哪层中添加()。",
+      "type": "single-choice",
+      "options": [
+        "网络层",
+        "传输层",
+        "物理层",
+        "数据链路层"
+      ],
+      "correct_answer": [
+        "网络层"
+      ],
+      "analysis": "",
+      "knowledge_point": "OSI/RM体系结构"
+    },
+    {
+      "uniqueId": "CN13",
+      "content": "在OSI参考模型中，服务的定义为()。",
+      "type": "single-choice",
+      "options": [
+        "各层向下一层提供的一组原语操作",
+        "各层间对等实体间通信的约定实现",
+        "各层通过其SAP向上层提供的一种功能",
+        "和协议的含义是一样的"
+      ],
+      "correct_answer": [
+        "各层通过其SAP向上层提供的一种功能"
+      ],
+      "analysis": "在OSI参考模型中服务的定义为在协议的控制下各层通过服务访问点向上层提供的一种功能。",
+      "knowledge_point": "协议、接口、服务"
+    },
+    {
+      "uniqueId": "CN14",
+      "content": "下列交换方式中，()是一次连接沿着一条路由发送所有的数据。",
+      "type": "single-choice",
+      "options": [
+        "分组交换",
+        "报文交换",
+        "电路交换",
+        "信元交换"
+      ],
+      "correct_answer": [
+        "电路交换"
+      ],
+      "analysis": "电路交换指在数据传送前建立物理通路，然后所有数据都沿着这条建立的通路传送。",
+      "knowledge_point": "交换方式"
+    },
+    {
+      "uniqueId": "CN15",
+      "content": "距离交换技术而言，局域网中广泛以太网采用的()。",
+      "type": "single-choice",
+      "options": [
+        "分组交换技术",
+        "电路交换技术",
+        "报文交换技术",
+        "信元交换技术"
+      ],
+      "correct_answer": [
+        "分组交换技术"
+      ],
+      "analysis": "",
+      "knowledge_point": "交换方式"
+    },
+    {
+      "uniqueId": "CN16",
+      "content": "在两台计算机间经两个中间节点传送100M字节的文件。已知：\n通信线路速率为8Kbps；\n中间节点存储转发和传输时延忽略；\n每段线传输时延为10ms。\n\n方案甲：将整个文件直接存储转发。\n方案乙：文件分为1000字节的帧（含10字节开销）逐级转发。",
+      "type": "single-choice",
+      "options": [
+        "方案甲时间小于乙方案时间",
+        "方案甲时间等于乙方案时间",
+        "方案甲时间大于乙方案时间",
+        "无法比较"
+      ],
+      "correct_answer": [
+        "方案甲时间大于乙方案时间"
+      ],
+      "analysis": "方案甲逐级传输整个文件，总时间为文件传输时间 + 传输时间 × (3段)。\n方案乙因为分组后再次传输，最后就无需等待而能够安全到达终点，总时间大幅缩短。\n虽然参数导致具体时间函数偏大，但大容量的分帧传输显著减少了总等待时间，故甲方案耗时更长。",
+      "knowledge_point": "传输时延"
+    },
+    {
+      "uniqueId": "CN17",
+      "content": "关于OSI参考模型与TCP/IP参考模型的比较，以下哪一项描述是准确的？\n\nA. TCP/IP模型的传输层仅包含TCP协议，而OSI模型传输层包含更多协议如SPX。\nB. OSI模型的网络层与TCP/IP模型的互联网层功能完全相同，均使用IP协议进行路由选择。\nC. TCP/IP模型的应用层直接对应OSI模型的表示层和会话层，而不包括应用层。\nD. OSI模型将物理层与数据链路层，而TCP/IP模型将两者合并为网络接口层。\nE. TCP/IP模型的网络接口层负责链路级数据传输，与OSI模型的物理层功能一致。",
+      "type": "single-choice",
+      "options": [
+        "TCP/IP模型的传输层仅包含TCP协议，而OSI模型传输层包含更多协议如SPX。",
+        "OSI模型的网络层与TCP/IP模型的互联网层功能完全相同，均使用IP协议进行路由选择。",
+        "TCP/IP模型的应用层直接对应OSI模型的表示层和会话层，而不包括应用层。",
+        "OSI模型将物理层与数据链路层，而TCP/IP模型将两者合并为网络接口层。",
+        "TCP/IP模型的网络接口层负责链路级数据传输，与OSI模型的物理层功能一致。"
+      ],
+      "correct_answer": [
+        "OSI模型将物理层与数据链路层，而TCP/IP模型将两者合并为网络接口层。"
+      ],
+      "analysis": "D正确：TCP/IP模型的网络接口层整合了OSI的物理层和数据链路层功能，而OSI模型则明确区分两层。\nA错误：TCP/IP传输层包含TCP和UDP协议，OSI传输层协议未限定具体协议。\nB错误：OSI网络层功能更广泛（如路由、拥塞控制），而TCP/IP互联网层主要执行IP协议。\nC错误：TCP/IP在应用层对应OSI的应用层、表示层和会话层，而非排除应用层。\nE错误：网络接口层负责链路级通信，端到端传输由传输层实现，与OSI模型功能一致。",
+      "knowledge_point": "TCP/IP体系结构, OSI参考体系结构"
+    },
+    {
+      "uniqueId": "CN18",
+      "content": "某卫星通信系统传输距离1000公里，信号传输速率为$2\\times 10^8$ m/s，发送10bit数据且信道速率为100kb/s时，以下哪项描述是准确的？",
+      "type": "single-choice",
+      "options": [
+        "发送时延0.1ms，传输时延5ms",
+        "发送时延1ms，传输时延50us",
+        "发送时延10us，传输时延0.5ms",
+        "发送时延0.01ms，传输时延500ms"
+      ],
+      "correct_answer": [
+        "发送时延0.1ms，传输时延5ms"
+      ],
+      "analysis": "发送时延 = 数据量 / 带宽 = 10bit / (100 * 10^3 bit/s) = 10^-4 s = 0.1ms。\n传输时延 = 距离 / 信号传输速率 = (1000 * 10^3 m) / (2 * 10^8 m/s) = 5 * 10^-3 s = 5ms。",
+      "knowledge_point": "传输时延"
+    },
+    {
+      "uniqueId": "CN19",
+      "content": "在相同传输距离和传输速率条件下，若发送速率提升至1Gb/s，此时的特点是：",
+      "type": "single-choice",
+      "options": [
+        "发送时延占主导地位，达10ms级别",
+        "传输时延可忽略，总时延约10ns",
+        "发送时延为10ns，传输时延仍为5ms",
+        "两种时延均小于1us，需精确计算"
+      ],
+      "correct_answer": [
+        "发送时延为10ns，传输时延仍为5ms"
+      ],
+      "analysis": "A选项高误码率和传输时延的因素。\nB选项误导主次关系（1Gb/s下传输时延不忽略）。\nD选项未识别传输时延的量级为毫秒。",
+      "knowledge_point": "调度策略"
+    },
+    {
+      "uniqueId": "CN20",
+      "content": "网络体系的通信方式分为客户-服务器方式和P2P方式。",
+      "type": "single-choice",
+      "options": [
+        "对",
+        "错"
+      ],
+      "correct_answer": [
+        "对"
+      ],
+      "analysis": "",
+      "knowledge_point": "基本概念"
+    },
+    {
+      "uniqueId": "CN21",
+      "content": "按照网络的范围进行分类，包括局域网(LAN)、城域网(MAN)、广域网(WAN)和卫星网络(SAN)。",
+      "type": "single-choice",
+      "options": [
+        "对",
+        "错"
+      ],
+      "correct_answer": [
+        "错"
+      ],
+      "analysis": "网络按作用范围分类应为局域网(LAN)、城域网(MAN)、广域网(WAN)和个人区域网(PAN)。\n题目中的“卫星网络(SAN)”属于技术实现方式（如卫星通信）或存储区域网络(Storage Area Network)，与作用范围分类无关，属于干扰项。\n正确分类中PAN(个人区域网)被替换为“SAN”，因此该选项错误。",
+      "knowledge_point": "基本概念"
+    }
+  ],
+  "sets": [
+    {
+      "id": "computer_networks_hw1",
+      "name": "计算机网络-第一次作业",
+      "description": "计算机网络单选题和判断题",
+      "questionIds": [
+        "CN01",
+        "CN02",
+        "CN03",
+        "CN04",
+        "CN05",
+        "CN06",
+        "CN07",
+        "CN08",
+        "CN09",
+        "CN10",
+        "CN11",
+        "CN12",
+        "CN13",
+        "CN14",
+        "CN15",
+        "CN16",
+        "CN17",
+        "CN18",
+        "CN19",
+        "CN20",
+        "CN21"
+      ]
+    }
+  ]
+}

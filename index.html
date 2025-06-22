@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>刷题</title>
+    <meta name="referrer" content="no-referrer">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
+    <script src="https://lf26-cdn-tos.bytecdntp.com/cdn/expire-1-M/marked/4.0.2/marked.min.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/mobile.css">
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+</head>
+<body>
+<div id="app" class="container">
+    <!-- 导航栏 -->
+    <div class="nav">
+        <a href="#" class="nav-title-link" @click="pageState = 'home'" @mouseover="hoverTitle = true" @mouseout="hoverTitle = false">
+            <span class="nav-title">Quiz App</span>
+        </a>
+        <div class="logo-container" >
+            <img src="favicon.ico" alt="logo" class="logo">
+        </div>
+    </div>
+
+    <!-- 1) home: 选择题库文件 example.json，并列出其 sets -->
+    <div v-if="pageState === 'home'" class="card">
+        <h1 class="title">选择题目文件</h1>
+        <p class="mb-2">请选择要加载的题库文件 (从 assets/xxx.json 加载)：</p>
+        <ul class="horizontal-list">
+            <li
+                v-for="(fileObj, idx) in fileList"
+                :key="idx"
+                class="quiz-item"
+                :style="getSetProgress(fileObj.file)"
+                @click="loadJsonFile(fileObj.file)"
+            >
+                <div class="quiz-item-content">
+                    {{ fileObj.name }}
+                </div>
+                <div class="quiz-item-progress">
+                    <div class="quiz-item-progress-bar" :style="getSetProgress(fileObj.file)"></div>
+                </div>
+            </li>
+        </ul>
+    </div>
+
+    <!-- 3) setDescription: 显示选中 set 的简介，用户点击"开始答题" -->
+    <div v-else-if="pageState === 'setDescription'" class="card">
+        <h1 class="title">{{ chosenSet.name }}</h1>
+        <p v-if="chosenSet.description" style="white-space: pre-wrap;">{{ chosenSet.description }}</p>
+        <p>本合集共有 {{ chosenSet.questionIds.length }} 道题目。</p>
+        <div v-if="setStats" style="font-size:14px; color:#666; margin-bottom: 8px;">
+            已做：{{ setStats.completed }} 题；
+            正确：{{ setStats.correct }} 题；
+            完成率：{{ setStats.completionRate }}%
+        </div>
+        <div style="margin-top: 10px;">
+            <button type="button" class="btn" @click="enterQuizMode">顺序答题</button>
+            <button type="button" class="btn" @click="enterOrderQuizMode" style="margin-left: 10px;">
+                按错误率答题
+            </button>
+            <button type="button" class="btn" @click="enterRandomQuizMode" style="margin-left: 10px;">
+                随机答题
+            </button>
+        </div>
+        <div style="margin-top: 10px;">
+            <button type="button" class="btn" @click="exportNotes">导出笔记</button>
+            <input type="file" id="import-file" style="display: none" @change="importNotes" accept=".json"/>
+            <button type="button" class="btn" @click="importNotesFile">导入笔记</button>
+        </div>
+    </div>
+
+    <!-- 4) quiz: 正式做题 -->
+    <div v-else-if="pageState === 'quiz' || pageState === 'orderQuiz' || pageState === 'randomQuiz'" class="card">
+        <div class="question-header">
+            <h1 class="title">
+                第 {{ currentIndex + 1 }} / {{ quizList.length }} 题
+                <span style="font-size: 14px; color:#888">
+                 [ {{ currentQuestion.type }} ]
+              </span>
+            </h1>
+            <div class="question-id">
+                题目 ID: {{ currentQuestion.uniqueId }}
+                <span class="float-right" @click="copyQuizLink">复制链接</span>
+            </div>
+        </div>
+
+        <!-- 题干 -->
+        <p v-html="renderedContent"></p>
+
+        <!-- 三种题型的渲染：single-choice / multiple-choice / short-answer -->
+        <div v-if="currentQuestion.type === 'single-choice'">
+            <!-- 单选题 -->
+            <label
+                v-for="(opt, idx) in currentQuestion.options"
+                :key="idx"
+                class="option-item"
+                :class="{
+            'green': showAnswer && isCorrectOptionSingle(opt),
+            'red': showAnswer && isChosenOptionSingle(opt) && !isCorrectOptionSingle(opt)
+          }"
+            >
+                <input
+                    type="radio"
+                    :value="opt"
+                    v-model="chosenAnswer"
+                    :disabled="showAnswer"
+                    style="margin-right: 6px;"
+                >
+                <strong>{{ letterMap[idx] }}. </strong>
+                <span v-html="opt"></span>
+            </label>
+        </div>
+
+        <div v-else-if="currentQuestion.type === 'multiple-choice'">
+            <!-- 多选题 -->
+            <label
+                v-for="(opt, idx) in currentQuestion.options"
+                :key="idx"
+                class="option-item"
+                :class="{
+            'green': showAnswer && isCorrectOptionMulti(opt),
+            'red': showAnswer && chosenAnswers.includes(opt) && !isCorrectOptionMulti(opt)
+          }"
+            >
+                <input
+                    type="checkbox"
+                    :value="opt"
+                    v-model="chosenAnswers"
+                    :disabled="showAnswer"
+                    style="margin-right: 6px;"
+                >
+                <strong>{{ letterMap[idx] }}. </strong>
+                <span v-html="opt"></span>
+            </label>
+        </div>
+
+        <div v-else-if="currentQuestion.type === 'short-answer'">
+            <!-- 简答题 -->
+            <textarea
+                v-model="shortAnswerText"
+                :disabled="showAnswer"
+                rows="4"
+                style="width: 100%; padding: 8px;"
+                placeholder="请输入你的答案"
+            ></textarea>
+        </div>
+
+        <!-- 提交答案 / 下一题 按钮 -->
+        <div style="margin-top: 12px;">
+            <button
+                type="button"
+                v-if="!showAnswer"
+                class="btn"
+                @click="submitAnswer"
+            >
+                提交答案 (空格)
+            </button>
+            <button
+                type="button"
+                v-else
+                class="btn"
+                @click="nextQuestion"
+            >
+                下一题 (空格)
+            </button>
+        </div>
+
+        <!-- 提交后显示：题目的解析 & 笔记 -->
+        <div v-if="showAnswer" style="margin-top: 8px; background: #fafafa; padding: 8px; border-radius:4px;">
+            <!-- 笔记区域 -->
+            <div
+                class="note-container"
+                :class="{'editing': isEditingNote}"
+                @click="editNote"
+                @keydown.esc="cancelNoteEdit"
+                ref="noteDivRef"
+                style="margin-top:10px; border-top:1px dashed #ccc; padding: 8px; cursor: pointer;border-left: 4px solid #B0C1A2; padding-left: 10px; margin: 1em 0; color: #6c7763;"
+            >
+                <h4 style="color:#888; margin:0 0 4px 0; font-size:14px;">笔记（点击此处编辑笔记）</h4>
+                <div v-if="!isEditingNote" style="white-space:pre-wrap;" >
+                    {{ currentQuestion.note || '点击此处添加笔记...' }}
+                </div>
+                <textarea
+                    v-else
+                    v-model="currentQuestion.note"
+                    @blur="saveNote"
+                    rows="4"
+                    style="width: 100%; padding: 8px;"
+                    placeholder="点击此处添加笔记..."
+                    ref="noteTextAreaRef"
+                ></textarea>
+            </div>
+            <br>
+            <!-- 解析 -->
+            <div v-if="currentQuestion.analysis">
+                <h3 style="color:#999; margin:0 0 4px 0; font-size:14px;">解析</h3>
+                <p style="white-space: pre-wrap; margin: 0;" v-html="currentQuestion.analysis"></p>
+            </div>
+        </div>
+
+        <p style="font-size:13px; color:#666; margin-top:8px;">
+            键盘：1~4 选项，空格提交/下一题，Alt+C切换解析，Ctrl+左键编辑笔记
+        </p>
+    </div>
+
+    <!-- 5) result: 最终结果 -->
+    <div v-else-if="pageState === 'result'" class="card">
+        <h1 class="title">答题完成</h1>
+        <p>本轮共 {{ quizList.length }} 题，已完成：{{ completedCount }}。</p>
+        <button type="button" class="btn" @click="pageState = 'home'">
+            返回题目选择 (空格)
+        </button>
+    </div>
+
+    <!-- 其他情况 -->
+    <div v-else class="card">
+        <p>正在处理，请稍后...</p>
+    </div>
+</div>
+
+<script type="module">
+import KeyboardManager from './js/modules/keyboard.js';
+import StorageManager from './js/modules/storage.js';
+import JsonLoader from './js/modules/jsonLoader.js';
+
+const { createApp } = Vue;
+
+createApp({
+    data() {
+        return {
+            /* ========== 文件列表：可扩展 ========== */
+            fileList: [
+                { file: 'czxt-chp3.json', name: '操作系统第三章选择' },
+                { file: 'jsjwl-chp1.json', name: '计网第一章' },
+            ],
+
+            /* ========== 页面状态 ========== */
+            pageState: 'home',
+            currentFileName: '',
+
+            /* ========== 题目数据 ========== */
+            questions: [],
+            sets: [],
+            chosenSet: null,
+            quizList: [],
+            currentIndex: 0,
+
+            /* ========== 答题状态 ========== */
+            showAnswer: false,
+            chosenAnswer: '',
+            chosenAnswers: [],
+            shortAnswerText: '',
+
+            /* ========== 其他 ========== */
+            letterMap: ['A','B','C','D','E','F'],
+            hoverTitle: false,
+            isEditingNote: false,
+        };
+    },
+    computed: {
+        currentQuestion() {
+            return this.quizList[this.currentIndex] || {};
+        },
+        completedCount() {
+            return this.storage.getQuestionCompletion(
+                this.chosenSet.id,
+                this.currentQuestion.uniqueId
+            )?.completed;
+        },
+        setStats() {
+            if (!this.chosenSet) return null;
+            return this.storage.getSetStats(this.chosenSet.id, this.questions);
+        },
+        renderedContent() {
+            if (!this.currentQuestion.content) return '';
+            
+            // 先用marked处理Markdown
+            let content = marked.parse(this.currentQuestion.content);
+            
+            // 使用正则表达式找到所有LaTeX公式并渲染
+            content = content.replace(/\${1,2}([^$]+)\${1,2}/g, (match, formula) => {
+                const isDisplayMode = match.startsWith('$$');
+                try {
+                    return katex.renderToString(formula, {
+                        displayMode: isDisplayMode,
+                        throwOnError: false
+                    });
+                } catch (e) {
+                    console.error('LaTeX rendering error:', e);
+                    return match;
+                }
+            });
+            
+            return content;
+        }
+    },
+    watch: {
+        currentQuestion: {
+            handler(newVal) {
+                if (newVal && newVal.uniqueId && this.chosenSet) {
+                    newVal.note = this.storage.getNote(this.chosenSet.id, newVal.uniqueId);
+                }
+            },
+            immediate: true
+        }
+    },
+    methods: {
+        /* ========== 文件加载 ========== */
+        async loadJsonFile(fileName) {
+            try {
+                const data = await this.jsonLoader.loadFile(fileName);
+                this.currentFileName = fileName;
+                this.questions = data.questions;
+                this.sets = data.sets;
+                
+                if (this.sets.length > 0) {
+                    this.chosenSet = this.sets[0];
+                    this.pageState = 'setDescription';
+                    // 在内容加载后重新渲染 LaTeX
+                    this.$nextTick(() => {
+                        renderMathInElement(document.body, {
+                            delimiters: [
+                                {left: "$$", right: "$$", display: true},
+                                {left: "$", right: "$", display: false}
+                            ],
+                            throwOnError: false
+                        });
+                    });
+                } else {
+                    alert(`${fileName} 文件没有可用的 set`);
+                }
+            } catch(e) {
+                alert(e.message);
+            }
+        },
+
+        /* ========== 答题模式 ========== */
+        enterQuizMode() {
+            this.quizList = this.jsonLoader.getQuestionsBySet(this.chosenSet.id);
+            if (!this.quizList.length) {
+                alert('该合集内无题目，请检查 questionIds');
+                return;
+            }
+            this.currentIndex = 0;
+            this.pageState = 'quiz';
+            this.resetAnswerState();
+        },
+
+        enterOrderQuizMode() {
+            this.quizList = this.jsonLoader.getQuestionsBySet(this.chosenSet.id);
+            if (!this.quizList.length) {
+                alert('该合集内无题目，请检查 questionIds');
+                return;
+            }
+            
+            // 按错误率排序
+            this.quizList = this.jsonLoader.sortQuestionsByErrorRate(
+                this.quizList,
+                (qId) => this.storage.getQuestionCompletion(this.chosenSet.id, qId)
+            );
+            
+            this.currentIndex = 0;
+            this.pageState = 'orderQuiz';
+            this.resetAnswerState();
+        },
+
+        enterRandomQuizMode() {
+            this.quizList = this.jsonLoader.getQuestionsBySet(this.chosenSet.id);
+            if (!this.quizList.length) {
+                alert('该合集内无题目，请检查 questionIds');
+                return;
+            }
+            
+            this.quizList = this.jsonLoader.shuffleQuestions(this.quizList);
+            this.currentIndex = 0;
+            this.pageState = 'randomQuiz';
+            this.resetAnswerState();
+        },
+
+        /* ========== 答题流程 ========== */
+        resetAnswerState() {
+            this.showAnswer = false;
+            this.chosenAnswer = '';
+            this.chosenAnswers = [];
+            this.shortAnswerText = '';
+        },
+
+        submitAnswer() {
+            const q = this.currentQuestion;
+            if (!q.uniqueId) return;
+
+            // 未选择/未填写时提示
+            if (q.type === 'single-choice' && !this.chosenAnswer) {
+                alert('请先选择一个选项');
+                return;
+            }
+            if (q.type === 'multiple-choice' && !this.chosenAnswers.length) {
+                alert('请至少选择一个选项');
+                return;
+            }
+            if (q.type === 'short-answer' && !this.shortAnswerText.trim()) {
+                alert('请先填写你的答案');
+                return;
+            }
+
+            // 判定正误
+            let isCorrect = false;
+            if (q.type === 'single-choice') {
+                isCorrect = (this.chosenAnswer === q.correct_answer[0]);
+            } else if (q.type === 'multiple-choice') {
+                const c1 = [...this.chosenAnswers].sort().join('||');
+                const c2 = [...q.correct_answer].sort().join('||');
+                isCorrect = (c1 === c2);
+            } else if (q.type === 'short-answer') {
+                const userAns = this.shortAnswerText.trim();
+                const correctAns = (q.correct_answer[0] || '').trim();
+                isCorrect = (userAns === correctAns);
+            }
+
+            // 更新完成状态
+            this.storage.updateQuestionCompletion(this.chosenSet.id, q.uniqueId, isCorrect);
+            this.showAnswer = true;
+        },
+
+        nextQuestion() {
+            if (this.currentIndex < this.quizList.length - 1) {
+                this.currentIndex++;
+                this.resetAnswerState();
+            } else {
+                this.pageState = 'result';
+            }
+        },
+
+        /* ========== 笔记相关 ========== */
+        editNote() {
+            if(this.showAnswer) {
+                this.isEditingNote = true;
+                this.$nextTick(() => {
+                    if (this.$refs?.noteTextAreaRef) {
+                        this.$refs.noteTextAreaRef.focus();
+                    }
+                });
+            }
+        },
+
+        saveNote() {
+            if (!this.currentQuestion?.uniqueId || !this.chosenSet?.id) return;
+            this.storage.saveNote(
+                this.chosenSet.id,
+                this.currentQuestion.uniqueId,
+                this.currentQuestion.note
+            );
+            this.isEditingNote = false;
+        },
+
+        cancelNoteEdit() {
+            this.isEditingNote = false;
+        },
+
+        /* ========== 导入导出 ========== */
+        exportNotes() {
+            if (!this.chosenSet) return;
+            const notes = this.storage.exportNotes(this.chosenSet.id, this.questions);
+            const jsonStr = JSON.stringify(notes, null, 2);
+            const blob = new Blob([jsonStr], {type: 'application/json'});
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `notes_${this.chosenSet.id}.json`;
+            a.click();
+            URL.revokeObjectURL(url);
+        },
+
+        importNotesFile() {
+            document.getElementById('import-file').click();
+        },
+
+        async importNotes(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            try {
+                const text = await file.text();
+                const data = JSON.parse(text);
+                const count = this.storage.importNotes(this.chosenSet.id, data);
+                alert(`成功导入 ${count} 条笔记`);
+                this.$forceUpdate();
+            } catch (err) {
+                alert('导入失败：' + err.message);
+            }
+        },
+
+        /* ========== 工具方法 ========== */
+        getSetProgress(fileName) {
+            if (!fileName) return null;
+            const fileInfo = this.fileList.find(f => f.file === fileName);
+            if (!fileInfo || !this.sets.length) return null;
+
+            const stats = this.storage.getSetStats(this.sets[0].id, this.questions);
+            const progress = stats.completionRate;
+            return {
+                backgroundImage: `linear-gradient(to right, #ffcccc, #ccffcc ${progress}%, transparent ${progress}%)`
+            };
+        },
+
+        copyQuizLink() {
+            const q = this.currentQuestion;
+            if (!q.uniqueId) return;
+            const baseUrl = window.location.origin + window.location.pathname;
+            const quizFile = this.currentFileName.replace('.json','');
+            const fullUrl = `${baseUrl}?quizKey=${quizFile}&questionId=${q.uniqueId}`;
+            navigator.clipboard.writeText(fullUrl)
+                .then(() => alert(`已复制链接:\n${fullUrl}`))
+                .catch(err => alert(`复制链接失败：${err}`));
+        },
+
+        /* ========== 选项判定 ========== */
+        isChosenOptionSingle(opt) {
+            return opt === this.chosenAnswer;
+        },
+
+        isCorrectOptionSingle(opt) {
+            const ans = this.currentQuestion.correct_answer || [];
+            return ans.length > 0 && opt === ans[0];
+        },
+
+        isCorrectOptionMulti(opt) {
+            const ans = this.currentQuestion.correct_answer || [];
+            return ans.includes(opt);
+        }
+    },
+    mounted() {
+        // 初始化模块
+        this.keyboard = new KeyboardManager(this);
+        this.storage = new StorageManager();
+        this.jsonLoader = new JsonLoader();
+
+        // 初始化 KaTeX 自动渲染
+        document.addEventListener("DOMContentLoaded", () => {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    {left: "$$", right: "$$", display: true},
+                    {left: "$", right: "$", display: false}
+                ],
+                throwOnError: false
+            });
+        });
+
+        // 处理URL参数
+        const urlParams = new URLSearchParams(window.location.search);
+        const quizKey = urlParams.get('quizKey');
+        const questionId = urlParams.get('questionId');
+        
+        if (quizKey) {
+            this.loadJsonFile(`${quizKey}.json`)
+                .then(() => {
+                    if (questionId) {
+                        const q = this.questions.find(q => q.uniqueId === questionId);
+                        if (q) {
+                            const setId = this.sets.find(s => s.questionIds.includes(questionId));
+                            if (setId) {
+                                this.chosenSet = setId;
+                                this.quizList = [q];
+                                this.pageState = 'quiz';
+                            }
+                        }
+                    }
+                });
+        }
+    },
+    unmounted() {
+        this.keyboard.destroy();
+    }
+}).mount('#app');
+</script>
+</body>
+</html>
