@@ -1,17 +1,9 @@
 {
-  "updateTime": "2025-06-23T12:14:48.365Z",
+  "updateTime": "2025-06-23T14:48:32.657Z",
   "banks": [
-    {
-      "file": "czxt-chp3.json",
-      "name": "操作系统进程-第三章-调度选择题"
-    },
     {
       "file": "demo.json",
       "name": "题型演示"
-    },
-    {
-      "file": "jsjwl-chp1.json",
-      "name": "计算机网络-第一次作业"
     },
     {
       "file": "rjgc-1.json",
