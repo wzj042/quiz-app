@@ -16,7 +16,7 @@ body {
 .nav {
   display: flex;
   align-items: center;
-  justify-content: start;
+  justify-content: space-between;
   background: rgba(176, 193, 162, 0.1);
   border-radius: 4px;
   padding: 12px;
@@ -205,7 +205,8 @@ body {
     }
 
     .nav {
-        flex-direction: column;
+        flex-direction: row;
+        justify-content: space-between;
         padding: 10px;
     }
 
@@ -234,6 +235,11 @@ body {
     }
     .question-id {
         font-size: 13px;
+    }
+
+    .github-icon {
+        width: 20px;
+        height: 20px;
     }
 }
 .note-container.editing {
@@ -271,4 +277,216 @@ body {
     background-color: #f5f5f5;
     border-radius: 4px;
     margin: 10px 0;
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin: 15px 0;
+}
+
+.stats-item {
+    text-align: center;
+    padding: 12px 8px;
+    background: #f5f5f5;
+    border-radius: 8px;
+    min-width: 0; /* 允许子元素收缩 */
+    overflow: hidden; /* 防止内容溢出 */
+}
+
+.stats-value {
+    font-size: 20px;
+    font-weight: bold;
+    color: #B0C1A2;
+    white-space: nowrap; /* 数字不换行 */
+    overflow: hidden;
+    text-overflow: ellipsis; /* 超出显示省略号 */
+}
+
+.stats-label {
+    font-size: 12px;
+    color: #666;
+    margin-top: 4px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+@media (max-width: 600px) {
+    .stats-grid {
+        gap: 8px;
+    }
+
+    .stats-item {
+        padding: 8px 6px;
+    }
+
+    .stats-value {
+        font-size: 16px;
+    }
+
+    .stats-label {
+        font-size: 11px;
+    }
+}
+
+.github-link {
+    color: #B0C1A2;
+    transition: color 0.3s ease, transform 0.3s ease;
+    display: flex;
+    align-items: center;
+}
+
+.github-link:hover {
+    color: #91a881;
+    transform: scale(1.1);
+}
+
+.github-icon {
+    display: block;
+}
+
+.banner {
+    margin: 0;
+    padding: 12px 16px;
+    background-color: rgba(176, 193, 162, 0.15);
+    border-bottom: 1px solid rgba(176, 193, 162, 0.2);
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    font-size: 14px;
+    line-height: 1.6;
+    transition: all 0.3s ease;
+    color: #4a5d3f;
+}
+
+.banner-content {
+    flex: 1;
+    padding-right: 12px;
+}
+
+.banner-content p {
+    margin: 0;
+}
+
+.banner-content p + p {
+    margin-top: 8px;
+}
+
+.banner-content a {
+    color: #4a5d3f;
+    text-decoration: underline;
+    font-weight: 500;
+}
+
+.banner-content a:hover {
+    color: #2c3825;
+}
+
+.banner-close {
+    background: none;
+    border: none;
+    padding: 4px;
+    margin: -4px;
+    cursor: pointer;
+    opacity: 0.6;
+    transition: opacity 0.3s ease;
+    color: inherit;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.banner-close:hover {
+    opacity: 1;
+}
+
+/* Banner types */
+.banner-info {
+    background-color: rgba(33, 150, 243, 0.1);
+    border-bottom-color: rgba(33, 150, 243, 0.2);
+    color: #0960a5;
+}
+
+.banner-info a {
+    color: #0960a5;
+}
+
+.banner-info a:hover {
+    color: #064475;
+}
+
+.banner-success {
+    background-color: rgba(76, 175, 80, 0.1);
+    border-bottom-color: rgba(76, 175, 80, 0.2);
+    color: #2e7d32;
+}
+
+.banner-success a {
+    color: #2e7d32;
+}
+
+.banner-success a:hover {
+    color: #1b4a1e;
+}
+
+.banner-warning {
+    background-color: rgba(255, 152, 0, 0.1);
+    border-bottom-color: rgba(255, 152, 0, 0.2);
+    color: #b26a00;
+}
+
+.banner-warning a {
+    color: #b26a00;
+}
+
+.banner-warning a:hover {
+    color: #804c00;
+}
+
+.banner-error {
+    background-color: rgba(244, 67, 54, 0.1);
+    border-bottom-color: rgba(244, 67, 54, 0.2);
+    color: #c62828;
+}
+
+.banner-error a {
+    color: #c62828;
+}
+
+.banner-error a:hover {
+    color: #8e1c1c;
+}
+
+.banner-neutral {
+    background-color: rgba(176, 193, 162, 0.15);
+    border-bottom-color: rgba(176, 193, 162, 0.2);
+    color: #4a5d3f;
+}
+
+.banner-neutral a {
+    color: #4a5d3f;
+}
+
+.banner-neutral a:hover {
+    color: #2c3825;
+}
+
+@media (max-width: 600px) {
+    .banner {
+        padding: 10px 12px;
+        font-size: 13px;
+        line-height: 1.5;
+    }
+
+    .banner-content p + p {
+        margin-top: 6px;
+    }
+
+    .banner-close {
+        padding: 3px;
+        margin: -3px;
+    }
 }

@@ -3,42 +3,110 @@ export default class JsonLoader {
     constructor() {
         this.questions = [];
         this.sets = [];
+        this.loadedFile = null;
+        this.validQuestionTypes = ['single-choice', 'multiple-choice', 'short-answer', 'fill-in-blank'];
     }
 
     // 生成唯一ID
-    generateUniqueId(setId, index) {
-        return `${setId}-q${String(index + 1).padStart(3, '0')}`;
+    generateUniqueId(setId, index, content) {
+        // 使用内容的哈希值来确保唯一性
+        const contentHash = this.hashString(content);
+        return `${setId}-${contentHash}-${String(index + 1).padStart(3, '0')}`;
+    }
+
+    // 简单的字符串哈希函数
+    hashString(str) {
+        let hash = 0;
+        for (let i = 0; i < str.length; i++) {
+            const char = str.charCodeAt(i);
+            hash = ((hash << 5) - hash) + char;
+            hash = hash & hash; // Convert to 32-bit integer
+        }
+        return Math.abs(hash).toString(16).substring(0, 8);
     }
 
     // 处理题目数据，添加唯一ID
     processQuestions(questions, setId) {
         return questions.map((q, index) => {
             // 生成新的唯一ID
-            const uniqueId = this.generateUniqueId(setId, index);
+            const uniqueId = this.generateUniqueId(setId, index, q.content);
+            
+            // 清理和验证内容
+            const cleanedQuestion = this.sanitizeQuestion(q);
             
             // 返回新对象，保留原有属性但使用新ID
             return {
-                ...q,
+                ...cleanedQuestion,
                 uniqueId
             };
         });
     }
 
+    // 清理题目内容
+    sanitizeQuestion(question) {
+        const cleaned = { ...question };
+        
+        // 清理文本内容
+        cleaned.content = this.sanitizeText(cleaned.content);
+        if (cleaned.analysis) {
+            cleaned.analysis = this.sanitizeText(cleaned.analysis);
+        }
+
+        // 清理选项
+        if (cleaned.options) {
+            cleaned.options = cleaned.options.map(opt => this.sanitizeText(opt));
+        }
+
+        // 清理答案
+        if (cleaned.correct_answer) {
+            cleaned.correct_answer = cleaned.correct_answer.map(ans => this.sanitizeText(ans));
+        }
+
+        return cleaned;
+    }
+
+    // 清理文本内容
+    sanitizeText(text) {
+        if (!text) return '';
+        
+        // 移除可能的XSS内容
+        return text
+            .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '')
+            .replace(/on\w+="[^"]*"/g, '')
+            .replace(/javascript:/gi, '')
+            .trim();
+    }
+
     // 加载JSON文件
     async loadFile(fileName) {
         try {
+            // 检查是否已经加载
+            if (this.loadedFile === fileName) {
+                return {
+                    questions: this.questions,
+                    sets: this.sets
+                };
+            }
+
             const response = await fetch(`assets/${fileName}`);
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
             const data = await response.json();
+
+            // 验证数据格式
+            if (!this.validateData(data)) {
+                throw new Error('Invalid data format');
+            }
             
             // 处理sets，确保每个set都有id
             this.sets = data.sets.map((set, index) => {
                 const setId = set.id || `set-${String(index + 1).padStart(3, '0')}`;
                 return {
                     ...set,
-                    id: setId
+                    id: setId,
+                    name: this.sanitizeText(set.name),
+                    description: set.description ? this.sanitizeText(set.description) : ''
                 };
             });
 
@@ -46,12 +114,16 @@ export default class JsonLoader {
             this.questions = data.questions.map((q, index) => {
                 // 默认放入第一个set
                 const setId = this.sets[0].id;
-                const uniqueId = this.generateUniqueId(setId, index);
+                const uniqueId = this.generateUniqueId(setId, index, q.content);
+                const cleanedQuestion = this.sanitizeQuestion(q);
                 return {
-                    ...q,
+                    ...cleanedQuestion,
                     uniqueId
                 };
             });
+
+            // 更新加载状态
+            this.loadedFile = fileName;
 
             return {
                 questions: this.questions,
@@ -65,60 +137,64 @@ export default class JsonLoader {
 
     // 数据格式验证
     validateData(data) {
-        // 基本结构验证
-        if (!Array.isArray(data.questions) || !Array.isArray(data.sets)) {
-            return false;
-        }
-
-        // 题目格式验证
-        const validQuestionTypes = ['single-choice', 'multiple-choice', 'short-answer', 'fill-in-blank'];
-        const isValidQuestion = q => {
-            if (!q.uniqueId || !q.content || !validQuestionTypes.includes(q.type)) {
+        try {
+            // 基本结构验证
+            if (!Array.isArray(data.questions) || !Array.isArray(data.sets)) {
                 return false;
             }
 
-            // 选择题特殊验证
-            if (q.type === 'single-choice' || q.type === 'multiple-choice') {
-                return Array.isArray(q.options) && 
-                       q.options.length > 0 &&
-                       Array.isArray(q.correct_answer) &&
-                       q.correct_answer.length > 0 &&
-                       q.correct_answer.every(ans => q.options.includes(ans));
+            // 题目格式验证
+            const isValidQuestion = q => {
+                if (!q.content || !this.validQuestionTypes.includes(q.type)) {
+                    return false;
+                }
+
+                // 选择题特殊验证
+                if (q.type === 'single-choice' || q.type === 'multiple-choice') {
+                    return Array.isArray(q.options) && 
+                           q.options.length > 0 &&
+                           Array.isArray(q.correct_answer) &&
+                           q.correct_answer.length > 0 &&
+                           q.correct_answer.every(ans => q.options.includes(ans));
+                }
+
+                // 填空题特殊验证
+                if (q.type === 'fill-in-blank') {
+                    return Array.isArray(q.blanks) &&
+                           Array.isArray(q.correct_answer) &&
+                           q.blanks.length === q.correct_answer.length &&
+                           q.blanks.length > 0;
+                }
+
+                // 简答题特殊验证
+                if (q.type === 'short-answer') {
+                    return Array.isArray(q.correct_answer) &&
+                           q.correct_answer.length > 0;
+                }
+
+                return true;
+            };
+
+            // 检查每个题目的格式
+            if (!data.questions.every(isValidQuestion)) {
+                return false;
             }
 
-            // 填空题特殊验证
-            if (q.type === 'fill-in-blank') {
-                return Array.isArray(q.blanks) &&
-                       Array.isArray(q.correct_answer) &&
-                       q.blanks.length === q.correct_answer.length &&
-                       q.blanks.length > 0;
-            }
+            // 检查每个set的格式
+            const isValidSet = set => {
+                return set.name && typeof set.name === 'string';
+            };
 
-            // 简答题特殊验证
-            if (q.type === 'short-answer') {
-                return Array.isArray(q.correct_answer) &&
-                       q.correct_answer.length > 0;
-            }
-
-            return true;
-        };
-
-        // 检查每个题目的格式
-        if (!data.questions.every(isValidQuestion)) {
+            return data.sets.every(isValidSet);
+        } catch (error) {
+            console.error('Data validation failed:', error);
             return false;
         }
-
-        // 检查每个set的格式
-        const isValidSet = set => {
-            return set.id && set.name;
-        };
-
-        return data.sets.every(isValidSet);
     }
 
     // 根据set获取题目列表
     getQuestionsBySet(setId) {
-        return this.questions;
+        return this.questions.filter(q => q.uniqueId.startsWith(setId));
     }
 
     // 按错误率排序题目
@@ -128,9 +204,9 @@ export default class JsonLoader {
             const completionB = getCompletion(b.uniqueId);
             
             const errorRateA = completionA ? 
-                (completionA.totalErrors / Math.max(1, completionA.totalAttempts)) : 0;
+                (completionA.errors / Math.max(1, completionA.attempts)) : 0;
             const errorRateB = completionB ? 
-                (completionB.totalErrors / Math.max(1, completionB.totalAttempts)) : 0;
+                (completionB.errors / Math.max(1, completionB.attempts)) : 0;
             
             return errorRateB - errorRateA; // 错误率高的排前面
         });
