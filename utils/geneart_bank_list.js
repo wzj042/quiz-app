@@ -55,9 +55,13 @@ async function generateBankList() {
         const assetsDir = path.join(__dirname, '..', 'assets');
         const bankList = await scanDirectory(assetsDir);
         
-        // 生成list.json文件
+        // 生成list.json文件，添加更新时间
+        const outputData = {
+            updateTime: new Date().toISOString(),
+            banks: bankList
+        };
         const outputPath = path.join(assetsDir, 'list.json');
-        await fs.writeFile(outputPath, JSON.stringify(bankList, null, 2));
+        await fs.writeFile(outputPath, JSON.stringify(outputData, null, 2));
         
         console.log(`Successfully generated list.json with ${bankList.length} quiz banks`);
     } catch (err) {

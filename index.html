@@ -50,26 +50,20 @@
         <a href="#" class="nav-title-link" @click="goHome" @mouseover="hoverTitle = true" @mouseout="hoverTitle = false">
             <span class="nav-title">Quiz App</span>
         </a>
-        <a href="https://github.com/wzj042/quiz-app" class="github-link" target="_blank" rel="noopener noreferrer" title="View on GitHub">
+        <a href="https://github.com/wzj042/quiz-app" class="github-link" target="_blank" rel="noopener noreferrer" 
+            title="项目调试中，欢迎参与开发和反馈。可参考 demo.json 格式，Fork 项目后添加自己的题库。">
             <svg class="github-icon" viewBox="0 0 16 16" width="24" height="24">
                 <path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"></path>
             </svg>
         </a>
     </div>
 
-    <!-- 通知横幅 -->
-    <div v-if="banner.show" :class="['banner', `banner-${banner.type}`]">
-        <div class="banner-content" v-html="renderMarkdown(banner.content)"></div>
-        <button class="banner-close" @click="closeBanner" v-if="banner.closeable">
-            <svg viewBox="0 0 24 24" width="16" height="16">
-                <path fill="currentColor" d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
-            </svg>
-        </button>
-    </div>
-
     <!-- 列出题库 -->
     <div v-if="pageState === 'home'" class="card">
-        <h1 class="title">选择题库</h1>
+        <h1 class="title">
+            选择题库
+            <span class="update-time" v-if="updateTime">更新于: {{ formatUpdateTime(updateTime) }}</span>
+        </h1>
         <!-- 加载状态 -->
         <div v-if="isLoading" class="loading-state">
             正在加载题库列表...
@@ -429,7 +423,7 @@
     const app = Vue.createApp({
         data() {
             return {
-                storageManager: null,
+                storageManager: new StorageManager(),
                 jsonLoader: null,
                 keyboardManager: null,
                 questionManager: null,
@@ -454,50 +448,18 @@
                 dontShowExportReminder: false,
                 groupedModifiedQuestions: {},
                 lastExportTimestamp: null,
-                banner: {
-                    show: false,
-                    content: '',
-                    type: 'info',
-                    closeable: true
-                }
+                updateTime: null
             }
         },
         async created() {
-            this.storageManager = new StorageManager();
+            // 初始化各个管理器
             this.jsonLoader = new JsonLoader();
-            this.keyboardManager = new KeyboardManager(this);
+            this.keyboardManager = new KeyboardManager();
             this.questionManager = new QuestionManager(this.storageManager);
             this.practiceManager = new PracticeManager(this.storageManager);
-            
-            // 显示项目状态横幅（仅首次访问）
-            if (this.pageState === 'home' && !this.storageManager.getBannerShown()) {
-                this.showBanner(
-                    '🚧 **项目调试中** 🚧\n\n' +
-                    '目前项目处于调试阶段，欢迎参与开发和反馈。\n' +
-                    '你可以参考 [demo.json](https://github.com/wzj042/quiz-app/blob/main/assets/demo.json) 的格式，' +
-                    'Fork 项目后添加自己的题库。',
-                    'info',
-                    true
-                );
-                this.storageManager.setBannerShown(true);
-            }
 
             // 加载题库列表
             await this.loadBankList();
-
-            // 添加页面关闭前的提示
-            window.addEventListener('beforeunload', (e) => {
-                if (this.isEditing && this.questionManager.checkUnsavedChanges()) {
-                    e.preventDefault();
-                    e.returnValue = '有未保存的修改，确定要离开吗？';
-                    return e.returnValue;
-                }
-            });
-        },
-        beforeUnmount() {
-            this.keyboardManager.destroy();
-            // 移除页面关闭前的提示
-            window.removeEventListener('beforeunload', this.handleBeforeUnload);
         },
         computed: {
             currentQuestion() {
@@ -591,14 +553,14 @@
                 this.loadError = null;
                 try {
                     const response = await fetch('assets/list.json');
-                    if (!response.ok) throw new Error('Failed to load bank list');
-                    this.fileList = await response.json();
+                    const data = await response.json();
+                    this.fileList = data.banks || [];
+                    this.updateTime = data.updateTime;
                 } catch (error) {
+                    console.error('Error loading file list:', error);
                     this.loadError = error.message;
-                    console.error('加载题库列表失败:', error);
-                } finally {
-                    this.isLoading = false;
                 }
+                this.isLoading = false;
             },
 
             // 加载题库文件
@@ -1056,6 +1018,16 @@
             },
             closeBanner() {
                 this.banner.show = false;
+            },
+            formatUpdateTime(isoString) {
+                const date = new Date(isoString);
+                return date.toLocaleString('zh-CN', {
+                    year: 'numeric',
+                    month: '2-digit',
+                    day: '2-digit',
+                    hour: '2-digit',
+                    minute: '2-digit'
+                });
             }
         }
     });

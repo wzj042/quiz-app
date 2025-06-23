@@ -105,6 +105,16 @@ body {
     font-weight: bold;
     color: #B0C1A2;
     margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.update-time {
+    font-size: 12px;
+    font-weight: normal;
+    color: #888;
+    white-space: nowrap;
 }
 
 .option-item {
@@ -226,7 +236,9 @@ body {
     }
 
     .title {
-        font-size: 16px; /* 移动端标题字体不缩小 */
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 4px;
     }
 
     .option-item {
@@ -240,6 +252,10 @@ body {
     .github-icon {
         width: 20px;
         height: 20px;
+    }
+
+    .update-time {
+        font-size: 11px;
     }
 }
 .note-container.editing {
@@ -353,146 +369,9 @@ body {
     height: 22px;
 }
 
-.banner {
-    margin: 0;
-    padding: 12px 16px;
-    background-color: rgba(176, 193, 162, 0.15);
-    border-bottom: 1px solid rgba(176, 193, 162, 0.2);
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    font-size: 14px;
-    line-height: 1.6;
-    transition: all 0.3s ease;
-    color: #4a5d3f;
-}
-
-.banner-content {
-    flex: 1;
-    padding-right: 12px;
-}
-
-.banner-content p {
-    margin: 0;
-}
-
-.banner-content p + p {
-    margin-top: 8px;
-}
-
-.banner-content a {
-    color: #4a5d3f;
-    text-decoration: underline;
-    font-weight: 500;
-}
-
-.banner-content a:hover {
-    color: #2c3825;
-}
-
-.banner-close {
-    background: none;
-    border: none;
-    padding: 4px;
-    margin: -4px;
-    cursor: pointer;
-    opacity: 0.6;
-    transition: opacity 0.3s ease;
-    color: inherit;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-}
-
-.banner-close:hover {
-    opacity: 1;
-}
-
-/* Banner types */
-.banner-info {
-    background-color: rgba(33, 150, 243, 0.1);
-    border-bottom-color: rgba(33, 150, 243, 0.2);
-    color: #0960a5;
-}
-
-.banner-info a {
-    color: #0960a5;
-}
-
-.banner-info a:hover {
-    color: #064475;
-}
-
-.banner-success {
-    background-color: rgba(76, 175, 80, 0.1);
-    border-bottom-color: rgba(76, 175, 80, 0.2);
-    color: #2e7d32;
-}
-
-.banner-success a {
-    color: #2e7d32;
-}
-
-.banner-success a:hover {
-    color: #1b4a1e;
-}
-
-.banner-warning {
-    background-color: rgba(255, 152, 0, 0.1);
-    border-bottom-color: rgba(255, 152, 0, 0.2);
-    color: #b26a00;
-}
-
-.banner-warning a {
-    color: #b26a00;
-}
-
-.banner-warning a:hover {
-    color: #804c00;
-}
-
-.banner-error {
-    background-color: rgba(244, 67, 54, 0.1);
-    border-bottom-color: rgba(244, 67, 54, 0.2);
-    color: #c62828;
-}
-
-.banner-error a {
-    color: #c62828;
-}
-
-.banner-error a:hover {
-    color: #8e1c1c;
-}
-
-.banner-neutral {
-    background-color: rgba(176, 193, 162, 0.15);
-    border-bottom-color: rgba(176, 193, 162, 0.2);
-    color: #4a5d3f;
-}
-
-.banner-neutral a {
-    color: #4a5d3f;
-}
-
-.banner-neutral a:hover {
-    color: #2c3825;
-}
-
 @media (max-width: 600px) {
-    .banner {
-        padding: 10px 12px;
-        font-size: 13px;
-        line-height: 1.5;
-    }
-
-    .banner-content p + p {
-        margin-top: 6px;
-    }
-
-    .banner-close {
-        padding: 3px;
-        margin: -3px;
+    .github-icon {
+        width: 20px;
+        height: 20px;
     }
 }
