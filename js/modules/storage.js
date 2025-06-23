@@ -1,96 +1,130 @@
 // 本地存储管理模块
 export default class StorageManager {
     constructor() {
-        this.PREFIX = 'quiz_app_';
+        this.storage = window.localStorage;
+        this.STORAGE_KEY = 'quiz_completion';
+        this.initStorage();
     }
 
-    // 获取题目的完成状态
-    getQuestionCompletion(setId, questionId) {
-        const key = `${this.PREFIX}completion_${setId}_${questionId}`;
-        const data = localStorage.getItem(key);
-        if (!data) return null;
-        try {
-            return JSON.parse(data);
-        } catch(e) {
-            return null;
+    initStorage() {
+        if (!this.storage.getItem(this.STORAGE_KEY)) {
+            this.storage.setItem(this.STORAGE_KEY, JSON.stringify({
+                version: 1,
+                data: {}
+            }));
         }
     }
 
-    // 更新题目完成状态
+    getQuestionCompletion(setId, questionId) {
+        const data = JSON.parse(this.storage.getItem(this.STORAGE_KEY));
+        return data.data[`${setId}-${questionId}`] || null;
+    }
+
     updateQuestionCompletion(setId, questionId, isCorrect) {
-        const key = `${this.PREFIX}completion_${setId}_${questionId}`;
-        const data = {
-            completed: true,
-            isCorrect: isCorrect,
-            completedAt: new Date().toISOString()
+        const data = JSON.parse(this.storage.getItem(this.STORAGE_KEY));
+        const key = `${setId}-${questionId}`;
+        const today = new Date().toISOString().split('T')[0];
+
+        const current = data.data[key] || {
+            completed: 0,
+            attempts: 0,
+            errors: 0,
+            lastAttemptDate: null
         };
-        localStorage.setItem(key, JSON.stringify(data));
+
+        current.attempts++;
+        if (!isCorrect) {
+            current.errors++;
+        }
+        current.completed = 1;
+        current.lastAttemptDate = today;
+
+        data.data[key] = current;
+        this.storage.setItem(this.STORAGE_KEY, JSON.stringify(data));
     }
 
-    // 获取题目笔记
-    getNote(setId, questionId) {
-        const key = `${this.PREFIX}note_${setId}_${questionId}`;
-        return localStorage.getItem(key) || '';
-    }
-
-    // 保存题目笔记
-    saveNote(setId, questionId, note) {
-        const key = `${this.PREFIX}note_${setId}_${questionId}`;
-        localStorage.setItem(key, note);
-    }
-
-    // 获取题库完成情况统计
     getSetStats(setId, questions) {
+        const data = JSON.parse(this.storage.getItem(this.STORAGE_KEY));
         let completed = 0;
-        let correct = 0;
+        let totalAttempts = 0;
+        let totalErrors = 0;
 
         questions.forEach(q => {
-            const completion = this.getQuestionCompletion(setId, q.uniqueId);
+            const completion = data.data[`${setId}-${q.uniqueId}`];
             if (completion) {
-                completed++;
-                if (completion.isCorrect) {
-                    correct++;
-                }
+                if (completion.completed) completed++;
+                totalAttempts += completion.attempts || 0;
+                totalErrors += completion.errors || 0;
             }
         });
 
         return {
-            total: questions.length,
             completed,
-            correct,
-            completionRate: (completed / questions.length * 100).toFixed(1)
+            totalAttempts,
+            totalErrors,
+            completionRate: questions.length ? Math.round((completed / questions.length) * 100) : 0
         };
     }
 
-    // 导出笔记
-    exportNotes(setId, questions) {
-        const notes = {};
-        questions.forEach(q => {
-            if(q.uniqueId) {
-                const note = this.getNote(setId, q.uniqueId);
-                if (note) {
-                    notes[q.uniqueId] = {
-                        id: q.uniqueId,
-                        content: note
-                    };
-                }
-            }
-        });
-        return { analysis: Object.values(notes) };
-    }
+    getBankStats(fileName) {
+        const data = JSON.parse(this.storage.getItem(this.STORAGE_KEY));
+        const prefix = fileName.replace('.json', '');
+        let completed = 0;
+        let total = 0;
+        let attempts = 0;
+        let errors = 0;
 
-    // 导入笔记
-    importNotes(setId, notesData) {
-        if (!Array.isArray(notesData.analysis)) {
-            throw new Error('导入的JSON文件格式错误');
+        // 遍历所有记录，找出属于这个题库的数据
+        for (const key in data.data) {
+            if (key.startsWith(prefix)) {
+                total++;
+                const completion = data.data[key];
+                if (completion.completed) completed++;
+                attempts += completion.attempts || 0;
+                errors += completion.errors || 0;
+            }
         }
 
-        notesData.analysis.forEach(item => {
-            if (item && item.id && item.content) {
-                this.saveNote(setId, item.id, item.content);
-            }
-        });
+        return {
+            completed,
+            total,
+            attempts,
+            errors
+        };
+    }
 
-        return notesData.analysis.length;
+    getAllBanksStats() {
+        const data = JSON.parse(this.storage.getItem(this.STORAGE_KEY));
+        const today = new Date().toISOString().split('T')[0];
+        let totalQuestions = 0;
+        let totalCompleted = 0;
+        let totalAttempts = 0;
+        let totalErrors = 0;
+        let todayPracticed = 0;
+
+        // 遍历所有记录
+        for (const key in data.data) {
+            const completion = data.data[key];
+            totalQuestions++;
+            if (completion.completed) totalCompleted++;
+            totalAttempts += completion.attempts || 0;
+            totalErrors += completion.errors || 0;
+            if (completion.lastAttemptDate === today) {
+                todayPracticed++;
+            }
+        }
+
+        return {
+            totalQuestions,
+            totalCompleted,
+            totalAttempts,
+            totalErrors,
+            todayPracticed
+        };
+    }
+
+    // 清除所有数据
+    clearAll() {
+        this.storage.removeItem(this.STORAGE_KEY);
     }
 } 

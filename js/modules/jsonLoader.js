@@ -5,33 +5,61 @@ export default class JsonLoader {
         this.sets = [];
     }
 
+    // 生成唯一ID
+    generateUniqueId(setId, index) {
+        return `${setId}-q${String(index + 1).padStart(3, '0')}`;
+    }
+
+    // 处理题目数据，添加唯一ID
+    processQuestions(questions, setId) {
+        return questions.map((q, index) => {
+            // 生成新的唯一ID
+            const uniqueId = this.generateUniqueId(setId, index);
+            
+            // 返回新对象，保留原有属性但使用新ID
+            return {
+                ...q,
+                uniqueId
+            };
+        });
+    }
+
     // 加载JSON文件
     async loadFile(fileName) {
         try {
-            const resp = await fetch(`assets/${fileName}`);
-            const jsonData = await resp.json();
+            const response = await fetch(`assets/${fileName}`);
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            const data = await response.json();
+            
+            // 处理sets，确保每个set都有id
+            this.sets = data.sets.map((set, index) => {
+                const setId = set.id || `set-${String(index + 1).padStart(3, '0')}`;
+                return {
+                    ...set,
+                    id: setId
+                };
+            });
 
-            // // 数据校验
-            // if (!this.validateData(jsonData)) {
-            //     throw new Error(`${fileName} 数据格式错误`);
-            // }
-
-            // 处理题目内容 - 使用marked渲染Markdown
-            jsonData.questions = jsonData.questions.map(q => ({
-                ...q,
-                content: marked.parse(q.content || ''),
-                analysis: q.analysis ? marked.parse(q.analysis) : ''
-            }));
-
-            this.questions = jsonData.questions;
-            this.sets = jsonData.sets;
+            // 处理questions，为每个题目生成唯一ID
+            this.questions = data.questions.map((q, index) => {
+                // 默认放入第一个set
+                const setId = this.sets[0].id;
+                const uniqueId = this.generateUniqueId(setId, index);
+                return {
+                    ...q,
+                    uniqueId
+                };
+            });
 
             return {
                 questions: this.questions,
                 sets: this.sets
             };
-        } catch(e) {
-            throw new Error(`加载 ${fileName} 失败：${e.message}`);
+        } catch (e) {
+            console.error('加载题目文件失败:', e);
+            throw e;
         }
     }
 
@@ -43,13 +71,36 @@ export default class JsonLoader {
         }
 
         // 题目格式验证
-        const validQuestionTypes = ['single-choice', 'multiple-choice', 'short-answer'];
+        const validQuestionTypes = ['single-choice', 'multiple-choice', 'short-answer', 'fill-in-blank'];
         const isValidQuestion = q => {
-            return q.uniqueId && 
-                   q.content && 
-                   validQuestionTypes.includes(q.type) &&
-                   Array.isArray(q.correct_answer) &&
-                   q.correct_answer.length > 0;
+            if (!q.uniqueId || !q.content || !validQuestionTypes.includes(q.type)) {
+                return false;
+            }
+
+            // 选择题特殊验证
+            if (q.type === 'single-choice' || q.type === 'multiple-choice') {
+                return Array.isArray(q.options) && 
+                       q.options.length > 0 &&
+                       Array.isArray(q.correct_answer) &&
+                       q.correct_answer.length > 0 &&
+                       q.correct_answer.every(ans => q.options.includes(ans));
+            }
+
+            // 填空题特殊验证
+            if (q.type === 'fill-in-blank') {
+                return Array.isArray(q.blanks) &&
+                       Array.isArray(q.correct_answer) &&
+                       q.blanks.length === q.correct_answer.length &&
+                       q.blanks.length > 0;
+            }
+
+            // 简答题特殊验证
+            if (q.type === 'short-answer') {
+                return Array.isArray(q.correct_answer) &&
+                       q.correct_answer.length > 0;
+            }
+
+            return true;
         };
 
         // 检查每个题目的格式
@@ -59,12 +110,7 @@ export default class JsonLoader {
 
         // 检查每个set的格式
         const isValidSet = set => {
-            return set.id && 
-                   set.name && 
-                   Array.isArray(set.questionIds) &&
-                   set.questionIds.every(id => 
-                       data.questions.some(q => q.uniqueId === id)
-                   );
+            return set.id && set.name;
         };
 
         return data.sets.every(isValidSet);
@@ -72,29 +118,21 @@ export default class JsonLoader {
 
     // 根据set获取题目列表
     getQuestionsBySet(setId) {
-        const set = this.sets.find(s => s.id === setId);
-        if (!set) return [];
-        
-        const idSet = new Set(set.questionIds);
-        return this.questions.filter(q => idSet.has(q.uniqueId));
+        return this.questions;
     }
 
     // 按错误率排序题目
-    sortQuestionsByErrorRate(questions, getCompletionFunc) {
+    sortQuestionsByErrorRate(questions, getCompletion) {
         return [...questions].sort((a, b) => {
-            const statsA = getCompletionFunc(a.uniqueId);
-            const statsB = getCompletionFunc(b.uniqueId);
+            const completionA = getCompletion(a.uniqueId);
+            const completionB = getCompletion(b.uniqueId);
             
-            // 未完成的题目排在前面
-            if (!statsA) return -1;
-            if (!statsB) return 1;
+            const errorRateA = completionA ? 
+                (completionA.totalErrors / Math.max(1, completionA.totalAttempts)) : 0;
+            const errorRateB = completionB ? 
+                (completionB.totalErrors / Math.max(1, completionB.totalAttempts)) : 0;
             
-            // 错误的题目排在前面
-            if (!statsA.isCorrect && statsB.isCorrect) return -1;
-            if (statsA.isCorrect && !statsB.isCorrect) return 1;
-            
-            // 按完成时间排序
-            return new Date(statsB.completedAt) - new Date(statsA.completedAt);
+            return errorRateB - errorRateA; // 错误率高的排前面
         });
     }
 

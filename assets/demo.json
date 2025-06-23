@@ -1,0 +1,52 @@
+{
+    "questions": [
+        {
+            "type": "single-choice",
+            "content": "# 单选题示例\n\n这是一道单选题，支持以下特性：\n- Markdown 渲染（如本条列表）\n- LaTeX 公式：$E = mc^2$\n- 外链图片：\n\n![示例图片](https://img20.360buyimg.com/openfeedback/jfs/t1/316849/31/11431/16081/68591208Fefbbf1b0/c67e77126634cdaa.png)\n\n请选择正确的选项：",
+            "options": [
+                "选项A - 普通文本",
+                "选项B - 包含公式：$\\sqrt{x^2 + y^2}$",
+                "选项C - **Markdown加粗**",
+                "选项D - 包含[链接](https://example.com)"
+            ],
+            "correct_answer": ["选项A - 普通文本"],
+            "analysis": "这是解析说明，同样支持：\n1. Markdown\n2. 公式 $\\sum_{i=1}^n i$\n3. 图片\n4. 链接"
+        },
+        {
+            "type": "multiple-choice",
+            "content": "# 多选题示例\n\n这是一道多选题，展示多行公式：\n\n$$\n\\begin{aligned}\nf(x) &= x^2 + 2x + 1 \\\\\n&= (x + 1)^2\n\\end{aligned}\n$$\n\n请选择所有正确的选项：",
+            "options": [
+                "选项A - 第一个正确选项",
+                "选项B - 第二个正确选项",
+                "选项C - 错误选项",
+                "选项D - 第三个正确选项"
+            ],
+            "correct_answer": [
+                "选项A - 第一个正确选项",
+                "选项B - 第二个正确选项",
+                "选项D - 第三个正确选项"
+            ],
+            "analysis": "多选题的解析也支持所有渲染特性"
+        },
+        {
+            "type": "fill-in-blank",
+            "content": "# 填空题示例\n\n请完成以下填空：\n\n1. 中国的首都是 _____\n2. $1 + 1 = \\_\\_\\_\\_\\_$\n3. The capital of the United States is _____",
+            "blanks": ["空1", "空2", "空3"],
+            "correct_answer": ["北京", "2", "Washington, D.C."],
+            "analysis": "填空题可以有多个空，每个空都需要填写正确才算答对"
+        },
+        {
+            "type": "short-answer",
+            "content": "# 简答题示例\n\n这是一道开放性主观题，提供大文本框作答。\n\n请简要说明 Git 的主要功能和基本工作流程。",
+            "correct_answer": ["这是一个参考答案，实际上简答题的答案可能有多种正确形式。\n\nGit 主要功能：\n1. 版本控制\n2. 分支管理\n3. 协作开发\n\n基本工作流程：\n1. git add\n2. git commit\n3. git push"],
+            "analysis": "简答题通常需要人工评判，系统判题时只能进行关键词匹配"
+        }
+    ],
+    "sets": [
+        {
+            "id": "demo-set",
+            "name": "题型演示",
+            "description": "这个题库演示了系统支持的所有题型和渲染特性 ![示例图片](https://img20.360buyimg.com/openfeedback/jfs/t1/316849/31/11431/16081/68591208Fefbbf1b0/c67e77126634cdaa.png)"
+        }
+    ]
+}

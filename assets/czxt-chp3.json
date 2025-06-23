@@ -230,7 +230,7 @@
     {
       "id": "czxtchp3",
       "name": "操作系统进程-第三章-调度选择题",
-       "description": "操作系统进程调度选择题",
+      "description": "操作系统进程调度选择题",
       "questionIds": [
          "SCH01",
          "SCH02",
