@@ -336,15 +336,21 @@ body {
     transition: color 0.3s ease, transform 0.3s ease;
     display: flex;
     align-items: center;
+    padding: 6px;
+    margin: -6px;
+    border-radius: 4px;
 }
 
 .github-link:hover {
     color: #91a881;
     transform: scale(1.1);
+    background-color: rgba(176, 193, 162, 0.1);
 }
 
 .github-icon {
     display: block;
+    width: 22px;
+    height: 22px;
 }
 
 .banner {

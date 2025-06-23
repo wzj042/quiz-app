@@ -469,8 +469,8 @@
             this.questionManager = new QuestionManager(this.storageManager);
             this.practiceManager = new PracticeManager(this.storageManager);
             
-            // 显示项目状态横幅
-            if (this.pageState === 'home') {
+            // 显示项目状态横幅（仅首次访问）
+            if (this.pageState === 'home' && !this.storageManager.getBannerShown()) {
                 this.showBanner(
                     '🚧 **项目调试中** 🚧\n\n' +
                     '目前项目处于调试阶段，欢迎参与开发和反馈。\n' +
@@ -479,6 +479,7 @@
                     'info',
                     true
                 );
+                this.storageManager.setBannerShown(true);
             }
 
             // 加载题库列表
@@ -787,15 +788,6 @@
 
             goHome() {
                 this.updatePageState('home');
-                // 显示项目状态横幅
-                this.showBanner(
-                    '🚧 **项目调试中** 🚧\n\n' +
-                    '目前项目处于调试阶段，欢迎参与开发和反馈。\n' +
-                    '你可以参考 [demo.json](https://github.com/wzj042/quiz-app/blob/main/assets/demo.json) 的格式，' +
-                    'Fork 项目后添加自己的题库。',
-                    'info',
-                    true
-                );
             },
 
             getBankStats(fileName) {

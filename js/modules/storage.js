@@ -247,4 +247,13 @@ export default class StorageManager {
             console.error('Error clearing storage:', error);
         }
     }
+
+    // Banner显示状态相关
+    getBannerShown() {
+        return localStorage.getItem('bannerShown') === 'true';
+    }
+
+    setBannerShown(shown) {
+        localStorage.setItem('bannerShown', shown);
+    }
 } 
