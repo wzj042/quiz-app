@@ -30,15 +30,19 @@
                             <span class="question-preview">{{ truncateText(q.content, 50) }}</span>
                         </li>
                     </ul>
-                    <button class="btn export-btn" @click="exportModifiedData">
-                        导出修改
-                    </button>
                 </div>
                 <div class="modal-actions">
-                    <button class="btn" @click="closeUnsavedModal">关闭</button>
+                    <div class="action-buttons">
+                        <button class="btn export-btn" @click="exportModifiedData">
+                            导出修改
+                        </button>
+                        <button class="btn close-btn" @click="closeUnsavedModalAndContinue">
+                            直接退出
+                        </button>
+                    </div>
                     <label class="dont-show-again">
                         <input type="checkbox" v-model="dontShowExportReminder">
-                        不再提醒
+                        <span>不再提醒</span>
                     </label>
                 </div>
             </div>
@@ -454,7 +458,7 @@
         async created() {
             // 初始化各个管理器
             this.jsonLoader = new JsonLoader();
-            this.keyboardManager = new KeyboardManager();
+            this.keyboardManager = new KeyboardManager(this);
             this.questionManager = new QuestionManager(this.storageManager);
             this.practiceManager = new PracticeManager(this.storageManager);
 
@@ -712,12 +716,8 @@
                 }
                 
                 if (this.isEditing && this.questionManager.checkUnsavedChanges()) {
-                    if (!confirm('有未保存的修改，确定要离开吗？')) {
-                        return;
-                    }
-                    this.questionManager.cancelEditing();
-                    this.isEditing = false;
-                    this.showExportButton = false;
+                    this.showUnsavedDialog(newState);
+                    return;
                 }
                 
                 this.pageState = newState;
@@ -727,17 +727,65 @@
                 }
             },
 
+            showUnsavedDialog(newState) {
+                const dialog = document.createElement('div');
+                dialog.className = 'modal-overlay';
+                dialog.innerHTML = `
+                    <div class="modal-content" style="padding: 20px; max-width: 400px;">
+                        <h3 style="margin-top: 0;">未保存的修改</h3>
+                        <p>当前题目有未保存的修改，请选择操作：</p>
+                        <div style="display: flex; gap: 10px; justify-content: flex-end; margin-top: 20px;">
+                            <button class="btn" id="continueEdit" style="background-color: #B0C1A2;">继续编辑</button>
+                            <button class="btn" id="saveAndExit" style="background-color: #91a881;">保存并退出</button>
+                            <button class="btn" id="discardAndExit" style="background-color: #d32f2f;">放弃修改</button>
+                        </div>
+                    </div>
+                `;
+
+                document.body.appendChild(dialog);
+
+                // 点击遮罩层关闭对话框（继续编辑）
+                dialog.addEventListener('click', (e) => {
+                    if (e.target === dialog) {
+                        document.body.removeChild(dialog);
+                    }
+                });
+
+                // 继续编辑
+                dialog.querySelector('#continueEdit').addEventListener('click', () => {
+                    document.body.removeChild(dialog);
+                });
+
+                // 保存并退出
+                dialog.querySelector('#saveAndExit').addEventListener('click', () => {
+                    this.questionManager.saveCurrentEdit();
+                    this.isEditing = false;
+                    this.showExportButton = false;
+                    this.pageState = newState;
+                    if (newState === 'home') {
+                        this.questionManager.clearEditHistory();
+                    }
+                    document.body.removeChild(dialog);
+                });
+
+                // 放弃修改并退出
+                dialog.querySelector('#discardAndExit').addEventListener('click', () => {
+                    this.questionManager.cancelEditing();
+                    this.isEditing = false;
+                    this.showExportButton = false;
+                    this.pageState = newState;
+                    if (newState === 'home') {
+                        this.questionManager.clearEditHistory();
+                    }
+                    document.body.removeChild(dialog);
+                });
+            },
+
             goBack() {
                 if (this.isEditing) {
                     if (this.questionManager.checkUnsavedChanges()) {
-                        if (confirm('有未保存的修改，确定要放弃吗？')) {
-                            this.questionManager.cancelEditing();
-                            this.isEditing = false;
-                            this.showExportButton = false;
-                            this.showAnswer = false; // 退出解析模式
-                        } else {
-                            return;
-                        }
+                        this.showUnsavedDialog('setDescription');
+                        return;
                     } else {
                         this.questionManager.cancelEditing();
                         this.isEditing = false;
@@ -1003,6 +1051,7 @@
                     this.groupedModifiedQuestions = this.jsonLoader.questions
                         .filter(q => modifiedQuestions.includes(q.uniqueId));
                     
+                    // 显示未导出提示模态框
                     this.showUnsavedModal = true;
                     return true;
                 }
@@ -1028,6 +1077,12 @@
                     hour: '2-digit',
                     minute: '2-digit'
                 });
+            },
+            closeUnsavedModalAndContinue() {
+                this.showUnsavedModal = false;
+                this.questionManager.clearModifiedQuestions();
+                this.modifiedCount = 0;
+                this.showExportButton = false;
             }
         }
     });
