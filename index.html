@@ -9,6 +9,7 @@
     <script defer src="https://lf3-cdn-tos.bytecdntp.com/cdn/expire-1-M/KaTeX/0.15.2/contrib/auto-render.min.js"></script>
     <script src="https://lf3-cdn-tos.bytecdntp.com/cdn/expire-1-M/vue/3.2.23/vue.global.prod.min.js"></script>
     <script src="https://lf26-cdn-tos.bytecdntp.com/cdn/expire-1-M/marked/4.0.2/marked.min.js"></script>
+    <link rel="stylesheet" href="https://lf9-cdn-tos.bytecdntp.com/cdn/expire-1-M/font-awesome/6.0.0/css/all.min.css">
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="css/mobile.css">
@@ -63,363 +64,427 @@
     </div>
 
     <!-- 列出题库 -->
-    <div v-if="pageState === 'home'" class="card">
-        <h1 class="title">
-            选择题库
-            <span class="update-time" v-if="updateTime">更新于: {{ formatUpdateTime(updateTime) }}</span>
-        </h1>
-        <!-- 加载状态 -->
-        <div v-if="isLoading" class="loading-state">
-            正在加载题库列表...
-        </div>
-        <!-- 错误状态 -->
-        <div v-else-if="loadError" class="error-state">
-            加载失败: {{ loadError }}
-            <button @click="loadBankList" class="btn">重试</button>
-        </div>
-        <!-- 总体统计 -->
-        <div v-else class="overall-stats">
-            <div class="stats-title">总体统计</div>
-            <div class="stats-grid">
-                <div class="stats-item">
-                    <div class="stats-value">{{ totalStats.totalCompleted }}/{{ totalStats.totalQuestions }}</div>
-                    <div class="stats-label">总完成题数</div>
-                </div>
-                <div class="stats-item">
-                    <div class="stats-value">{{ totalStats.averageAccuracy }}%</div>
-                    <div class="stats-label">平均正确率</div>
-                </div>
-                <div class="stats-item">
-                    <div class="stats-value">{{ totalStats.todayPracticed }}</div>
-                    <div class="stats-label">今日已练习</div>
-                </div>
-            </div>
-        </div>
-        <!-- 题库列表 -->
-        <ul v-else class="horizontal-list">
-            <template v-for="(group, groupIndex) in groupedFileList" :key="groupIndex">
-                <li class="category-header">
-                    <h2>{{ group[0] }}</h2>
-                    <hr>
-                </li>
-                <li
-                    v-for="(fileObj, idx) in group[1]"
-                    :key="idx"
-                    class="quiz-item"
-                    @click="loadJsonFile(fileObj.file)"
-                >
-                    <div class="quiz-item-content">
-                        <div class="quiz-item-title">{{ fileObj.name }}</div>
-                        <div class="quiz-item-stats" v-if="getBankStats(fileObj.file)">
-                            <div class="quiz-stat">
-                                完成：{{ getBankStats(fileObj.file).completed }}/{{ getBankStats(fileObj.file).total }}
-                            </div>
-                            <div class="quiz-stat">
-                                正确率：{{ getBankStats(fileObj.file).accuracy }}%
-                            </div>
-                        </div>
+    <div v-if="isLoading" class="card">
+        <p>正在处理，请稍后...</p>
+    </div>
+
+    <template v-else>
+        <div v-if="pageState === 'home'" class="card">
+            <h1 class="title">
+                选择题库
+                <span class="update-time" v-if="updateTime">更新于: {{ formatUpdateTime(updateTime) }}</span>
+            </h1>
+
+            <!-- 总体统计 -->
+            <div class="overall-stats">
+                <div class="stats-title">总体统计</div>
+                <div class="stats-grid">
+                    <div class="stats-item">
+                        <div class="stats-value">{{ totalStats.totalCompleted }}/{{ totalStats.totalQuestions }}</div>
+                        <div class="stats-label">总完成题数</div>
                     </div>
-                </li>
+                    <div class="stats-item">
+                        <div class="stats-value">{{ totalStats.averageAccuracy }}%</div>
+                        <div class="stats-label">平均正确率</div>
+                    </div>
+                    <div class="stats-item">
+                        <div class="stats-value">{{ totalStats.todayPracticed }}</div>
+                        <div class="stats-label">今日已练习</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 题库列表 -->
+            <template v-if="fileList.length > 0">
+                <ul class="horizontal-list">
+                    <!-- Tags筛选器 -->
+                    <div class="tags-filter">
+                        <div class="top-tags">
+                            <span 
+                                v-for="tag in topTags" 
+                                :key="tag.tag"
+                                :class="['tag-chip', { active: selectedTags.includes(tag.tag) }]"
+                                @click="toggleTag(tag.tag)"
+                            >
+                                {{ tag.tag }}
+                                <span v-if="selectedTags.includes(tag.tag)" class="tag-count">({{ tag.count }})</span>
+                            </span>
+                        </div>
+                        <button 
+                            :class="['tags-button', { 'has-active': selectedTags.length > 0 }]" 
+                            @click="showTagsModal = true"
+                        >
+                            <i class="fas fa-tags"></i>
+                        </button>
+                    </div>
+
+                    <template v-for="(group, groupIndex) in filteredGroupedFileList" :key="groupIndex">
+                        <li class="category-header">
+                            <h2>{{ group[0] }}</h2>
+                            <hr>
+                        </li>
+                        <li
+                            v-for="(fileObj, idx) in group[1]"
+                            :key="idx"
+                            class="quiz-item"
+                            @click="loadJsonFile(fileObj.file)"
+                        >
+                            <div class="quiz-item-content">
+                                <div class="quiz-item-title">{{ fileObj.name }}</div>
+                                <div class="quiz-item-tags" v-if="fileObj.tags && fileObj.tags.length">
+                                    <span v-for="tag in fileObj.tags.slice(0, 3)" :key="tag" class="item-tag">
+                                        {{ tag }}
+                                    </span>
+                                </div>
+                                <div class="quiz-item-stats" v-if="getBankStats(fileObj.file)">
+                                    <div class="quiz-stat">
+                                        完成：{{ getBankStats(fileObj.file).completed }}/{{ getBankStats(fileObj.file).total }}
+                                    </div>
+                                    <div class="quiz-stat">
+                                        正确率：{{ getBankStats(fileObj.file).accuracy }}%
+                                    </div>
+                                    <div class="quiz-item-time" v-if="fileObj.createTime || fileObj.updateTime">
+                                        <div v-if="fileObj.updateTime" class="update-time">
+                                            更新：{{ formatDate(fileObj.updateTime) }}
+                                        </div>
+                                        <div v-else-if="fileObj.createTime" class="create-time">
+                                            创建：{{ formatDate(fileObj.createTime) }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                    </template>
+                </ul>
             </template>
-        </ul>
-        <!-- 如果列表为空 -->
-        <div v-if="!isLoading && !loadError && fileList.length === 0" class="empty-state">
-            没有找到可用的题库
-        </div>
-    </div>
 
-    <!-- 题库详情页面 -->
-    <div v-else-if="pageState === 'setDescription'" class="card">
-        <h1 class="title">{{ chosenSet.name }}</h1>
-        <p v-if="chosenSet.description" style="white-space: pre-wrap;" v-html="renderMarkdown(chosenSet.description)"></p>
-        
-        <!-- 题库统计信息 -->
-        <div class="set-stats">
-            <div class="stats-grid">
-                <div class="stats-item">
-                    <div class="stats-value">{{ setStats.completedQuestions }}/{{ setStats.totalQuestions }}</div>
-                    <div class="stats-label">已练习题数</div>
+            <!-- 如果列表为空 -->
+            <template v-else>
+                <div class="empty-state">
+                    没有找到可用的题库
                 </div>
-                <div class="stats-item">
-                    <div class="stats-value">{{ setStats.averageAccuracy }}%</div>
-                    <div class="stats-label">平均正确率</div>
+            </template>
+        </div>
+
+        <!-- 题库详情页面 -->
+        <div v-else-if="pageState === 'setDescription'" class="card">
+            <h1 class="title">
+                {{ chosenSet.name }}
+                <div class="time-info" v-if="chosenSet.createTime || chosenSet.updateTime">
+                    <div v-if="chosenSet.updateTime" class="update-time">
+                        更新于：{{ formatDate(chosenSet.updateTime) }}
+                    </div>
+                    <div v-else-if="chosenSet.createTime" class="create-time">
+                        创建于：{{ formatDate(chosenSet.createTime) }}
+                    </div>
                 </div>
-                <div class="stats-item">
-                    <div class="stats-value">{{ setStats.todayDistinctQuestions }}</div>
-                    <div class="stats-label">今日练习题数</div>
-                    <div class="stats-sublabel">正确: {{ setStats.todayCorrect }}</div>
+            </h1>
+            <p v-if="chosenSet.description" style="white-space: pre-wrap;" v-html="renderMarkdown(chosenSet.description)"></p>
+            
+            <!-- 题库统计信息 -->
+            <div class="set-stats">
+                <div class="stats-grid">
+                    <div class="stats-item">
+                        <div class="stats-value">{{ setStats.completedQuestions }}/{{ setStats.totalQuestions }}</div>
+                        <div class="stats-label">已练习题数</div>
+                    </div>
+                    <div class="stats-item">
+                        <div class="stats-value">{{ setStats.averageAccuracy }}%</div>
+                        <div class="stats-label">平均正确率</div>
+                    </div>
+                    <div class="stats-item">
+                        <div class="stats-value">{{ setStats.todayDistinctQuestions }}</div>
+                        <div class="stats-label">今日练习题数</div>
+                        <div class="stats-sublabel">正确: {{ setStats.todayCorrect }}</div>
+                    </div>
+                </div>
+                <div class="stats-details">
+                    <div class="stats-row">
+                        <span class="stats-label">总练习次数：</span>
+                        <span class="stats-value">{{ setStats.totalAttempts }}次</span>
+                    </div>
+                    <div class="stats-row">
+                        <span class="stats-label">不同题目数：</span>
+                        <span class="stats-value">{{ setStats.distinctQuestionCount }}题</span>
+                    </div>
+                    <div class="stats-row">
+                        <span class="stats-label">总正确次数：</span>
+                        <span class="stats-value">{{ setStats.totalCorrect }}次</span>
+                    </div>
+                    <div class="stats-row">
+                        <span class="stats-label">总错误次数：</span>
+                        <span class="stats-value">{{ setStats.totalIncorrect }}次</span>
+                    </div>
+                    <div class="stats-row">
+                        <span class="stats-label">完成率：</span>
+                        <span class="stats-value">{{ setStats.completionRate }}%</span>
+                    </div>
                 </div>
             </div>
-            <div class="stats-details">
-                <div class="stats-row">
-                    <span class="stats-label">总练习次数：</span>
-                    <span class="stats-value">{{ setStats.totalAttempts }}次</span>
-                </div>
-                <div class="stats-row">
-                    <span class="stats-label">不同题目数：</span>
-                    <span class="stats-value">{{ setStats.distinctQuestionCount }}题</span>
-                </div>
-                <div class="stats-row">
-                    <span class="stats-label">总正确次数：</span>
-                    <span class="stats-value">{{ setStats.totalCorrect }}次</span>
-                </div>
-                <div class="stats-row">
-                    <span class="stats-label">总错误次数：</span>
-                    <span class="stats-value">{{ setStats.totalIncorrect }}次</span>
-                </div>
-                <div class="stats-row">
-                    <span class="stats-label">完成率：</span>
-                    <span class="stats-value">{{ setStats.completionRate }}%</span>
+
+            <!-- 当前题目统计 -->
+            <div v-if="currentQuestion && !isPreviewMode" class="question-stats">
+                <h4>当前题目统计</h4>
+                <div class="stats-details">
+                    <div class="stats-row" v-if="questionStats">
+                        <span class="stats-label">练习次数：</span>
+                        <span class="stats-value">{{ questionStats.totalAttempts }}次</span>
+                    </div>
+                    <div class="stats-row" v-if="questionStats">
+                        <span class="stats-label">正确次数：</span>
+                        <span class="stats-value">{{ questionStats.correctCount }}次</span>
+                    </div>
+                    <div class="stats-row" v-if="questionStats">
+                        <span class="stats-label">错误次数：</span>
+                        <span class="stats-value">{{ questionStats.incorrectCount }}次</span>
+                    </div>
+                    <div class="stats-row" v-if="questionStats">
+                        <span class="stats-label">连续正确：</span>
+                        <span class="stats-value">{{ questionStats.consecutiveCorrect }}次</span>
+                    </div>
+                    <div class="stats-row" v-if="questionStats && questionStats.lastAttemptDate">
+                        <span class="stats-label">上次练习：</span>
+                        <span class="stats-value">{{ formatDate(questionStats.lastAttemptDate) }}</span>
+                        <span :class="['status-indicator', questionStats.lastCorrect ? 'correct' : 'incorrect']">
+                            {{ questionStats.lastCorrect ? '正确' : '错误' }}
+                        </span>
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <!-- 当前题目统计 -->
-        <div v-if="currentQuestion && !isPreviewMode" class="question-stats">
-            <h4>当前题目统计</h4>
-            <div class="stats-details">
-                <div class="stats-row" v-if="questionStats">
-                    <span class="stats-label">练习次数：</span>
-                    <span class="stats-value">{{ questionStats.totalAttempts }}次</span>
-                </div>
-                <div class="stats-row" v-if="questionStats">
-                    <span class="stats-label">正确次数：</span>
-                    <span class="stats-value">{{ questionStats.correctCount }}次</span>
-                </div>
-                <div class="stats-row" v-if="questionStats">
-                    <span class="stats-label">错误次数：</span>
-                    <span class="stats-value">{{ questionStats.incorrectCount }}次</span>
-                </div>
-                <div class="stats-row" v-if="questionStats">
-                    <span class="stats-label">连续正确：</span>
-                    <span class="stats-value">{{ questionStats.consecutiveCorrect }}次</span>
-                </div>
-                <div class="stats-row" v-if="questionStats && questionStats.lastAttemptDate">
-                    <span class="stats-label">上次练习：</span>
-                    <span class="stats-value">{{ formatDate(questionStats.lastAttemptDate) }}</span>
-                    <span :class="['status-indicator', questionStats.lastCorrect ? 'correct' : 'incorrect']">
-                        {{ questionStats.lastCorrect ? '正确' : '错误' }}
-                    </span>
-                </div>
-            </div>
-        </div>
-
-        <div style="margin-top: 20px;">
-            <button type="button" class="btn" @click="enterQuizMode">顺序答题</button>
-            <button type="button" class="btn" @click="enterOrderQuizMode" style="margin-left: 10px;">
-                按错误率答题
-            </button>
-            <button type="button" class="btn" @click="enterRandomQuizMode" style="margin-left: 10px;">
-                随机答题
-            </button>
-            <button type="button" class="btn" @click="enterPreviewMode" style="margin-left: 10px;">
-                预览模式
-            </button>
-        </div>
-    </div>
-
-    <!-- 题目页面 -->
-    <div v-else-if="pageState === 'quiz' || pageState === 'orderQuiz' || pageState === 'randomQuiz'" class="card">
-        <div class="question-header">
-            <div class="header-row">
-                <button class="back-button" @click="goBack">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M19 12H5M12 19l-7-7 7-7"/>
-                    </svg>
-                    返回
+            <div style="margin-top: 20px;">
+                <button type="button" class="btn" @click="enterQuizMode">顺序答题</button>
+                <button type="button" class="btn" @click="enterOrderQuizMode" style="margin-left: 10px;">
+                    按错误率答题
                 </button>
-                <h1 class="title">
-                    第 {{ currentIndex + 1 }} / {{ quizList.length }} 题
-                    <span style="font-size: 14px; color:#888">
-                        [ {{ currentQuestion.type }} ]
-                    </span>
-                    <span v-if="isPreviewMode" class="preview-mode">
-                        [预览模式]
-                    </span>
-                </h1>
-            </div>
-            <div class="header-row">
-                <div class="question-id">
-                    题目 ID: {{ currentQuestion.uniqueId }}
-                    <span v-if="!isPreviewMode" class="progress-text">{{ progressText }}</span>
-                </div>
-                <div class="action-buttons">
-                    <span class="action-button" @click="editQuestion" v-if="!isEditing">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
-                            <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
-                        </svg>
-                        编辑{{ modifiedCount ? ` (${modifiedCount})` : '' }}
-                    </span>
-                    <span class="action-button" @click="exitEditMode" v-if="isEditing">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M5 13l4 4L19 7"></path>
-                        </svg>
-                        完成
-                    </span>
-                    <span class="action-button" @click="exportModifiedData" v-if="showExportButton">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-                            <polyline points="7 10 12 15 17 10"></polyline>
-                            <line x1="12" y1="15" x2="12" y2="3"></line>
-                        </svg>
-                        导出题库
-                    </span>
-                </div>
+                <button type="button" class="btn" @click="enterRandomQuizMode" style="margin-left: 10px;">
+                    随机答题
+                </button>
+                <button type="button" class="btn" @click="enterPreviewMode" style="margin-left: 10px;">
+                    预览模式
+                </button>
             </div>
         </div>
 
-        <!-- 题目内容 -->
-        <div 
-            v-if="!isEditing || editingField !== 'content'"
-            @click="isEditing && !isPreviewMode ? enterEditMode('content', currentQuestion.content) : null"
-            class="question-content"
-            :class="{ 'editable': !isPreviewMode && isEditing }"
-            v-html="renderedContent"
-        ></div>
-        <textarea
-            v-else-if="editingField === 'content'"
-            v-model="editingContent"
-            @blur="exitEditMode"
-            class="edit-textarea"
-            rows="8"
-        ></textarea>
-
-        <!-- 选项 -->
-        <div v-if="currentQuestion.type === 'single-choice' || currentQuestion.type === 'multiple-choice'">
-            <label
-                v-for="(opt, idx) in currentQuestion.options"
-                :key="idx"
-                class="option-item"
-                :class="{
-                    'green': showAnswer && (currentQuestion.type === 'single-choice' ? isCorrectOptionSingle(opt) : isCorrectOptionMulti(opt)),
-                    'red': showAnswer && (currentQuestion.type === 'single-choice' ? 
-                        (isChosenOptionSingle(opt) && !isCorrectOptionSingle(opt)) : 
-                        (chosenAnswers.includes(opt) && !isCorrectOptionMulti(opt))),
-                    'editable': !isPreviewMode
-                }"
-            >
-                <input
-                    :type="currentQuestion.type === 'single-choice' ? 'radio' : 'checkbox'"
-                    :name="currentQuestion.type === 'single-choice' ? 'single-choice-' + currentQuestion.uniqueId : ''"
-                    :value="opt"
-                    :checked="currentQuestion.type === 'single-choice' ? chosenAnswer === opt : chosenAnswers.includes(opt)"
-                    @change="handleOptionChange(opt, currentQuestion.type === 'single-choice')"
-                    :disabled="showAnswer || isEditing || isPreviewMode"
-                    style="margin-right: 6px;"
-                >
-                <div class="option-content" v-if="!isEditing || editingField !== `option-${idx}`">
-                    <strong>{{ letterMap[idx] }}. </strong>
-                    <span 
-                        v-html="renderMarkdownWithLatex(opt)"
-                        @click="isEditing && !isPreviewMode ? enterEditMode(`option-${idx}`, opt) : null"
-                    ></span>
+        <!-- 题目页面 -->
+        <div v-else-if="pageState === 'quiz' || pageState === 'orderQuiz' || pageState === 'randomQuiz'" class="card">
+            <div class="question-header">
+                <div class="header-row">
+                    <button class="back-button" @click="goBack">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M19 12H5M12 19l-7-7 7-7"/>
+                        </svg>
+                        返回
+                    </button>
+                    <h1 class="title">
+                        第 {{ currentIndex + 1 }} / {{ quizList.length }} 题
+                        <span style="font-size: 14px; color:#888">
+                            [ {{ currentQuestion.type }} ]
+                        </span>
+                        <span v-if="isPreviewMode" class="preview-mode">
+                            [预览模式]
+                        </span>
+                    </h1>
                 </div>
-                <div v-else class="option-edit">
-                    <strong>{{ letterMap[idx] }}. </strong>
-                    <input
-                        type="text"
-                        v-model="editingContent"
-                        @blur="exitEditMode"
-                        class="edit-input"
-                    >
+                <div class="header-row">
+                    <div class="question-id">
+                        题目 ID: {{ currentQuestion.uniqueId }}
+                        <span v-if="!isPreviewMode" class="progress-text">{{ progressText }}</span>
+                    </div>
+                    <div class="action-buttons">
+                        <span class="action-button" @click="editQuestion" v-if="!isEditing">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                                <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                            </svg>
+                            编辑{{ modifiedCount ? ` (${modifiedCount})` : '' }}
+                        </span>
+                        <span class="action-button" @click="exitEditMode" v-if="isEditing">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M5 13l4 4L19 7"></path>
+                            </svg>
+                            完成
+                        </span>
+                        <span class="action-button" @click="exportModifiedData" v-if="showExportButton">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                <polyline points="7 10 12 15 17 10"></polyline>
+                                <line x1="12" y1="15" x2="12" y2="3"></line>
+                            </svg>
+                            导出题库
+                        </span>
+                    </div>
                 </div>
-            </label>
-        </div>
-
-        <div v-else-if="currentQuestion.type === 'short-answer'">
-            <!-- 简答题 -->
-            <textarea
-                v-model="shortAnswerText"
-                :disabled="showAnswer"
-                rows="4"
-                style="width: 100%; padding: 8px;"
-                placeholder="请输入你的答案"
-            ></textarea>
-        </div>
-
-        <div v-else-if="currentQuestion.type === 'fill-in-blank'">
-            <!-- 填空题 -->
-            <div v-for="(blank, idx) in currentQuestion.blanks" :key="idx" class="fill-blank-item">
-                <label :for="'blank-'+idx">空{{idx + 1}}：</label>
-                <input
-                    :id="'blank-'+idx"
-                    type="text"
-                    v-model="fillInAnswers[idx]"
-                    :disabled="showAnswer"
-                    style="width: 200px; padding: 4px 8px; margin: 4px 0;"
-                    :placeholder="'请填写空'+(idx+1)"
-                >
-                <span v-if="showAnswer" style="margin-left: 10px; color: #666;">
-                    正确答案：{{ currentQuestion.correct_answer[idx] }}
-                </span>
             </div>
-        </div>
 
-        <!-- 提交答案 / 下一题 按钮 -->
-        <div style="margin-top: 12px;">
-            <button
-                type="button"
-                v-if="!showAnswer"
-                class="btn"
-                @click="submitAnswer"
-            >
-                提交答案 (空格)
-            </button>
-            <button
-                type="button"
-                v-else
-                class="btn"
-                @click="nextQuestion"
-            >
-                下一题 (空格)
-            </button>
-        </div>
-
-        <!-- 解析 -->
-        <div v-if="showAnswer" class="analysis">
-            <h3>解析</h3>
+            <!-- 题目内容 -->
             <div 
-                v-if="(!isEditing || editingField !== 'analysis') && currentQuestion.analysis"
-                @click="isEditing && !isPreviewMode ? enterEditMode('analysis', currentQuestion.analysis) : null"
-                v-html="renderedAnalysis"
-                :class="{ 'editable': isEditing && !isPreviewMode }"
+                v-if="!isEditing || editingField !== 'content'"
+                @click="isEditing && !isPreviewMode ? enterEditMode('content', currentQuestion.content) : null"
+                class="question-content"
+                :class="{ 'editable': !isPreviewMode && isEditing }"
+                v-html="renderedContent"
             ></div>
-            <div 
-                v-if="(!isEditing || editingField !== 'analysis') && !currentQuestion.analysis"
-                @click="isEditing && !isPreviewMode ? enterEditMode('analysis', '') : null"
-                class="empty-analysis"
-                :class="{ 'editable': isEditing && !isPreviewMode }"
-            >
-                点击添加解析
-            </div>
             <textarea
-                v-else-if="editingField === 'analysis'"
+                v-else-if="editingField === 'content'"
                 v-model="editingContent"
                 @blur="exitEditMode"
                 class="edit-textarea"
-                rows="6"
-                placeholder="请输入解析内容..."
+                rows="8"
             ></textarea>
+
+            <!-- 选项 -->
+            <div v-if="currentQuestion.type === 'single-choice' || currentQuestion.type === 'multiple-choice'">
+                <label
+                    v-for="(opt, idx) in currentQuestion.options"
+                    :key="idx"
+                    class="option-item"
+                    :class="{
+                        'green': showAnswer && (currentQuestion.type === 'single-choice' ? isCorrectOptionSingle(opt) : isCorrectOptionMulti(opt)),
+                        'red': showAnswer && (currentQuestion.type === 'single-choice' ? 
+                            (isChosenOptionSingle(opt) && !isCorrectOptionSingle(opt)) : 
+                            (chosenAnswers.includes(opt) && !isCorrectOptionMulti(opt))),
+                        'editable': !isPreviewMode
+                    }"
+                >
+                    <input
+                        :type="currentQuestion.type === 'single-choice' ? 'radio' : 'checkbox'"
+                        :name="currentQuestion.type === 'single-choice' ? 'single-choice-' + currentQuestion.uniqueId : ''"
+                        :value="opt"
+                        :checked="currentQuestion.type === 'single-choice' ? chosenAnswer === opt : chosenAnswers.includes(opt)"
+                        @change="handleOptionChange(opt, currentQuestion.type === 'single-choice')"
+                        :disabled="showAnswer || isEditing || isPreviewMode"
+                        style="margin-right: 6px;"
+                    >
+                    <div class="option-content" v-if="!isEditing || editingField !== `option-${idx}`">
+                        <strong>{{ letterMap[idx] }}. </strong>
+                        <span 
+                            v-html="renderMarkdownWithLatex(opt)"
+                            @click="isEditing && !isPreviewMode ? enterEditMode(`option-${idx}`, opt) : null"
+                        ></span>
+                    </div>
+                    <div v-else class="option-edit">
+                        <strong>{{ letterMap[idx] }}. </strong>
+                        <input
+                            type="text"
+                            v-model="editingContent"
+                            @blur="exitEditMode"
+                            class="edit-input"
+                        >
+                    </div>
+                </label>
+            </div>
+
+            <div v-else-if="currentQuestion.type === 'short-answer'">
+                <!-- 简答题 -->
+                <textarea
+                    v-model="shortAnswerText"
+                    :disabled="showAnswer"
+                    rows="4"
+                    style="width: 100%; padding: 8px;"
+                    placeholder="请输入你的答案"
+                ></textarea>
+            </div>
+
+            <div v-else-if="currentQuestion.type === 'fill-in-blank'">
+                <!-- 填空题 -->
+                <div v-for="(blank, idx) in currentQuestion.blanks" :key="idx" class="fill-blank-item">
+                    <label :for="'blank-'+idx">空{{idx + 1}}：</label>
+                    <input
+                        :id="'blank-'+idx"
+                        type="text"
+                        v-model="fillInAnswers[idx]"
+                        :disabled="showAnswer"
+                        style="width: 200px; padding: 4px 8px; margin: 4px 0;"
+                        :placeholder="'请填写空'+(idx+1)"
+                    >
+                    <span v-if="showAnswer" style="margin-left: 10px; color: #666;">
+                        正确答案：{{ currentQuestion.correct_answer[idx] }}
+                    </span>
+                </div>
+            </div>
+
+            <!-- 提交答案 / 下一题 按钮 -->
+            <div style="margin-top: 12px;">
+                <button
+                    type="button"
+                    v-if="!showAnswer"
+                    class="btn"
+                    @click="submitAnswer"
+                >
+                    提交答案 (空格)
+                </button>
+                <button
+                    type="button"
+                    v-else
+                    class="btn"
+                    @click="nextQuestion"
+                >
+                    下一题 (空格)
+                </button>
+            </div>
+
+            <!-- 解析 -->
+            <div v-if="showAnswer" class="analysis">
+                <h3>解析</h3>
+                <div 
+                    v-if="(!isEditing || editingField !== 'analysis') && currentQuestion.analysis"
+                    @click="isEditing && !isPreviewMode ? enterEditMode('analysis', currentQuestion.analysis) : null"
+                    v-html="renderedAnalysis"
+                    :class="{ 'editable': isEditing && !isPreviewMode }"
+                ></div>
+                <div 
+                    v-if="(!isEditing || editingField !== 'analysis') && !currentQuestion.analysis"
+                    @click="isEditing && !isPreviewMode ? enterEditMode('analysis', '') : null"
+                    class="empty-analysis"
+                    :class="{ 'editable': isEditing && !isPreviewMode }"
+                >
+                    点击添加解析
+                </div>
+                <textarea
+                    v-else-if="editingField === 'analysis'"
+                    v-model="editingContent"
+                    @blur="exitEditMode"
+                    class="edit-textarea"
+                    rows="6"
+                    placeholder="请输入解析内容..."
+                ></textarea>
+            </div>
+
+            <p style="font-size:13px; color:#666; margin-top:8px;">
+                键盘：1~4 选项，空格提交/下一题，Shift+C切换解析
+            </p>
         </div>
 
-        <p style="font-size:13px; color:#666; margin-top:8px;">
-            键盘：1~4 选项，空格提交/下一题，Shift+C切换解析
-        </p>
-    </div>
+        <!-- 5) result: 最终结果 -->
+        <div v-else-if="pageState === 'result'" class="card">
+            <h1 class="title">答题完成</h1>
+            <p>本轮共 {{ quizList.length }} 题，已完成：{{ completedCount }}。</p>
+            <button type="button" class="btn" @click="pageState = 'home'">
+                返回题目选择 (空格)
+            </button>
+        </div>
+    </template>
 
-    <!-- 5) result: 最终结果 -->
-    <div v-else-if="pageState === 'result'" class="card">
-        <h1 class="title">答题完成</h1>
-        <p>本轮共 {{ quizList.length }} 题，已完成：{{ completedCount }}。</p>
-        <button type="button" class="btn" @click="pageState = 'home'">
-            返回题目选择 (空格)
-        </button>
-    </div>
-
-    <!-- 其他情况 -->
-    <div v-else class="card">
-        <p>正在处理，请稍后...</p>
+    <!-- Tags Modal -->
+    <div v-if="showTagsModal" class="modal-overlay" @click="showTagsModal = false">
+        <div class="modal-content" @click.stop>
+            <h2>选择标签</h2>
+            <div class="tags-grid">
+                <span 
+                    v-for="tagInfo in allTags" 
+                    :key="tagInfo.tag"
+                    :class="['tag-chip', { active: selectedTags.includes(tagInfo.tag) }]"
+                    @click="toggleTag(tagInfo.tag)"
+                >
+                    {{ tagInfo.tag }} ({{ tagInfo.count }})
+                </span>
+            </div>
+            <div class="modal-footer">
+                <button @click="clearTags" class="btn btn-clear">清除筛选</button>
+                <button @click="showTagsModal = false" class="btn btn-close">关闭窗口</button>
+            </div>
+        </div>
     </div>
 </div>
 
@@ -459,7 +524,11 @@
                 dontShowExportReminder: false,
                 groupedModifiedQuestions: {},
                 lastExportTimestamp: null,
-                updateTime: null
+                updateTime: null,
+                showTagsModal: false,
+                selectedTags: [],
+                topTags: [],
+                allTags: [],
             }
         },
         async created() {
@@ -486,7 +555,16 @@
                 return this.practiceManager?.isPreviewMode || false;
             },
             totalStats() {
-                return this.storageManager.getAllBanksStats();
+                const stats = this.storageManager.getAllBanksStats();
+                console.log('[totalStats computed] Raw stats from storage:', stats);
+                const result = {
+                    totalCompleted: stats.totalCompleted || 0,
+                    totalQuestions: stats.totalQuestions || 0,
+                    averageAccuracy: stats.averageAccuracy || 0,
+                    todayPracticed: stats.todayPracticed || 0
+                };
+                console.log('[totalStats computed] Processed stats:', result);
+                return result;
             },
             setStats() {
                 if (!this.chosenSet) return null;
@@ -505,8 +583,8 @@
                 return {
                     ...stats,
                     todayCount,
-                    accuracy: stats.totalAttempts > 0 
-                        ? Math.round((stats.totalAttempts - stats.totalErrors) / stats.totalAttempts * 100) 
+                    averageAccuracy: stats.totalAttempts > 0 
+                        ? Math.round((stats.totalCorrect / stats.totalAttempts) * 100)
                         : 0
                 };
             },
@@ -542,6 +620,16 @@
                     this.chosenSet.id,
                     this.currentQuestion.uniqueId
                 );
+            },
+            filteredGroupedFileList() {
+                if (this.selectedTags.length === 0) return this.groupedFileList;
+                
+                return this.groupedFileList.map(([category, items]) => {
+                    const filteredItems = items.filter(item => 
+                        this.selectedTags.every(tag => item.tags && item.tags.includes(tag))
+                    );
+                    return [category, filteredItems];
+                }).filter(([_, items]) => items.length > 0);
             }
         },
         watch: {
@@ -568,18 +656,47 @@
                     this.fileList = data.banks || [];
                     this.updateTime = data.updateTime;
                     
-                    // 加载每个题库的sets信息以获取category
+                    // 加载每个题库的sets信息以获取category和tags
                     const fileCategories = {};
+                    const fileTags = {};
+                    const tagsCount = new Map();
+                    
                     for (const bank of this.fileList) {
                         try {
                             const bankData = await this.jsonLoader.loadFile(bank.file);
                             const category = bankData.sets[0]?.category || '未分类';
+                            const tags = bankData.sets[0]?.tags || [];
+                            
                             fileCategories[bank.file] = category;
+                            fileTags[bank.file] = tags;
+                            
+                            // 统计tags
+                            tags.forEach(tag => {
+                                tagsCount.set(tag, (tagsCount.get(tag) || 0) + 1);
+                            });
                         } catch (error) {
                             console.error(`Error loading bank ${bank.file}:`, error);
                             fileCategories[bank.file] = '未分类';
+                            fileTags[bank.file] = [];
                         }
                     }
+                    
+                    // 更新fileList添加tags信息
+                    this.fileList = this.fileList.map(bank => ({
+                        ...bank,
+                        tags: fileTags[bank.file] || []
+                    }));
+                    
+                    // 获取前三个最常用的tags
+                    this.topTags = Array.from(tagsCount.entries())
+                        .sort((a, b) => b[1] - a[1])
+                        .slice(0, 3)
+                        .map(([tag, count]) => ({ tag, count }));
+                    
+                    // 获取所有tags
+                    this.allTags = Array.from(tagsCount.entries())
+                        .sort((a, b) => b[1] - a[1])
+                        .map(([tag, count]) => ({ tag, count }));
                     
                     // 按category对题库进行分组
                     const groups = {};
@@ -599,10 +716,8 @@
                     // 转换为数组并按分类名排序，确保"未分类"永远在最后
                     this.groupedFileList = Object.entries(groups)
                         .sort((a, b) => {
-                            // 如果其中一个是"未分类"，特殊处理
-                            if (a[0] === '未分类') return 1;  // a是未分类，放到后面
-                            if (b[0] === '未分类') return -1; // b是未分类，放到后面
-                            // 其他情况按字母顺序排序
+                            if (a[0] === '未分类') return 1;
+                            if (b[0] === '未分类') return -1;
                             return a[0].localeCompare(b[0]);
                         });
                 } catch (error) {
@@ -848,15 +963,18 @@
             getBankStats(fileName) {
                 try {
                     const bankData = this.storageManager.getBankStats(fileName);
+                    console.log(`[getBankStats] Stats for ${fileName}:`, bankData);
                     if (!bankData) return null;
                     
-                    return {
+                    const stats = {
                         completed: bankData.completed,
                         total: bankData.total,
                         accuracy: bankData.attempts > 0 
-                            ? Math.round((bankData.attempts - bankData.errors) / bankData.attempts * 100)
+                            ? Math.round((bankData.correct / bankData.attempts) * 100)
                             : 0
                     };
+                    console.log(`[getBankStats] Processed stats for ${fileName}:`, stats);
+                    return stats;
                 } catch (e) {
                     console.error('获取题库统计失败:', e);
                     return null;
@@ -1128,7 +1246,18 @@
                 this.questionManager.clearModifiedQuestions();
                 this.modifiedCount = 0;
                 this.showExportButton = false;
-            }
+            },
+            toggleTag(tag) {
+                const index = this.selectedTags.indexOf(tag);
+                if (index === -1) {
+                    this.selectedTags.push(tag);
+                } else {
+                    this.selectedTags.splice(index, 1);
+                }
+            },
+            clearTags() {
+                this.selectedTags = [];
+            },
         }
     });
 
@@ -1236,40 +1365,57 @@
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 20px;
-    margin: 15px 0;
+    margin-top: 15px;
 }
 
 .stats-item {
-    text-align: center;
     padding: 15px;
-    background: #f5f5f5;
     border-radius: 8px;
+    background-color: #f5f5f5;
+    text-align: center;
 }
 
 .stats-value {
     font-size: 24px;
     font-weight: bold;
-    color: #B0C1A2;
+    color: var(--theme-color);
+    margin-bottom: 5px;
 }
 
 .stats-label {
     font-size: 14px;
     color: #666;
-    margin-top: 5px;
 }
 
 .stats-title {
     font-size: 18px;
-    font-weight: bold;
-    margin: 20px 0 10px;
+    color: #333;
+    margin-bottom: 10px;
 }
 
 .overall-stats {
-    margin-bottom: 20px;
+    margin-bottom: 8px;
     padding: 15px;
     background: #fff;
     border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.quiz-item {
+    background: white;
+    border-radius: 8px;
+    padding: 15px;
+    margin: 10px;
+    cursor: pointer;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    flex: 1;
+    min-width: 280px;
+    max-width: 400px;
+}
+
+.quiz-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
 }
 
 .quiz-item-content {
@@ -1279,16 +1425,40 @@
 }
 
 .quiz-item-title {
-    font-weight: bold;
+    font-size: 16px;
+    color: #333;
+    margin-bottom: 4px;
+}
+
+.quiz-item-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin: 4px 0;
+}
+
+.item-tag {
+    font-size: 12px;
+    padding: 2px 8px;
+    border-radius: 12px;
+    background-color: var(--theme-color-light);
+    color: var(--theme-color);
+    border: 1px solid var(--theme-color);
+    display: inline-block;
 }
 
 .quiz-item-stats {
+    display: flex;
+    gap: 12px;
     font-size: 13px;
     color: #666;
+    margin-top: 4px;
 }
 
 .quiz-stat {
-    margin-top: 2px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
 }
 
 .stats-details {
@@ -1380,89 +1550,149 @@
 }
 
 .modal-content {
-    background: white;
-    padding: 20px;
+    background-color: white;
+    padding: 24px;
     border-radius: 8px;
-    max-width: 600px;
-    width: 90%;
+    min-width: 400px;
+    max-width: 80%;
     max-height: 80vh;
     overflow-y: auto;
 }
 
-.modal-content h3 {
-    margin-top: 0;
+.modal-content h2 {
+    margin: 0 0 20px 0;
     color: #333;
-    border-bottom: 1px solid #eee;
-    padding-bottom: 10px;
+    font-size: 1.5em;
 }
 
-.modified-questions-list {
-    margin: 15px 0;
+.tags-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 12px;
+    margin: 0 0 24px 0;
+    padding: 4px;
 }
 
-.modified-set {
-    margin-bottom: 20px;
-    padding: 15px;
-    background: #f5f5f5;
-    border-radius: 6px;
-}
-
-.modified-set h4 {
-    margin: 0 0 10px 0;
-    color: #B0C1A2;
-}
-
-.modified-set ul {
-    list-style: none;
-    padding: 0;
-    margin: 0 0 15px 0;
-}
-
-.modified-set li {
-    padding: 8px;
-    margin: 5px 0;
-    background: white;
-    border-radius: 4px;
-    font-size: 14px;
-}
-
-.question-preview {
-    color: #666;
-    font-size: 13px;
-}
-
-.modal-actions {
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    gap: 10px;
-    margin-top: 20px;
-    padding-top: 15px;
+.modal-footer {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-top: 24px;
     border-top: 1px solid #eee;
+    padding-top: 24px;
 }
 
-.export-btn {
+.btn {
+    padding: 10px 20px;
+    border-radius: 4px;
+    border: 1px solid transparent;
+    cursor: pointer;
     font-size: 14px;
-    padding: 6px 12px;
-    margin-top: 10px;
+    transition: all 0.3s ease;
+    width: 100%;
+    text-align: center;
 }
 
-.dont-show-again {
-    margin-left: 20px;
-    font-size: 14px;
+.btn-clear {
+    background-color: #f5f5f5;
     color: #666;
-    display: flex;
-    align-items: center;
-    gap: 5px;
+    border-color: #ddd;
+}
+
+.btn-clear:hover {
+    background-color: #eee;
+}
+
+.btn-close {
+    background-color: var(--theme-color, #B0C1A2);
+    color: white;
+    border-color: var(--theme-color, #B0C1A2);
+}
+
+.btn-close:hover {
+    opacity: 0.9;
 }
 
 .btn.primary {
-    background-color: #B0C1A2;
+    background-color: var(--theme-color, #B0C1A2);
     color: white;
+    border-color: var(--theme-color, #B0C1A2);
 }
 
 .btn.primary:hover {
-    background-color: #1976d2;
+    opacity: 0.9;
+}
+
+.tag-chip {
+    padding: 6px 12px;
+    border-radius: 16px;
+    background-color: #f5f5f5;
+    color: #666;
+    cursor: pointer;
+    font-size: 14px;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+    border: 1px solid transparent;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    user-select: none;
+}
+
+.tag-chip:hover {
+    background-color: #eee;
+}
+
+.tag-chip.active {
+    background-color: var(--theme-color-light, rgba(176, 193, 162, 0.1));
+    color: var(--theme-color, #B0C1A2);
+    border-color: var(--theme-color, #B0C1A2);
+}
+
+.tags-button {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: #f5f5f5;
+    border: 1px solid transparent;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    color: #666;
+}
+
+.tags-button:hover, .tags-button.has-active {
+    background-color: var(--theme-color-light, rgba(176, 193, 162, 0.1));
+    color: var(--theme-color, #B0C1A2);
+    border-color: var(--theme-color, #B0C1A2);
+}
+
+.item-tag {
+    font-size: 12px;
+    padding: 2px 8px;
+    border-radius: 12px;
+    background-color: var(--theme-color-light);
+    color: var(--theme-color);
+    border: 1px solid var(--theme-color);
+    display: inline-block;
+}
+
+.modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.quiz-item-tags {
+    margin: 4px 0;
+}
+
+:root {
+    --theme-color: #B0C1A2;
+    --theme-color-light: rgba(176, 193, 162, 0.1);
 }
 
 .banner {
@@ -1471,7 +1701,7 @@
     left: 0;
     right: 0;
     padding: 10px;
-    background-color: #B0C1A2;
+    background-color: var(--theme-color);
     color: white;
     display: flex;
     justify-content: space-between;
@@ -1508,6 +1738,60 @@
     height: 1px;
     background-color: #ddd;
     margin: 5px 0;
+}
+
+.tags-filter {
+    position: fixed;
+    right: 20px;
+    top: 100px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 10px;
+    z-index: 100;
+    background-color: rgba(255, 255, 255, 0.9);
+    padding: 10px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.top-tags {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.loading-text {
+    text-align: center;
+    padding: 20px;
+    color: #666;
+    font-size: 14px;
+    margin: 0;
+}
+
+.card {
+    background: white;
+    border-radius: 8px;
+    padding: 20px;
+    margin: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.card.loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 200px;
+}
+
+.empty-state {
+    text-align: center;
+    padding: 40px;
+    color: #666;
+    font-size: 14px;
+    background: #f5f5f5;
+    border-radius: 8px;
+    margin: 20px;
 }
 </style>
 </body>

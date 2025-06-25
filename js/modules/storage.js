@@ -1,17 +1,38 @@
 // 本地存储管理模块
 export default class StorageManager {
     constructor() {
-        this.STORAGE_KEY = 'quiz_completion';
-        this.data = this.loadData();
+        this.STORAGE_KEY = 'quiz-app-storage';
+        this.version = '1.0.0';
+        try {
+            const savedData = JSON.parse(localStorage.getItem(this.STORAGE_KEY));
+            this.data = savedData?.data || {};
+        } catch (error) {
+            console.error('Failed to load storage:', error);
+            this.data = {};
+        }
     }
 
     loadData() {
-        const stored = localStorage.getItem(this.STORAGE_KEY);
-        return stored ? JSON.parse(stored) : {};
+        try {
+            const savedData = JSON.parse(localStorage.getItem(this.STORAGE_KEY));
+            if (!savedData) return {};
+            return savedData.data || {};
+        } catch (error) {
+            console.error('Failed to load data:', error);
+            return {};
+        }
     }
 
     saveData() {
-        localStorage.setItem(this.STORAGE_KEY, JSON.stringify(this.data));
+        try {
+            console.log('[saveData] Saving data to localStorage:', this.data);
+            localStorage.setItem(this.STORAGE_KEY, JSON.stringify({
+                version: this.version,
+                data: this.data
+            }));
+        } catch (error) {
+            console.error('[saveData] Failed to save data:', error);
+        }
     }
 
     getQuestionCompletion(setId, questionId) {
@@ -25,6 +46,8 @@ export default class StorageManager {
     }
 
     updateQuestionCompletion(setId, questionId, isCorrect) {
+        console.log('[updateQuestionCompletion] Updating stats:', { setId, questionId, isCorrect });
+        
         if (!this.data[setId]) {
             this.data[setId] = {};
         }
@@ -64,6 +87,8 @@ export default class StorageManager {
         }
         stats.lastAttemptDate = now;
 
+        console.log('[updateQuestionCompletion] Updated stats:', stats);
+        
         this.saveData();
         return stats;
     }
@@ -138,7 +163,7 @@ export default class StorageManager {
         return {
             ...stats,
             averageAccuracy: stats.totalAttempts > 0 
-                ? (stats.totalCorrect / stats.totalAttempts * 100).toFixed(1)
+                ? Math.round((stats.totalCorrect / stats.totalAttempts) * 100)
                 : 0,
             completionRate: (stats.completedQuestions / questions.length * 100).toFixed(1),
             totalQuestions: questions.length,
@@ -148,51 +173,56 @@ export default class StorageManager {
 
     getBankStats(fileName) {
         try {
-            const data = JSON.parse(localStorage.getItem(this.STORAGE_KEY));
-            if (!data || !data.data) {
-                return {
-                    completed: 0,
-                    total: 0,
-                    attempts: 0,
-                    errors: 0
-                };
-            }
-
+            console.log('[getBankStats] Checking stats for:', fileName);
+            console.log('[getBankStats] Current data:', this.data);
+            
             const prefix = fileName.replace('.json', '');
             let completed = 0;
             let total = 0;
             let attempts = 0;
-            let errors = 0;
+            let correct = 0;
 
             // 遍历所有记录，找出属于这个题库的数据
-            for (const key in data.data) {
-                if (key.startsWith(prefix)) {
-                    total++;
-                    const completion = data.data[key];
-                    if (completion.completed) completed++;
-                    attempts += completion.attempts || 0;
-                    errors += completion.errors || 0;
+            for (const setId in this.data) {
+                if (setId === prefix) {
+                    const setData = this.data[setId];
+                    for (const questionId in setData) {
+                        const qStats = setData[questionId];
+                        if (qStats && typeof qStats === 'object') {
+                            total++;
+                            if (qStats.completed) completed++;
+                            attempts += qStats.totalAttempts || 0;
+                            correct += qStats.correctCount || 0;
+                        }
+                    }
                 }
             }
 
-            return {
+            const stats = {
                 completed,
                 total,
                 attempts,
-                errors
+                correct,
+                accuracy: attempts > 0 ? Math.round((correct / attempts) * 100) : 0
             };
+            
+            console.log(`[getBankStats] Calculated stats for ${fileName}:`, stats);
+            return stats;
         } catch (error) {
             console.error('Error getting bank stats:', error);
             return {
                 completed: 0,
                 total: 0,
                 attempts: 0,
-                errors: 0
+                correct: 0,
+                accuracy: 0
             };
         }
     }
 
     getAllBanksStats() {
+        console.log('[getAllBanksStats] Starting calculation with data:', this.data);
+        
         let totalStats = {
             totalQuestions: 0,
             totalCompleted: 0,
@@ -207,32 +237,52 @@ export default class StorageManager {
 
         const today = new Date().toISOString().split('T')[0];
 
+        // 遍历每个题库的数据
         for (const setId in this.data) {
-            for (const questionId in this.data[setId]) {
-                const qStats = this.data[setId][questionId];
-                totalStats.totalQuestions++;
-                if (qStats.completed) {
-                    totalStats.totalCompleted++;
-                }
-                totalStats.totalAttempts += qStats.totalAttempts;
-                totalStats.totalCorrect += qStats.correctCount;
-                totalStats.distinctQuestionCount++;
-                totalStats.totalQuestionAttempts += qStats.totalAttempts;
+            console.log(`[getAllBanksStats] Processing set: ${setId}`);
+            const setData = this.data[setId];
+            
+            // 确保setData是一个对象且不是null
+            if (setData && typeof setData === 'object') {
+                // 遍历题库中的每个问题
+                for (const questionId in setData) {
+                    const qStats = setData[questionId];
+                    // 确保qStats包含所需的所有属性
+                    if (qStats && typeof qStats === 'object') {
+                        totalStats.totalQuestions++;
+                        if (qStats.completed) {
+                            totalStats.totalCompleted++;
+                        }
+                        // 使用0作为默认值，避免NaN
+                        totalStats.totalAttempts += qStats.totalAttempts || 0;
+                        totalStats.totalCorrect += qStats.correctCount || 0;
+                        totalStats.distinctQuestionCount++;
+                        totalStats.totalQuestionAttempts += qStats.totalAttempts || 0;
 
-                if (qStats.lastAttemptDate?.startsWith(today)) {
-                    totalStats.todayPracticed++;
-                    if (qStats.lastCorrect) {
-                        totalStats.todayCorrect++;
+                        if (qStats.lastAttemptDate?.startsWith(today)) {
+                            totalStats.todayPracticed++;
+                            if (qStats.lastCorrect) {
+                                totalStats.todayCorrect++;
+                            }
+                            totalStats.todayDistinctQuestions.add(questionId);
+                        }
                     }
-                    totalStats.todayDistinctQuestions.add(questionId);
                 }
             }
         }
 
+        console.log('[getAllBanksStats] Final stats:', {
+            totalAttempts: totalStats.totalAttempts,
+            totalCorrect: totalStats.totalCorrect,
+            averageAccuracy: totalStats.totalAttempts > 0
+                ? Math.round((totalStats.totalCorrect / totalStats.totalAttempts) * 100)
+                : 0
+        });
+
         return {
             ...totalStats,
             averageAccuracy: totalStats.totalAttempts > 0
-                ? (totalStats.totalCorrect / totalStats.totalAttempts * 100).toFixed(1)
+                ? Math.round((totalStats.totalCorrect / totalStats.totalAttempts) * 100)
                 : 0,
             todayDistinctQuestions: totalStats.todayDistinctQuestions.size
         };

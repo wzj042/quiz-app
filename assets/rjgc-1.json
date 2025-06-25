@@ -9,7 +9,10 @@
                 "螺旋模型",
                 "喷泉模型"
             ],
-            "correct_answer": ["原型模型"]
+            "correct_answer": [
+                "原型模型"
+            ],
+            "uniqueId": "rjgc-1-21cf7a2c-001"
         },
         {
             "type": "single-choice",
@@ -20,7 +23,10 @@
                 "螺旋模型",
                 "喷泉模型"
             ],
-            "correct_answer": ["螺旋模型"]
+            "correct_answer": [
+                "螺旋模型"
+            ],
+            "uniqueId": "rjgc-1-24df5402-002"
         },
         {
             "type": "single-choice",
@@ -31,7 +37,10 @@
                 "螺旋模型",
                 "喷泉模型"
             ],
-            "correct_answer": ["喷泉模型"]
+            "correct_answer": [
+                "喷泉模型"
+            ],
+            "uniqueId": "rjgc-1-60a3654c-003"
         },
         {
             "type": "single-choice",
@@ -42,7 +51,10 @@
                 "实施工程",
                 "客户评估"
             ],
-            "correct_answer": ["风险分析"]
+            "correct_answer": [
+                "风险分析"
+            ],
+            "uniqueId": "rjgc-1-3c99f84d-004"
         },
         {
             "type": "single-choice",
@@ -53,7 +65,11 @@
                 "螺旋模型",
                 "原型模型"
             ],
-            "correct_answer": ["增量式模型"]
+            "correct_answer": [
+                "增量式模型"
+            ],
+            "uniqueId": "rjgc-1-7b0f60e6-005",
+            "analysis": "增量模型将软件分批交付，每次交付一个可运行的增量版本。\n\n这允许客户早期获得核心功能，降低了初始投资的风险，并可根据早期反馈进行调整。"
         },
         {
             "type": "single-choice",
@@ -64,7 +80,10 @@
                 "物质",
                 "消耗"
             ],
-            "correct_answer": ["逻辑"]
+            "correct_answer": [
+                "逻辑"
+            ],
+            "uniqueId": "rjgc-1-7c48c7d2-006"
         },
         {
             "type": "single-choice",
@@ -75,7 +94,10 @@
                 "技术日新月异，发展快",
                 "质量得不到保证"
             ],
-            "correct_answer": ["技术日新月异，发展快"]
+            "correct_answer": [
+                "技术日新月异，发展快"
+            ],
+            "uniqueId": "rjgc-1-74e34ec5-007"
         },
         {
             "type": "single-choice",
@@ -86,7 +108,10 @@
                 "数学",
                 "哲学"
             ],
-            "correct_answer": ["工程学"]
+            "correct_answer": [
+                "工程学"
+            ],
+            "uniqueId": "rjgc-1-487b2d3c-008"
         },
         {
             "type": "single-choice",
@@ -97,7 +122,10 @@
                 "小组技术水平",
                 "部署环境"
             ],
-            "correct_answer": ["管理水平"]
+            "correct_answer": [
+                "管理水平"
+            ],
+            "uniqueId": "rjgc-1-5a851057-009"
         },
         {
             "type": "single-choice",
@@ -108,7 +136,11 @@
                 "技术,标准和平台",
                 "入口,过程和出口"
             ],
-            "correct_answer": ["方法,工具和过程"]
+            "correct_answer": [
+                "方法,工具和过程"
+            ],
+            "uniqueId": "rjgc-1-eb67bf4-010",
+            "analysis": "软件工程方法学通常由三个部分组成：\n\n方法（How to do it）\n\n工具（Automated support for methods）\n\n过程（The framework in which methods and tools are applied）"
         },
         {
             "type": "single-choice",
@@ -119,7 +151,10 @@
                 "可行性分析",
                 "运行与维护"
             ],
-            "correct_answer": ["运行与维护"]
+            "correct_answer": [
+                "运行与维护"
+            ],
+            "uniqueId": "rjgc-1-371e2b8f-011"
         },
         {
             "type": "single-choice",
@@ -130,7 +165,11 @@
                 "瀑布模型具有良好的灵活性",
                 "瀑布模型采用构造化的分析与设计方法，将逻辑实现与物理实现分开"
             ],
-            "correct_answer": ["瀑布模型采用构造化的分析与设计方法，将逻辑实现与物理实现分开"]
+            "correct_answer": [
+                "瀑布模型采用构造化的分析与设计方法，将逻辑实现与物理实现分开"
+            ],
+            "uniqueId": "rjgc-1-821b3ad-012",
+            "analysis": "瀑布模型在后期发现问题修改代价很高。\n\n瀑布模型的核心是严格的线性顺序和阶段划分。\n\n瀑布模型灵活性差，不适应需求变化。"
         },
         {
             "type": "single-choice",
@@ -141,7 +180,10 @@
                 "编写程序",
                 "软件维护"
             ],
-            "correct_answer": ["软件维护"]
+            "correct_answer": [
+                "软件维护"
+            ],
+            "uniqueId": "rjgc-1-4dec94af-013"
         },
         {
             "type": "single-choice",
@@ -152,63 +194,144 @@
                 "螺旋模型",
                 "喷泉模型"
             ],
-            "correct_answer": ["瀑布模型"]
+            "correct_answer": [
+                "瀑布模型"
+            ],
+            "uniqueId": "rjgc-1-4b640f9-014"
         },
         {
             "type": "fill-in-blank",
             "content": "RUP 的核心工作流有 ( )，( )，( )，( )，( ) 和 ( )。",
-            "blanks": ["空1", "空2", "空3", "空4", "空5", "空6"],
-            "correct_answer": ["业务建模", "需求", "分析与设计", "实现", "测试", "部署"]
+            "blanks": [
+                "空1",
+                "空2",
+                "空3",
+                "空4",
+                "空5",
+                "空6"
+            ],
+            "correct_answer": [
+                "业务建模",
+                "需求",
+                "分析与设计",
+                "实现",
+                "测试",
+                "部署"
+            ],
+            "uniqueId": "rjgc-1-ad51ee5-015"
         },
         {
             "type": "fill-in-blank",
             "content": "软件工程是指计算机软件 ( ) 和 ( ) 的一门工程学科。",
-            "blanks": ["空1", "空2"],
-            "correct_answer": ["开发", "维护"]
+            "blanks": [
+                "空1",
+                "空2"
+            ],
+            "correct_answer": [
+                "开发",
+                "维护"
+            ],
+            "uniqueId": "rjgc-1-6412636f-016"
         },
         {
             "type": "fill-in-blank",
             "content": "软件生命周期阶段包括问题定义、( )、( )、( )、( )、( )、( ) 和 ( )。",
-            "blanks": ["空1", "空2", "空3", "空4", "空5", "空6", "空7"],
-            "correct_answer": ["可行性研究", "需求分析", "总体设计", "详细设计", "编码和单元测试", "综合测试", "软件维护"]
+            "blanks": [
+                "空1",
+                "空2",
+                "空3",
+                "空4",
+                "空5",
+                "空6",
+                "空7"
+            ],
+            "correct_answer": [
+                "可行性研究",
+                "需求分析",
+                "总体设计",
+                "详细设计",
+                "编码和单元测试",
+                "综合测试",
+                "软件维护"
+            ],
+            "uniqueId": "rjgc-1-1722e6d6-017"
         },
         {
             "type": "fill-in-blank",
             "content": "目前使用最广泛的软件工程方法包括 ( ) 和 ( )。",
-            "blanks": ["空1", "空2"],
-            "correct_answer": ["结构化方法", "面向对象方法"]
+            "blanks": [
+                "空1",
+                "空2"
+            ],
+            "correct_answer": [
+                "结构化方法",
+                "面向对象方法"
+            ],
+            "uniqueId": "rjgc-1-5dcfbe94-018"
         },
         {
             "type": "fill-in-blank",
             "content": "RUP的四个工作阶段包括 ( )、( )、( )、( )。",
-            "blanks": ["空1", "空2", "空3", "空4"],
-            "correct_answer": ["初始化阶段", "细化阶段", "构造阶段", "转换阶段"]
+            "blanks": [
+                "空1",
+                "空2",
+                "空3",
+                "空4"
+            ],
+            "correct_answer": [
+                "初始化阶段",
+                "细化阶段",
+                "构造阶段",
+                "转换阶段"
+            ],
+            "uniqueId": "rjgc-1-4a12b782-019"
         },
         {
             "type": "single-choice",
             "content": "软件危机是指在计算机软件开发、使用与维护过程中遇到的一系列严重问题和难题。",
-            "options": ["对", "错"],
-            "correct_answer": ["对"]
+            "options": [
+                "对",
+                "错"
+            ],
+            "correct_answer": [
+                "对"
+            ],
+            "uniqueId": "rjgc-1-75f9dad8-020"
         },
         {
             "type": "single-choice",
             "content": "快速原型模型建造出的软件原型有可能会被丢弃。",
-            "options": ["对", "错"],
-            "correct_answer": ["对"]
+            "options": [
+                "对",
+                "错"
+            ],
+            "correct_answer": [
+                "对"
+            ],
+            "uniqueId": "rjgc-1-18837046-021"
         },
         {
             "type": "single-choice",
             "content": "只有质量差的产品才需要维护。",
-            "options": ["对", "错"],
-            "correct_answer": ["错"]
+            "options": [
+                "对",
+                "错"
+            ],
+            "correct_answer": [
+                "错"
+            ],
+            "uniqueId": "rjgc-1-5555a21a-022"
         }
     ],
+    
     "sets": [
         {
             "id": "rjgc-1",
-            "name": "学习通-软件工程-01-概述",
+            "name": "01-软件工程-概述",
             "category": "软件工程",
             "tags": ["期末", "概述", "原题"],
+            "createTime": "2025-06-23 22:48:00",
+            "updateTime": "2025-06-25 08:48:00",
             "description": "[概述](https://mooc1.chaoxing.com/mooc-ans/mooc2/work/view?courseId=227327462&classId=115629904&cpi=411759952&workId=41275127&answerId=53478996&enc=b153d4314c1d69cc55e7375748ac4f3f)"
         }
     ]
