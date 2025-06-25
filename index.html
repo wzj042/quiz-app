@@ -41,17 +41,10 @@
             });
 
             // 添加键盘快捷键支持
-            document.addEventListener('keydown', function(e) {
+            const handleKeydown = (e) => {
                 // 如果正在输入，不处理快捷键
                 if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') {
                     return;
-                }
-
-                // Alt + H: 返回首页
-                if (e.altKey && e.key === 'h') {
-                    e.preventDefault();
-                    const homeLink = document.querySelector('.nav-title-link');
-                    if (homeLink) homeLink.click();
                 }
 
                 // T: 打开标签筛选
@@ -76,7 +69,9 @@
                     const exportBtn = document.querySelector('.export-btn');
                     if (exportBtn) exportBtn.click();
                 }
-            });
+            };
+
+            document.addEventListener('keydown', handleKeydown);
 
             // 初始化焦点管理
             initFocusManagement();
@@ -530,22 +525,31 @@
             </div>
 
             <!-- 提交答案 / 下一题 按钮 -->
-            <div style="margin-top: 12px;">
+            <div style="margin-top: 12px; display: flex; gap: 12px; align-items: center;">
+                <button
+                    type="button"
+                    v-if="practiceManager?.currentIndex > 0"
+                    class="btn"
+                    @click="prevQuestion"
+                >
+                    上一题
+                </button>
                 <button
                     type="button"
                     v-if="!showAnswer"
                     class="btn"
                     @click="submitAnswer"
                 >
-                    提交答案 (空格)
+                    提交答案
                 </button>
                 <button
                     type="button"
                     v-else
                     class="btn"
                     @click="nextQuestion"
+                    :disabled="practiceManager?.currentIndex === quizList.length - 1 && isPreviewMode"
                 >
-                    下一题 (空格)
+                    下一题 
                 </button>
             </div>
 
@@ -577,7 +581,12 @@
             </div>
 
             <p style="font-size:13px; color:#666; margin-top:8px;">
-                键盘：1~4 选项，空格提交/下一题，Shift+C切换解析
+                <template v-if="!isPreviewMode">
+                  键盘：1~4 选项，空格提交/下一题，Shift+C切换解析
+                </template>
+                <template v-else>
+                  键盘：1~4 选项，Shift+C切换解析，q/e切换上一题/下一题
+                </template>
             </p>
         </div>
 
@@ -655,6 +664,7 @@
                 topTags: [],
                 allTags: [],
                 bankStats: {},
+                _altHPressed: false,
             }
         },
         mounted() {
@@ -676,10 +686,20 @@
 
             // 添加浏览器前进/后退按钮支持
             window.addEventListener('popstate', this.handlePopState);
+
+            // 添加 URL 变化监听
+            window.addEventListener('hashchange', this.handleUrlChange);
+            window.addEventListener('popstate', this.handleUrlChange);
+
+            // 添加全局Alt+H返回快捷键
+            window.addEventListener('keydown', this.handleGlobalBackShortcut);
         },
         beforeUnmount() {
             // 清理事件监听器
             window.removeEventListener('popstate', this.handlePopState);
+            window.removeEventListener('hashchange', this.handleUrlChange);
+            window.removeEventListener('popstate', this.handleUrlChange);
+            window.removeEventListener('keydown', this.handleGlobalBackShortcut);
         },
         watch: {
             pageState: {
@@ -713,11 +733,11 @@
             this.questionManager = new QuestionManager(this.storageManager);
             this.practiceManager = new PracticeManager(this.storageManager);
 
-            // 处理URL参数
-            await this.handleUrlParams();
-
-            // 加载题库列表
+            // 先加载题库列表
             await this.loadBankList();
+            
+            // 然后处理URL参数
+            await this.handleUrlParams();
         },
         computed: {
             currentQuestion() {
@@ -897,17 +917,35 @@
 
             // 加载题库文件
             async loadJsonFile(fileName) {
-                if (this.isLoading) return;
+                console.log('[loadJsonFile] Starting to load file:', fileName);
+                if (this.isLoading) {
+                    console.log('[loadJsonFile] Already loading, skipping');
+                    return;
+                }
                 this.isLoading = true;
                 try {
+                    console.log('[loadJsonFile] Loading data from file');
                     const data = await this.jsonLoader.loadFile(fileName);
+                    console.log('[loadJsonFile] Data loaded:', {
+                        setName: data.sets[0]?.name,
+                        questionCount: data.questions?.length
+                    });
+                    
                     this.chosenSet = data.sets[0];
+                    
+                    // 更新统计数据
+                    console.log('[loadJsonFile] Updating bank stats');
+                    await this.loadBankStats(fileName);
+                    
+                    // 更新URL并切换到题库详情页
+                    console.log('[loadJsonFile] Updating page state to setDescription');
                     this.updatePageState('setDescription');
                 } catch (error) {
-                    console.error('加载题库失败:', error);
+                    console.error('[loadJsonFile] Failed to load bank:', error);
                     alert('加载题库失败: ' + error.message);
                 } finally {
                     this.isLoading = false;
+                    console.log('[loadJsonFile] Loading completed');
                 }
             },
 
@@ -935,7 +973,7 @@
                 this.practiceManager.togglePreviewMode(false);
                 this.showAnswer = false;
                 this.currentSessionCompleted.clear();
-                this.updatePageState('quiz');
+                this.updatePageState('quiz', { mode: 'all' });
             },
 
             enterOrderQuizMode() {
@@ -943,7 +981,7 @@
                 this.practiceManager.togglePreviewMode(false);
                 this.showAnswer = false;
                 this.currentSessionCompleted.clear();
-                this.updatePageState('orderQuiz');
+                this.updatePageState('quiz', { mode: 'wrong' });
             },
 
             enterRandomQuizMode() {
@@ -951,14 +989,14 @@
                 this.practiceManager.togglePreviewMode(false);
                 this.showAnswer = false;
                 this.currentSessionCompleted.clear();
-                this.updatePageState('randomQuiz');
+                this.updatePageState('quiz', { mode: 'random' });
             },
 
             enterPreviewMode() {
                 this.practiceManager.initPractice(this.jsonLoader.questions, 'sequence');
                 this.practiceManager.togglePreviewMode(true);
                 this.showAnswer = true;
-                this.updatePageState('quiz');
+                this.updatePageState('quiz', { mode: 'preview' });
             },
 
             // 编辑相关方法
@@ -1051,6 +1089,7 @@
 
             // 状态更新
             updatePageState(newState, params = {}) {
+                console.log('[updatePageState] from:', this.pageState, 'to:', newState, 'params:', params);
                 // 如果有未导出的修改，且不是刚刚导出的，且不是在编辑模式中
                 if (this.modifiedCount > 0 && !this.dontShowExportReminder && 
                     (!this.lastExportTimestamp || Date.now() - this.lastExportTimestamp > 1000) &&
@@ -1067,6 +1106,15 @@
                 }
                 
                 this.pageState = newState;
+                
+                // 如果是返回题库详情页，确保传递当前题库参数
+                if (newState === 'setDescription' && this.chosenSet) {
+                    const currentFile = this.fileList.find(f => f.name === this.chosenSet.name)?.file;
+                    if (currentFile) {
+                        params.bank = currentFile;
+                    }
+                }
+                
                 // 更新URL参数
                 this.updateUrlParams(newState, params);
                 
@@ -1131,6 +1179,7 @@
             },
 
             goBack() {
+                console.log('[goBack] Called, pageState:', this.pageState, 'isEditing:', this.isEditing);
                 if (this.isEditing) {
                     if (this.questionManager.checkUnsavedChanges()) {
                         this.showUnsavedDialog('setDescription');
@@ -1142,12 +1191,22 @@
                         this.showAnswer = false; // 退出解析模式
                     }
                 }
-                this.updatePageState('setDescription');
+                
+                // 获取当前题库文件名
+                const currentFile = this.fileList.find(f => f.name === this.chosenSet?.name)?.file;
+                console.log('[goBack] Current bank file:', currentFile);
+                
+                // 返回题库描述页面时保持bank参数
+                console.log('[goBack] updatePageState to setDescription');
+                this.updatePageState('setDescription', { bank: currentFile });
             },
 
             goHome() {
-                // 清除URL参数
-                window.history.pushState({}, '', window.location.pathname);
+                console.log('[goHome] Called, pageState:', this.pageState);
+                // 清除所有状态和URL参数
+                this.chosenSet = null;
+                this.questionManager.clearEditHistory();
+                this.showExportButton = false;
                 this.updatePageState('home');
             },
 
@@ -1354,19 +1413,10 @@
             },
 
             nextQuestion() {
-                // 在预览模式下，不更新答题记录
-                if (this.currentIndex < this.quizList.length - 1) {
-                    this.practiceManager.nextQuestion();
-                    // 重置答案状态
-                    this.chosenAnswer = '';
-                    this.chosenAnswers = [];
-                    this.shortAnswerText = '';
-                    this.fillInAnswers = [];
+                if (this.practiceManager && this.practiceManager.currentIndex < this.practiceManager.questions.length - 1) {
+                    this.practiceManager.currentIndex++;
                     this.showAnswer = false;
-                    console.log('Reset answer state:', {
-                        chosenAnswer: this.chosenAnswer,
-                        chosenAnswers: this.chosenAnswers
-                    });
+                    this.updateUrlParams('quiz', { mode: this.getCurrentMode(), qid: this.practiceManager.questions[this.practiceManager.currentIndex].uniqueId });
                 } else if (!this.isPreviewMode) {
                     this.updatePageState('result');
                 }
@@ -1450,14 +1500,26 @@
                 this.selectedTags = [];
             },
             async loadBankStats(fileName) {
+                console.log('[loadBankStats] Loading stats for:', fileName);
                 try {
-                    // 先加载题库文件
-                    const data = await this.jsonLoader.loadFile(fileName);
-                    // 然后获取统计信息
-                    this.bankStats[fileName] = this.storageManager.getBankStats(fileName, this.jsonLoader);
-                    this.$forceUpdate(); // 强制更新视图
+                    // 获取统计信息
+                    const stats = this.storageManager.getBankStats(fileName, this.jsonLoader);
+                    console.log('[loadBankStats] Retrieved stats:', stats);
+                    this.bankStats[fileName] = stats;
+                    
+                    // 强制更新计算属性
+                    this.$forceUpdate();
+                    console.log('[loadBankStats] Stats updated and view forced to update');
+                    
+                    // 如果在题库详情页面，确保setStats被重新计算
+                    if (this.pageState === 'setDescription') {
+                        console.log('[loadBankStats] Recalculating setStats for description page');
+                        // Vue会自动重新计算setStats，因为依赖的数据已经更新
+                        const currentStats = this.setStats;
+                        console.log('[loadBankStats] Current setStats:', currentStats);
+                    }
                 } catch (error) {
-                    console.error('Error loading bank stats:', error);
+                    console.error('[loadBankStats] Error loading bank stats:', error);
                 }
             },
             focusPrevButton(event) {
@@ -1709,59 +1771,365 @@
             async handleUrlParams() {
                 const urlParams = new URLSearchParams(window.location.search);
                 const bankParam = urlParams.get('bank');
+                const stateParam = urlParams.get('state');
+                const modeParam = urlParams.get('mode');
+                const qidParam = urlParams.get('qid');
                 
-                if (bankParam) {
-                    try {
-                        await this.loadJsonFile(bankParam);
-                    } catch (error) {
-                        console.error('Failed to load bank from URL:', error);
+                console.log('[handleUrlParams] Processing URL parameters:', {
+                    bank: bankParam,
+                    state: stateParam,
+                    mode: modeParam,
+                    qid: qidParam
+                });
+                
+                if (!bankParam) {
+                    console.log('[handleUrlParams] No bank parameter, staying on home page');
+                    return;
+                }
+
+                // 确保题库列表已加载
+                if (this.fileList.length === 0) {
+                    console.log('[handleUrlParams] File list not loaded yet, waiting...');
+                    await this.loadBankList();
+                }
+
+                // 验证题库是否存在
+                const bankExists = this.fileList.some(f => f.file === bankParam);
+                if (!bankExists) {
+                    console.error('[handleUrlParams] Bank not found:', bankParam);
+                    alert('找不到指定的题库');
+                    this.resetAllState();
+                    return;
+                }
+                
+                try {
+                    this.isLoading = true;
+                    // 加载题库数据
+                    console.log('[handleUrlParams] Loading bank data:', bankParam);
+                    const data = await this.jsonLoader.loadFile(bankParam);
+                    console.log('[handleUrlParams] Bank data loaded:', {
+                        setName: data.sets[0]?.name,
+                        questionCount: data.questions?.length
+                    });
+                    
+                    this.chosenSet = data.sets[0];
+                    
+                    // 更新统计数据
+                    console.log('[handleUrlParams] Updating bank stats');
+                    await this.loadBankStats(bankParam);
+                    
+                    // 根据state参数设置页面状态
+                    if (stateParam === 'quiz' && modeParam) {
+                        console.log('[handleUrlParams] Setting up quiz mode:', modeParam);
+                        await this.setupQuizMode(modeParam, qidParam);
+                    } else {
+                        console.log('[handleUrlParams] Setting page state to:', stateParam || 'setDescription');
+                        this.pageState = stateParam || 'setDescription';
                     }
+                } catch (error) {
+                    console.error('[handleUrlParams] Failed to process URL parameters:', error);
+                    alert('加载题库失败: ' + error.message);
+                    this.resetAllState();
+                } finally {
+                    this.isLoading = false;
                 }
             },
 
-            // 更新URL参数
+            // 设置练习模式，支持qid跳转
+            async setupQuizMode(mode, qid = null) {
+                console.log('[setupQuizMode] Setting up quiz mode:', mode, {
+                    currentQuestions: this.jsonLoader.questions?.length,
+                    qid
+                });
+                try {
+                    // 确保我们使用的是当前加载的题库数据
+                    const questions = this.jsonLoader.questions;
+                    if (!questions || questions.length === 0) {
+                        throw new Error('No questions available for quiz mode');
+                    }
+
+                    switch(mode) {
+                        case 'all':
+                            this.practiceManager.initPractice(questions, 'sequence');
+                            this.practiceManager.togglePreviewMode(false);
+                            break;
+                        case 'wrong':
+                            this.practiceManager.initPractice(questions, 'error-rate');
+                            this.practiceManager.togglePreviewMode(false);
+                            break;
+                        case 'random':
+                            this.practiceManager.initPractice(questions, 'random');
+                            this.practiceManager.togglePreviewMode(false);
+                            break;
+                        case 'preview':
+                            this.practiceManager.initPractice(questions, 'sequence');
+                            this.practiceManager.togglePreviewMode(true);
+                            this.showAnswer = true;
+                            break;
+                    }
+                    // 跳转到指定qid
+                    if (qid) {
+                        const idx = questions.findIndex(q => q.uniqueId === qid);
+                        if (idx !== -1) {
+                            this.practiceManager.currentIndex = idx;
+                        }
+                    }
+                    console.log('[setupQuizMode] Practice manager initialized with questions:', questions.length);
+                    this.resetQuizState();
+                    this.pageState = 'quiz';
+                    console.log('[setupQuizMode] Quiz mode setup completed');
+                } catch (error) {
+                    console.error('[setupQuizMode] Failed to setup quiz mode:', error);
+                    this.resetAllState();
+                }
+            },
+
+            // 处理浏览器前进/后退
+            async handlePopState(event) {
+                console.log('[handlePopState] Processing popstate event:', event);
+                const urlParams = new URLSearchParams(window.location.search);
+                const bankParam = urlParams.get('bank');
+                const stateParam = urlParams.get('state');
+                const modeParam = urlParams.get('mode');
+                
+                console.log('[handlePopState] URL parameters:', {
+                    bank: bankParam,
+                    state: stateParam,
+                    mode: modeParam
+                });
+                
+                if (!bankParam) {
+                    console.log('[handlePopState] No bank parameter, resetting state');
+                    this.resetAllState();
+                    return;
+                }
+                
+                try {
+                    // 如果bank变化了，需要重新加载题库
+                    const currentFile = this.fileList.find(f => f.name === this.chosenSet?.name)?.file;
+                    console.log('[handlePopState] Checking bank change:', {
+                        current: currentFile,
+                        new: bankParam
+                    });
+                    
+                    if (bankParam !== currentFile) {
+                        console.log('[handlePopState] Loading new bank data');
+                        const data = await this.jsonLoader.loadFile(bankParam);
+                        this.chosenSet = data.sets[0];
+                        // 更新统计数据
+                        await this.loadBankStats(bankParam);
+                    }
+                    
+                    // 根据state参数切换状态
+                    if (stateParam) {
+                        console.log('[handlePopState] Processing state:', stateParam);
+                        switch(stateParam) {
+                            case 'quiz':
+                                if (modeParam) {
+                                    console.log('[handlePopState] Setting up quiz mode:', modeParam);
+                                    this.setupQuizMode(modeParam);
+                                }
+                                break;
+                            case 'setDescription':
+                                console.log('[handlePopState] Switching to setDescription');
+                                this.pageState = 'setDescription';
+                                break;
+                            default:
+                                console.log('[handlePopState] Invalid state, resetting');
+                                this.resetAllState();
+                        }
+                    } else {
+                        console.log('[handlePopState] No state parameter, defaulting to setDescription');
+                        this.pageState = 'setDescription';
+                    }
+                } catch (error) {
+                    console.error('[handlePopState] Failed to handle popstate:', error);
+                    this.resetAllState();
+                }
+            },
+
+            // 处理 URL 变化
+            async handleUrlChange(event) {
+                // 避免重复处理 popstate 事件
+                if (event.type === 'popstate') {
+                    return;
+                }
+
+                console.log('[handleUrlChange] URL changed:', {
+                    oldURL: event.oldURL,
+                    newURL: event.newURL || window.location.href
+                });
+
+                await this.handleUrlParams();
+            },
+
+            // 更新URL参数，支持qid
             updateUrlParams(state, params = {}) {
+                console.log('[updateUrlParams] Updating URL parameters:', {
+                    state,
+                    params
+                });
+                
                 const url = new URL(window.location.href);
+                const oldParams = new URLSearchParams(url.search);
+                const oldBank = oldParams.get('bank');
+                const oldState = oldParams.get('state');
                 
                 // 清除现有参数
                 url.search = '';
+                const newParams = new URLSearchParams();
                 
                 // 根据状态设置参数
-                if (state === 'setDescription' && this.chosenSet) {
-                    const currentFile = this.fileList.find(f => f.name === this.chosenSet.name)?.file;
-                    if (currentFile) {
-                        url.searchParams.set('bank', currentFile);
+                if (state !== 'home') {
+                    // 设置state参数
+                    newParams.set('state', state);
+                    
+                    // 如果有题库，添加bank参数
+                    if (this.chosenSet) {
+                        const currentFile = this.fileList.find(f => f.name === this.chosenSet.name)?.file;
+                        if (currentFile) {
+                            newParams.set('bank', currentFile);
+                        }
+                    }
+                    
+                    // 如果是quiz状态，添加mode参数
+                    if (state === 'quiz' || state === 'orderQuiz' || state === 'randomQuiz') {
+                        let mode = 'all';
+                        if (state === 'orderQuiz') mode = 'wrong';
+                        else if (state === 'randomQuiz') mode = 'random';
+                        newParams.set('mode', mode);
+                        // 支持qid
+                        if (params.qid) {
+                            newParams.set('qid', params.qid);
+                        } else if (this.practiceManager && this.practiceManager.questions && this.practiceManager.currentIndex != null) {
+                            const q = this.practiceManager.questions[this.practiceManager.currentIndex];
+                            if (q && q.uniqueId) {
+                                newParams.set('qid', q.uniqueId);
+                            }
+                        }
                     }
                 }
                 
                 // 添加其他参数
                 Object.entries(params).forEach(([key, value]) => {
-                    if (value) {
-                        url.searchParams.set(key, value);
+                    if (value && key !== 'qid') {
+                        newParams.set(key, value);
                     }
                 });
                 
-                // 更新URL，不刷新页面
-                window.history.pushState({}, '', url);
+                // 检查参数是否真的改变了
+                const newBank = newParams.get('bank');
+                const newState = newParams.get('state');
+                
+                if (oldBank !== newBank || oldState !== newState) {
+                    // 更新URL，不刷新页面
+                    url.search = newParams.toString();
+                    window.history.pushState({
+                        state,
+                        params
+                    }, '', url);
+                }
             },
 
-            // 处理浏览器前进/后退
-            async handlePopState() {
-                const urlParams = new URLSearchParams(window.location.search);
-                const bankParam = urlParams.get('bank');
-                
-                if (bankParam) {
-                    // 如果URL中有bank参数，加载对应题库
-                    try {
-                        await this.loadJsonFile(bankParam);
-                    } catch (error) {
-                        console.error('Failed to load bank from popstate:', error);
-                        this.pageState = 'home';
-                    }
-                } else {
-                    // 如果没有参数，返回首页
-                    this.pageState = 'home';
+            // 重置所有状态
+            resetAllState() {
+                this.pageState = 'home';
+                this.chosenSet = null;
+                this.practiceManager?.reset();
+                this.resetQuizState();
+                this.showExportButton = false;
+                this.isEditing = false;
+                this.editingField = null;
+                this.editingContent = '';
+            },
+
+            // 重置答题状态
+            resetQuizState() {
+                this.chosenAnswer = '';
+                this.chosenAnswers = [];
+                this.shortAnswerText = '';
+                this.fillInAnswers = [];
+                this.currentSessionCompleted.clear();
+                this.showAnswer = false;
+            },
+            prevQuestion() {
+                if (this.practiceManager && this.practiceManager.currentIndex > 0) {
+                    this.practiceManager.currentIndex--;
+                    this.showAnswer = false;
+                    this.updateUrlParams('quiz', { mode: this.getCurrentMode(), qid: this.practiceManager.questions[this.practiceManager.currentIndex].uniqueId });
                 }
+            },
+            getCurrentMode() {
+                if (!this.practiceManager) return 'all';
+                if (this.practiceManager.isPreviewMode) return 'preview';
+                if (this.practiceManager.mode === 'random') return 'random';
+                if (this.practiceManager.mode === 'error-rate') return 'wrong';
+                return 'all';
+            },
+            // 全局Alt+H返回上一级快捷键
+            handleGlobalBackShortcut(e) {
+                const tag = document.activeElement && document.activeElement.tagName;
+                if (tag === 'INPUT' || tag === 'TEXTAREA') return;
+
+                if (e.altKey && (e.key === 'h' || e.key === 'H')) {
+                    console.log('[handleGlobalBackShortcut] Alt+H detected, pageState:', this.pageState);
+                    e.preventDefault();
+                    e.stopPropagation();
+                    e.stopImmediatePropagation();
+                    
+                    switch (this.pageState) {
+                        case 'quiz':
+                        case 'orderQuiz':
+                        case 'randomQuiz':
+                            if (!this.isEditing) {
+                                console.log('[handleGlobalBackShortcut] Calling goBack() from quiz mode');
+                                this.goBack();
+                            }
+                            break;
+                        case 'setDescription':
+                            console.log('[handleGlobalBackShortcut] Calling goHome() from setDescription');
+                            this.goHome();
+                            break;
+                        case 'home':
+                            // 在首页不做任何操作
+                            break;
+                    }
+                    return false;
+                }
+            },
+
+            // 返回上一页
+            goBack() {
+                console.log('[goBack] Called, pageState:', this.pageState, 'isEditing:', this.isEditing);
+                if (this.isEditing) {
+                    if (this.questionManager.checkUnsavedChanges()) {
+                        this.showUnsavedDialog('setDescription');
+                        return;
+                    } else {
+                        this.questionManager.cancelEditing();
+                        this.isEditing = false;
+                        this.showExportButton = false;
+                        this.showAnswer = false; // 退出解析模式
+                    }
+                }
+                
+                // 获取当前题库文件名
+                const currentFile = this.fileList.find(f => f.name === this.chosenSet?.name)?.file;
+                console.log('[goBack] Current bank file:', currentFile);
+                
+                // 返回题库描述页面时保持bank参数
+                console.log('[goBack] updatePageState to setDescription');
+                this.updatePageState('setDescription', { bank: currentFile });
+            },
+
+            // 返回首页
+            goHome() {
+                console.log('[goHome] Called, pageState:', this.pageState);
+                // 清除所有状态和URL参数
+                this.chosenSet = null;
+                this.questionManager.clearEditHistory();
+                this.showExportButton = false;
+                this.updatePageState('home');
             },
         }
     });

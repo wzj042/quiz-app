@@ -99,7 +99,29 @@ export default class JsonLoader {
             if (!this.validateData(data)) {
                 throw new Error('Invalid data format');
             }
-            
+
+            // 更新当前数据
+            await this.setCurrentData(data, fileName);
+
+            return {
+                questions: this.questions,
+                sets: this.sets
+            };
+        } catch (e) {
+            console.error('加载题目文件失败:', e);
+            throw e;
+        }
+    }
+
+    // 设置当前数据
+    async setCurrentData(data, fileName = null) {
+        console.log('[JsonLoader] Setting current data:', {
+            fileName,
+            setsCount: data.sets?.length,
+            questionsCount: data.questions?.length
+        });
+
+        try {
             // 处理sets，确保每个set都有id和category
             this.sets = data.sets.map((set, index) => {
                 const setId = set.id || `set-${String(index + 1).padStart(3, '0')}`;
@@ -132,15 +154,20 @@ export default class JsonLoader {
             });
 
             // 更新加载状态
-            this.loadedFile = fileName;
+            if (fileName) {
+                this.loadedFile = fileName;
+            }
 
-            return {
-                questions: this.questions,
-                sets: this.sets
-            };
-        } catch (e) {
-            console.error('加载题目文件失败:', e);
-            throw e;
+            console.log('[JsonLoader] Data set successfully:', {
+                setsProcessed: this.sets.length,
+                questionsProcessed: this.questions.length,
+                currentFile: this.loadedFile
+            });
+
+            return true;
+        } catch (error) {
+            console.error('[JsonLoader] Failed to set current data:', error);
+            throw error;
         }
     }
 
