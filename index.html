@@ -12,8 +12,30 @@
     <link rel="stylesheet" href="https://lf9-cdn-tos.bytecdntp.com/cdn/expire-1-M/font-awesome/6.0.0/css/all.min.css">
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="css/mobile.css">
-    <link rel="icon" href="favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="css/mobile.css?v=1.0">
+    <link rel="icon" href="favicon.ico?v=1.0" type="image/x-icon">
+    <script>
+        // 动态加载 JS 模块，添加版本号防止缓存
+        window.addEventListener('DOMContentLoaded', function() {
+            const version = '1.0';
+            const modules = [
+                'js/modules/DataManager.js',
+                'js/modules/jsonLoader.js',
+                'js/modules/keyboard.js',
+                'js/modules/PracticeManager.js',
+                'js/modules/ProgressManager.js',
+                'js/modules/QuestionManager.js',
+                'js/modules/storage.js'
+            ];
+            
+            modules.forEach(module => {
+                const script = document.createElement('script');
+                script.type = 'module';
+                script.src = `${module}?v=${version}`;
+                document.head.appendChild(script);
+            });
+        });
+    </script>
 </head>
 <body>
 <div id="app" class="container">
