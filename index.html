@@ -91,7 +91,6 @@
                 );
                 const firstFocusable = focusableElements[0];
                 const lastFocusable = focusableElements[focusableElements.length - 1];
-
                 // 焦点循环
                 modalOverlay.addEventListener('keydown', function(e) {
                     if (e.key === 'Tab') {
@@ -674,6 +673,13 @@
                     });
                 }
             });
+
+            // 添加浏览器前进/后退按钮支持
+            window.addEventListener('popstate', this.handlePopState);
+        },
+        beforeUnmount() {
+            // 清理事件监听器
+            window.removeEventListener('popstate', this.handlePopState);
         },
         watch: {
             pageState: {
@@ -706,6 +712,9 @@
             this.keyboardManager = new KeyboardManager(this);
             this.questionManager = new QuestionManager(this.storageManager);
             this.practiceManager = new PracticeManager(this.storageManager);
+
+            // 处理URL参数
+            await this.handleUrlParams();
 
             // 加载题库列表
             await this.loadBankList();
@@ -1041,7 +1050,7 @@
             },
 
             // 状态更新
-            updatePageState(newState) {
+            updatePageState(newState, params = {}) {
                 // 如果有未导出的修改，且不是刚刚导出的，且不是在编辑模式中
                 if (this.modifiedCount > 0 && !this.dontShowExportReminder && 
                     (!this.lastExportTimestamp || Date.now() - this.lastExportTimestamp > 1000) &&
@@ -1058,6 +1067,9 @@
                 }
                 
                 this.pageState = newState;
+                // 更新URL参数
+                this.updateUrlParams(newState, params);
+                
                 if (newState === 'home') {
                     this.questionManager.clearEditHistory();
                     this.showExportButton = false;
@@ -1134,6 +1146,8 @@
             },
 
             goHome() {
+                // 清除URL参数
+                window.history.pushState({}, '', window.location.pathname);
                 this.updatePageState('home');
             },
 
@@ -1689,6 +1703,64 @@
                             firstBtn.focus();
                         }
                     });
+                }
+            },
+            // URL参数处理
+            async handleUrlParams() {
+                const urlParams = new URLSearchParams(window.location.search);
+                const bankParam = urlParams.get('bank');
+                
+                if (bankParam) {
+                    try {
+                        await this.loadJsonFile(bankParam);
+                    } catch (error) {
+                        console.error('Failed to load bank from URL:', error);
+                    }
+                }
+            },
+
+            // 更新URL参数
+            updateUrlParams(state, params = {}) {
+                const url = new URL(window.location.href);
+                
+                // 清除现有参数
+                url.search = '';
+                
+                // 根据状态设置参数
+                if (state === 'setDescription' && this.chosenSet) {
+                    const currentFile = this.fileList.find(f => f.name === this.chosenSet.name)?.file;
+                    if (currentFile) {
+                        url.searchParams.set('bank', currentFile);
+                    }
+                }
+                
+                // 添加其他参数
+                Object.entries(params).forEach(([key, value]) => {
+                    if (value) {
+                        url.searchParams.set(key, value);
+                    }
+                });
+                
+                // 更新URL，不刷新页面
+                window.history.pushState({}, '', url);
+            },
+
+            // 处理浏览器前进/后退
+            async handlePopState() {
+                const urlParams = new URLSearchParams(window.location.search);
+                const bankParam = urlParams.get('bank');
+                
+                if (bankParam) {
+                    // 如果URL中有bank参数，加载对应题库
+                    try {
+                        await this.loadJsonFile(bankParam);
+                    } catch (error) {
+                        console.error('Failed to load bank from popstate:', error);
+                        this.pageState = 'home';
+                    }
+                } else {
+                    // 如果没有参数，返回首页
+                    this.pageState = 'home';
                 }
             },
         }
