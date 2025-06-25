@@ -5,6 +5,7 @@ export default class JsonLoader {
         this.sets = [];
         this.loadedFile = null;
         this.validQuestionTypes = ['single-choice', 'multiple-choice', 'short-answer', 'fill-in-blank'];
+        this.allTags = new Map(); // 存储所有tags及其出现次数
     }
 
     // 生成唯一ID
@@ -99,14 +100,22 @@ export default class JsonLoader {
                 throw new Error('Invalid data format');
             }
             
-            // 处理sets，确保每个set都有id
+            // 处理sets，确保每个set都有id和category
             this.sets = data.sets.map((set, index) => {
                 const setId = set.id || `set-${String(index + 1).padStart(3, '0')}`;
+                // 更新tags统计
+                if (set.tags && Array.isArray(set.tags)) {
+                    set.tags.forEach(tag => {
+                        this.allTags.set(tag, (this.allTags.get(tag) || 0) + 1);
+                    });
+                }
                 return {
                     ...set,
                     id: setId,
                     name: this.sanitizeText(set.name),
-                    description: set.description ? this.sanitizeText(set.description) : ''
+                    description: set.description ? this.sanitizeText(set.description) : '',
+                    category: set.category ? this.sanitizeText(set.category) : '未分类',
+                    tags: set.tags || []
                 };
             });
 
@@ -220,5 +229,45 @@ export default class JsonLoader {
             [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
         }
         return shuffled;
+    }
+
+    // 按分类对题库进行分组
+    groupSetsByCategory(sets) {
+        const groups = {};
+        sets.forEach(set => {
+            const category = set.category || '未分类';
+            if (!groups[category]) {
+                groups[category] = [];
+            }
+            groups[category].push(set);
+        });
+        
+        // 对每个分类内的题库按名称排序
+        for (const category in groups) {
+            groups[category].sort((a, b) => a.name.localeCompare(b.name));
+        }
+        
+        // 返回排序后的分类列表
+        return Object.entries(groups).sort((a, b) => a[0].localeCompare(b[0]));
+    }
+
+    // 获取所有tags及其出现次数，按出现次数降序排序
+    getAllTags() {
+        return Array.from(this.allTags.entries())
+            .sort((a, b) => b[1] - a[1])
+            .map(([tag, count]) => ({ tag, count }));
+    }
+
+    // 获取前N个最常用的tags
+    getTopTags(n = 3) {
+        return this.getAllTags().slice(0, n);
+    }
+
+    // 根据选中的tags筛选sets
+    filterSetsByTags(sets, selectedTags) {
+        if (!selectedTags || selectedTags.length === 0) return sets;
+        return sets.filter(set => 
+            selectedTags.every(tag => set.tags && set.tags.includes(tag))
+        );
     }
 } 

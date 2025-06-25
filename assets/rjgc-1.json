@@ -207,6 +207,8 @@
         {
             "id": "rjgc-1",
             "name": "学习通-软件工程-01-概述",
+            "category": "软件工程",
+            "tags": ["期末", "概述", "原题"],
             "description": "[概述](https://mooc1.chaoxing.com/mooc-ans/mooc2/work/view?courseId=227327462&classId=115629904&cpi=411759952&workId=41275127&answerId=53478996&enc=b153d4314c1d69cc55e7375748ac4f3f)"
         }
     ]

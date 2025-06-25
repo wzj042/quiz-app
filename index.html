@@ -97,24 +97,30 @@
         </div>
         <!-- 题库列表 -->
         <ul v-else class="horizontal-list">
-            <li
-                v-for="(fileObj, idx) in fileList"
-                :key="idx"
-                class="quiz-item"
-                @click="loadJsonFile(fileObj.file)"
-            >
-                <div class="quiz-item-content">
-                    <div class="quiz-item-title">{{ fileObj.name }}</div>
-                    <div class="quiz-item-stats" v-if="getBankStats(fileObj.file)">
-                        <div class="quiz-stat">
-                            完成：{{ getBankStats(fileObj.file).completed }}/{{ getBankStats(fileObj.file).total }}
-                        </div>
-                        <div class="quiz-stat">
-                            正确率：{{ getBankStats(fileObj.file).accuracy }}%
+            <template v-for="(group, groupIndex) in groupedFileList" :key="groupIndex">
+                <li class="category-header">
+                    <h2>{{ group[0] }}</h2>
+                    <hr>
+                </li>
+                <li
+                    v-for="(fileObj, idx) in group[1]"
+                    :key="idx"
+                    class="quiz-item"
+                    @click="loadJsonFile(fileObj.file)"
+                >
+                    <div class="quiz-item-content">
+                        <div class="quiz-item-title">{{ fileObj.name }}</div>
+                        <div class="quiz-item-stats" v-if="getBankStats(fileObj.file)">
+                            <div class="quiz-stat">
+                                完成：{{ getBankStats(fileObj.file).completed }}/{{ getBankStats(fileObj.file).total }}
+                            </div>
+                            <div class="quiz-stat">
+                                正确率：{{ getBankStats(fileObj.file).accuracy }}%
+                            </div>
                         </div>
                     </div>
-                </div>
-            </li>
+                </li>
+            </template>
         </ul>
         <!-- 如果列表为空 -->
         <div v-if="!isLoading && !loadError && fileList.length === 0" class="empty-state">
@@ -436,6 +442,7 @@
                 isLoading: false,
                 loadError: null,
                 fileList: [],
+                groupedFileList: [],
                 chosenSet: null,
                 showAnswer: false,
                 isEditing: false,
@@ -560,6 +567,44 @@
                     const data = await response.json();
                     this.fileList = data.banks || [];
                     this.updateTime = data.updateTime;
+                    
+                    // 加载每个题库的sets信息以获取category
+                    const fileCategories = {};
+                    for (const bank of this.fileList) {
+                        try {
+                            const bankData = await this.jsonLoader.loadFile(bank.file);
+                            const category = bankData.sets[0]?.category || '未分类';
+                            fileCategories[bank.file] = category;
+                        } catch (error) {
+                            console.error(`Error loading bank ${bank.file}:`, error);
+                            fileCategories[bank.file] = '未分类';
+                        }
+                    }
+                    
+                    // 按category对题库进行分组
+                    const groups = {};
+                    this.fileList.forEach(bank => {
+                        const category = fileCategories[bank.file] || '未分类';
+                        if (!groups[category]) {
+                            groups[category] = [];
+                        }
+                        groups[category].push(bank);
+                    });
+                    
+                    // 对每个分类内的题库按名称排序
+                    for (const category in groups) {
+                        groups[category].sort((a, b) => a.name.localeCompare(b.name));
+                    }
+                    
+                    // 转换为数组并按分类名排序，确保"未分类"永远在最后
+                    this.groupedFileList = Object.entries(groups)
+                        .sort((a, b) => {
+                            // 如果其中一个是"未分类"，特殊处理
+                            if (a[0] === '未分类') return 1;  // a是未分类，放到后面
+                            if (b[0] === '未分类') return -1; // b是未分类，放到后面
+                            // 其他情况按字母顺序排序
+                            return a[0].localeCompare(b[0]);
+                        });
                 } catch (error) {
                     console.error('Error loading file list:', error);
                     this.loadError = error.message;
@@ -1444,6 +1489,25 @@
     color: white;
     font-size: 16px;
     cursor: pointer;
+}
+
+.category-header {
+    width: 100%;
+    margin-top: 20px;
+    margin-bottom: 10px;
+}
+
+.category-header h2 {
+    font-size: 1.5em;
+    color: #333;
+    margin-bottom: 5px;
+}
+
+.category-header hr {
+    border: none;
+    height: 1px;
+    background-color: #ddd;
+    margin: 5px 0;
 }
 </style>
 </body>

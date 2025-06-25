@@ -22,27 +22,22 @@ async function scanDirectory(dir) {
             // 如果不是被忽略的目录，则递归扫描
             const subList = await scanDirectory(fullPath);
             bankList.push(...subList);
-        } else if (file.endsWith('.json')) {
+        } else if (file.endsWith('.json') && file !== 'list.json') {
             try {
                 // 读取JSON文件内容
                 const content = await fs.readFile(fullPath, 'utf8');
                 const data = JSON.parse(content);
                 
-                // 确保文件有sets数组且不为空
+                // 确保文件包含必要的数据
                 if (data.sets && data.sets.length > 0) {
-                    // 使用相对于assets目录的路径
-                    const relativePath = path.relative(
-                        path.join(__dirname, '..', 'assets'),
-                        fullPath
-                    );
-                    
                     bankList.push({
-                        file: relativePath,
-                        name: data.sets[0].name // 使用第一个set的名称
+                        file: file,
+                        name: data.sets[0].name || file.replace('.json', ''),
+                        category: data.sets[0].category || '未分类'
                     });
                 }
             } catch (err) {
-                console.error(`Error processing ${file}:`, err);
+                console.warn(`Warning: Could not process ${file}:`, err);
             }
         }
     }

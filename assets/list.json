@@ -1,13 +1,15 @@
 {
-  "updateTime": "2025-06-23T14:48:32.657Z",
+  "updateTime": "2025-06-25T01:05:25.529Z",
   "banks": [
     {
       "file": "demo.json",
-      "name": "题型演示"
+      "name": "题型演示",
+      "category": "未分类"
     },
     {
       "file": "rjgc-1.json",
-      "name": "学习通-软件工程-01-概述"
+      "name": "01-软件工程-概述",
+      "category": "软件工程"
     }
   ]
 }
