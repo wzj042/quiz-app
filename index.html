@@ -1014,7 +1014,8 @@
                     
                     // 加载每个题库的统计信息
                     for (const bank of this.fileList) {
-                        await this.loadBankStats(bank.file);
+                        const stats = await this.storageManager.getBankStats(bank.file, this.jsonLoader);
+                        this.bankStats[bank.file] = stats;
                     }
                     
                     // 加载每个题库的sets信息以获取category和tags
@@ -1108,7 +1109,8 @@
                     
                     // 更新统计数据
                     console.log('[loadJsonFile] Updating bank stats');
-                    await this.loadBankStats(fileName);
+                    const stats = await this.storageManager.getBankStats(fileName, this.jsonLoader);
+                    this.bankStats[fileName] = stats;
                     
                     // 更新URL并切换到题库详情页
                     console.log('[loadJsonFile] Updating page state to setDescription');
@@ -1991,7 +1993,8 @@
                     
                     // 更新统计数据
                     console.log('[handleUrlParams] Updating bank stats');
-                    await this.loadBankStats(bankParam);
+                    const stats = await this.storageManager.getBankStats(bankParam, this.jsonLoader);
+                    this.bankStats[bankParam] = stats;
                     
                     // 根据state参数设置页面状态
                     if (stateParam === 'quiz' && modeParam) {

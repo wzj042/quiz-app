@@ -171,7 +171,7 @@ export default class StorageManager {
         };
     }
 
-    getBankStats(fileName, jsonLoader) {
+    async getBankStats(fileName, jsonLoader) {
         try {
             console.log('[getBankStats] Checking stats for:', fileName);
             console.log('[getBankStats] Current data:', this.data);
@@ -197,8 +197,20 @@ export default class StorageManager {
             }
 
             // 获取题库的实际题目总数
-            let total = jsonLoader ? jsonLoader.questions.length : 0;
-
+            console.log('[getBankStats] jsonLoader', jsonLoader);
+            let questions = [];
+            if (jsonLoader) {
+                // 如果题库未加载，先加载题库
+                if (!jsonLoader.loadedBanks.has(fileName)) {
+                    console.log('[getBankStats] Loading bank first:', fileName);
+                    await jsonLoader.loadFile(fileName);
+                }
+                questions = jsonLoader.getQuestionsFromBank(fileName) || [];
+            }
+            console.log('[getBankStats] questions from bank:', questions);
+            let total = questions.length;
+            console.log('[getBankStats] total', total);
+            
             const stats = {
                 completed,
                 total,
