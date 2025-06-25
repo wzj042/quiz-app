@@ -329,7 +329,7 @@
             "id": "rjgc-1",
             "name": "01-软件工程-概述",
             "category": "软件工程",
-            "tags": ["生存期模型"],
+            "tags": ["生存期模型", "软件工程"],
             "createTime": "2025-06-23 22:48:00",
             "updateTime": "2025-06-25 08:48:00",
             "description": "[概述](https://mooc1.chaoxing.com/mooc-ans/mooc2/work/view?courseId=227327462&classId=115629904&cpi=411759952&workId=41275127&answerId=53478996&enc=b153d4314c1d69cc55e7375748ac4f3f)"

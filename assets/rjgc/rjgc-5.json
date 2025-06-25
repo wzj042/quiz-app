@@ -160,7 +160,7 @@
             "id": "rjgc-5",
             "name": "05-软工-作业4",
             "category": "软件工程",
-            "tags": ["软件体系结构", "面向对象", "子系统设计"],
+            "tags": ["软件体系结构", "面向对象", "子系统设计", "软件工程"],
             "createTime": "2024-06-06 15:37:00",
             "updateTime": "2024-06-25 21:05:00",
             "description": "[作业4](https://mooc1.chaoxing.com/mooc-ans/mooc2/work/view?courseId=227327462&classId=115629904&cpi=411759952&workId=44165768&answerId=53745324&enc=48fa9f559d90ad658f0e49d533d6f768)，包含填空、单选、多选题，涉及软件体系结构、面向对象概念和数据管理等内容。"
