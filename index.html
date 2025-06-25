@@ -2635,11 +2635,23 @@
                     const url = new URL(window.location.href);
                     const params = new URLSearchParams(url.search);
                     
-                    // 确保当前状态已经同步到URL
+                    // 获取当前题目在原题库中的序号（从1开始）
+                    const currentQuestion = this.practiceManager.getCurrentQuestion();
+                    let questionSequenceNumber = 1;
+                    
+                    // 在原题库中查找当前题目的序号
+                    if (currentQuestion) {
+                        const originalQuestions = this.jsonLoader.questions;
+                        questionSequenceNumber = originalQuestions.findIndex(q => 
+                            q.uniqueId === currentQuestion.uniqueId
+                        ) + 1;
+                    }
+                    
+                    // 确保当前状态已经同步到URL，但使用原题库中的序号
                     const currentFile = this.fileList.find(f => f.name === this.chosenSet?.name)?.file;
                     this.updateUrlParams('quiz', {
-                        mode: this.getCurrentMode(),
-                        qid: this.practiceManager.currentIndex + 1,
+                        mode: 'all', // 总是使用全部练习模式的链接
+                        qid: questionSequenceNumber,
                         bank: currentFile
                     });
                     
