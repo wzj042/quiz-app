@@ -2639,12 +2639,20 @@
                     const currentQuestion = this.practiceManager.getCurrentQuestion();
                     let questionSequenceNumber = 1;
                     
-                    // 在原题库中查找当前题目的序号
+                    // 在原题库中查找当前题目的序号，通过内容匹配
                     if (currentQuestion) {
                         const originalQuestions = this.jsonLoader.questions;
+                        // 使用题目内容和类型来匹配，确保找到正确的题目
                         questionSequenceNumber = originalQuestions.findIndex(q => 
-                            q.uniqueId === currentQuestion.uniqueId
+                            q.content === currentQuestion.content && 
+                            q.type === currentQuestion.type
                         ) + 1;
+
+                        // 如果没找到匹配的题目（这种情况不应该发生），使用默认值
+                        if (questionSequenceNumber <= 0) {
+                            console.error('Failed to find matching question in original bank:', currentQuestion);
+                            questionSequenceNumber = 1;
+                        }
                     }
                     
                     // 确保当前状态已经同步到URL，但使用原题库中的序号
