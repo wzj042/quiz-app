@@ -12,12 +12,12 @@
     <link rel="stylesheet" href="https://lf9-cdn-tos.bytecdntp.com/cdn/expire-1-M/font-awesome/6.0.0/css/all.min.css">
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="css/mobile.css?v=1.0">
-    <link rel="icon" href="favicon.ico?v=1.0" type="image/x-icon">
+    <link rel="stylesheet" href="css/mobile.css?v=_timestamp_">
+    <link rel="icon" href="favicon.ico?v=_timestamp_" type="image/x-icon">
     <script>
-        // 动态加载 JS 模块，添加版本号防止缓存
+        // 动态加载 JS 模块，使用时间戳防止缓存
         window.addEventListener('DOMContentLoaded', function() {
-            const version = '1.0';
+            const timestamp = Date.now();  // 使用时间戳确保每次加载最新资源
             const modules = [
                 'js/modules/DataManager.js',
                 'js/modules/jsonLoader.js',
@@ -28,10 +28,15 @@
                 'js/modules/storage.js'
             ];
             
+            // 更新 CSS 和 favicon 的时间戳
+            document.querySelector('link[href*="mobile.css"]').href = `css/mobile.css?v=${timestamp}`;
+            document.querySelector('link[rel="icon"]').href = `favicon.ico?v=${timestamp}`;
+            
+            // 动态加载 JS 模块
             modules.forEach(module => {
                 const script = document.createElement('script');
                 script.type = 'module';
-                script.src = `${module}?v=${version}`;
+                script.src = `${module}?v=${timestamp}`;
                 document.head.appendChild(script);
             });
         });
