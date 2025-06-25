@@ -52,7 +52,16 @@ async function generateBankList() {
         
         // 生成list.json文件，添加更新时间
         const outputData = {
-            updateTime: new Date().toISOString(),
+            updateTime: new Date().toLocaleString('zh-CN', {
+                timeZone: 'Asia/Shanghai',
+                hour12: false,
+                year: 'numeric',
+                month: '2-digit',
+                day: '2-digit',
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit'
+            }).replace(/\//g, '-'),
             banks: bankList
         };
         const outputPath = path.join(assetsDir, 'list.json');
