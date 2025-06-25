@@ -1057,10 +1057,27 @@
                     this.fileList = data.banks || [];
                     this.updateTime = data.updateTime;
                     
+                    // 初始化 jsonLoader
+                    if (!this.jsonLoader) {
+                        this.jsonLoader = new JsonLoader();
+                    }
+                    
                     // 加载每个题库的统计信息
                     for (const bank of this.fileList) {
-                        const stats = await this.storageManager.getBankStats(bank.file, this.jsonLoader);
-                        this.bankStats[bank.file] = stats;
+                        try {
+                            // 先加载题库数据
+                            await this.jsonLoader.loadFile(bank.file);
+                            // 然后获取统计信息
+                            const stats = await this.storageManager.getBankStats(bank.file, this.jsonLoader);
+                            this.bankStats[bank.file] = stats;
+                        } catch (error) {
+                            console.error(`Error loading bank ${bank.file}:`, error);
+                            this.bankStats[bank.file] = {
+                                completed: 0,
+                                total: 0,
+                                accuracy: 0
+                            };
+                        }
                     }
                     
                     // 加载每个题库的sets信息以获取category和tags
@@ -1490,15 +1507,21 @@
                 this.updatePageState('home');
             },
 
-            getBankStats(fileName) {
+            async getBankStats(fileName) {
                 try {
-                    const bankData = this.storageManager.getBankStats(fileName);
+                    // 确保题库已加载
+                    if (!this.jsonLoader.loadedBanks.has(fileName)) {
+                        console.log(`[getBankStats] Loading bank first: ${fileName}`);
+                        await this.jsonLoader.loadFile(fileName);
+                    }
+                    
+                    const bankData = await this.storageManager.getBankStats(fileName, this.jsonLoader);
                     console.log(`[getBankStats] Stats for ${fileName}:`, bankData);
                     if (!bankData) return null;
                     
                     const stats = {
-                        completed: bankData.completed,
-                        total: bankData.total,
+                        completed: bankData.completed || 0,
+                        total: bankData.total || 0,
                         accuracy: bankData.attempts > 0 
                             ? Math.round((bankData.correct / bankData.attempts) * 100)
                             : 0
@@ -1507,7 +1530,11 @@
                     return stats;
                 } catch (e) {
                     console.error('获取题库统计失败:', e);
-                    return null;
+                    return {
+                        completed: 0,
+                        total: 0,
+                        accuracy: 0
+                    };
                 }
             },
 
