@@ -6,6 +6,7 @@ export default class JsonLoader {
         this.loadedFile = null;
         this.validQuestionTypes = ['single-choice', 'multiple-choice', 'short-answer', 'fill-in-blank'];
         this.allTags = new Map(); // 存储所有tags及其出现次数
+        this.loadedBanks = new Map(); // 存储已加载的题库
     }
 
     // 生成唯一ID
@@ -81,36 +82,57 @@ export default class JsonLoader {
     // 加载JSON文件
     async loadFile(fileName) {
         try {
-            // 检查是否已经加载
-            if (this.loadedFile === fileName) {
-                return {
-                    questions: this.questions,
-                    sets: this.sets
-                };
-            }
-
             const response = await fetch(`assets/${fileName}`);
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
             const data = await response.json();
-
-            // 验证数据格式
-            if (!this.validateData(data)) {
-                throw new Error('Invalid data format');
-            }
-
-            // 更新当前数据
-            await this.setCurrentData(data, fileName);
-
-            return {
-                questions: this.questions,
-                sets: this.sets
-            };
-        } catch (e) {
-            console.error('加载题目文件失败:', e);
-            throw e;
+            
+            // 更新当前加载的题库
+            this.questions = data.questions || [];
+            this.sets = data.sets || [];
+            
+            // 缓存题库数据
+            this.loadedBanks.set(fileName, {
+                questions: data.questions || [],
+                sets: data.sets || []
+            });
+            
+            return data;
+        } catch (error) {
+            console.error('Error loading JSON file:', error);
+            throw error;
         }
+    }
+
+    // 从指定题库获取题目
+    getQuestionsFromBank(fileName) {
+        // 如果题库已加载，从缓存获取
+        if (this.loadedBanks.has(fileName)) {
+            return this.loadedBanks.get(fileName).questions;
+        }
+        
+        // 如果是当前加载的题库
+        if (this.questions.length > 0 && this.sets.length > 0) {
+            return this.questions;
+        }
+        
+        return [];
+    }
+
+    // 异步加载多个题库
+    async loadMultipleBanks(fileNames) {
+        const loadPromises = fileNames.map(fileName => 
+            this.loadFile(fileName)
+                .then(data => ({
+                    fileName,
+                    data
+                }))
+                .catch(error => {
+                    console.error(`Error loading bank ${fileName}:`, error);
+                    return null;
+                })
+        );
+
+        const results = await Promise.all(loadPromises);
+        return results.filter(result => result !== null);
     }
 
     // 设置当前数据

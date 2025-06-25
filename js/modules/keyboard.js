@@ -46,6 +46,18 @@ export default class KeyboardManager {
             return;
         }
 
+        // 检查当前焦点元素是否为输入框
+        const activeElement = document.activeElement;
+        const isInputFocused = activeElement.tagName === 'INPUT' || 
+                             activeElement.tagName === 'TEXTAREA' || 
+                             activeElement.isContentEditable ||
+                             activeElement.closest('.modal-content'); // 检查是否在模态框内
+        
+        // 如果输入框获得焦点或在模态框内，不拦截任何按键
+        if (isInputFocused) {
+            return;
+        }
+
         const focusable = this.getFocusableElements();
         
         // 预览模式下的快捷键

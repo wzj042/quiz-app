@@ -207,6 +207,10 @@
                         <div class="stats-label">今日已练习</div>
                     </div>
                 </div>
+                <button class="cross-practice-btn" @click="showCrossPracticeModal = true">
+                    <i class="fas fa-random"></i>
+                    跨卷练习设置
+                </button>
             </div>
 
             <!-- 题库列表 -->
@@ -383,56 +387,35 @@
         <div v-else-if="pageState === 'quiz' || pageState === 'orderQuiz' || pageState === 'randomQuiz'" class="card">
             <div class="question-header">
                 <div class="header-row">
-                    <button 
-                        class="back-button" 
-                        @click="goBack"
-                        @keydown.left="focusPreviousButton($event)"
-                        @keydown.right="focusNextButton($event)"
-                        tabindex="0"
-                        role="button"
-                        aria-label="返回上一页">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-                            <path d="M19 12H5M12 19l-7-7 7-7"/>
-                        </svg>
-                        返回
-                    </button>
-                    <h1 class="title">
-                        第 {{ currentIndex + 1 }} / {{ quizList.length }} 题
-                        <span style="font-size: 14px; color:#888">
-                            [ {{ currentQuestion.type }} ]
+                    <div style="display: flex; align-items: center;">
+                        <button class="back-button" @click="backToHome">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M19 12H5M12 19l-7-7 7-7"/>
+                            </svg>
+                            返回
+                        </button>
+                        <span class="progress-text">
+                            {{ practiceManager.currentIndex + 1 }} / {{ practiceManager.questions.length }}
+                            <template v-if="chosenSet.isCrossPractice && currentQuestion">
+                                · 来自：{{ currentQuestion.sourceBank }}
+                            </template>
                         </span>
-                        <span v-if="isPreviewMode" class="preview-mode">
-                            [预览模式]
-                        </span>
-                    </h1>
-                </div>
-                <div class="header-row">
-                    <div class="question-id">
-                        题目 ID: {{ currentQuestion.uniqueId }}
-                        <span v-if="!isPreviewMode" class="progress-text">{{ progressText }}</span>
                     </div>
                     <div class="action-buttons">
-                        <span class="action-button" @click="editQuestion" v-if="!isEditing">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
-                                <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                        <button class="action-button" @click="togglePreviewMode" v-if="isAdmin">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                                <circle cx="12" cy="12" r="3"/>
                             </svg>
-                            编辑{{ modifiedCount ? ` (${modifiedCount})` : '' }}
-                        </span>
-                        <span class="action-button" @click="exitEditMode" v-if="isEditing">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M5 13l4 4L19 7"></path>
+                            {{ isPreviewMode ? '退出预览' : '预览模式' }}
+                        </button>
+                        <button class="action-button" @click="editCurrentQuestion" v-if="isAdmin && !isPreviewMode">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+                                <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
                             </svg>
-                            完成
-                        </span>
-                        <span class="action-button" @click="exportModifiedData" v-if="showExportButton">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-                                <polyline points="7 10 12 15 17 10"></polyline>
-                                <line x1="12" y1="15" x2="12" y2="3"></line>
-                            </svg>
-                            导出题库
-                        </span>
+                            编辑
+                        </button>
                     </div>
                 </div>
             </div>
@@ -620,6 +603,109 @@
             </div>
         </div>
     </div>
+
+    <!-- Cross Practice Modal -->
+    <div v-if="showCrossPracticeModal" 
+         class="modal-overlay" 
+         @click="showCrossPracticeModal = false"
+         @keydown.stop>
+        <div class="modal-content cross-practice-modal" 
+             @click.stop
+             @keydown.left.prevent
+             @keydown.right.prevent
+             @keydown.up.prevent
+             @keydown.down.prevent>
+            <h2>跨卷练习设置</h2>
+            
+            <!-- 题型筛选 -->
+            <div class="setting-section">
+                <h3>题型筛选</h3>
+                <div class="question-types">
+                    <label v-for="type in questionTypes" :key="type.value" class="type-checkbox">
+                        <input type="checkbox" 
+                               v-model="selectedQuestionTypes" 
+                               :value="type.value">
+                        {{ type.label }}
+                    </label>
+                </div>
+            </div>
+
+            <!-- 练习模式 -->
+            <div class="setting-section">
+                <h3>练习模式</h3>
+                <div class="practice-mode">
+                    <label class="mode-radio">
+                        <input type="radio" 
+                               v-model="crossPracticeMode" 
+                               value="random">
+                        随机抽题
+                    </label>
+                    <label class="mode-radio">
+                        <input type="radio" 
+                               v-model="crossPracticeMode" 
+                               value="error-rate">
+                        错误率优先
+                    </label>
+                </div>
+            </div>
+
+            <!-- 题目数量 -->
+            <div class="setting-section">
+                <h3>练习题数</h3>
+                <div class="question-count">
+                            <input type="number" 
+               :value="crossPracticeCount"
+               min="1" 
+               :max="maxQuestionCount"
+               class="count-input"
+               @input="handleQuestionInput"
+               @blur="handleQuestionBlur"
+               @keydown.stop
+               @keydown.left.prevent
+               @keydown.right.prevent
+               @keydown.up.prevent
+               @keydown.down.prevent
+               ref="countInput">
+                    <span class="max-count" :class="{ 'error': crossPracticeCount > maxQuestionCount }">
+                        当前可选 {{ maxQuestionCount }} 题
+                        <template v-if="crossPracticeCount > maxQuestionCount">
+                            (超出限制)
+                        </template>
+                    </span>
+                </div>
+            </div>
+
+            <!-- 参与题库及占比 -->
+            <div class="setting-section">
+                <h3>参与题库及占比</h3>
+                <div class="bank-distribution">
+                    <div v-for="bank in filteredBankDistribution" 
+                         :key="bank.file" 
+                         class="bank-item">
+                        <div class="bank-name">{{ bank.name }}</div>
+                        <div class="bank-count">
+                            {{ bank.questionCount }}/{{ bank.availableQuestions }}题
+                            ({{ Math.round((bank.questionCount / bank.availableQuestions) * 100) }}%)
+                        </div>
+                        <div class="bank-progress">
+                            <div class="progress-bar" 
+                                 :style="{ width: Math.round((bank.questionCount / bank.availableQuestions) * 100) + '%' }"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button @click="showCrossPracticeModal = false" 
+                        class="btn btn-clear">取消</button>
+                <button @click="startCrossPractice" 
+                        class="btn btn-primary"
+                        :disabled="!canStartCrossPractice">
+                    开始练习
+                </button>
+            </div>
+        </div>
+    </div>
 </div>
 
 <script type="module">
@@ -665,6 +751,17 @@
                 allTags: [],
                 bankStats: {},
                 _altHPressed: false,
+                // 跨卷练习相关
+                _showCrossPracticeModal: false,
+                selectedQuestionTypes: ['single-choice', 'multiple-choice', 'fill-in-blank', 'short-answer'],
+                crossPracticeMode: 'random',
+                crossPracticeCount: 30,
+                questionTypes: [
+                    { value: 'single-choice', label: '单选题' },
+                    { value: 'multiple-choice', label: '多选题' },
+                    { value: 'fill-in-blank', label: '填空题' },
+                    { value: 'short-answer', label: '简答题' }
+                ],
             }
         },
         mounted() {
@@ -702,6 +799,13 @@
             window.removeEventListener('keydown', this.handleGlobalBackShortcut);
         },
         watch: {
+            selectedQuestionTypes: {
+                handler() {
+                    console.log('[selectedQuestionTypes] Question types changed, updating distribution');
+                    this.updateBankDistribution();
+                },
+                deep: true
+            },
             pageState: {
                 handler(newState, oldState) {
                     console.log('Page state changed:', {
@@ -826,6 +930,75 @@
                     );
                     return [category, filteredItems];
                 }).filter(([_, items]) => items.length > 0);
+            },
+            // 跨卷练习相关的计算属性
+            filteredBankDistribution() {
+                // 获取符合当前标签和题型筛选的题库及题目数
+                const distribution = [];
+                let totalQuestions = 0;
+
+                // 遍历所有题库
+                this.fileList.forEach(bank => {
+                    // 检查标签筛选
+                    if (this.selectedTags.length > 0 && 
+                        !this.selectedTags.every(tag => bank.tags && bank.tags.includes(tag))) {
+                        return;
+                    }
+
+                    // 获取题库中符合题型的题目数量
+                    const questions = this.jsonLoader.getQuestionsFromBank(bank.file);
+                    const filteredQuestions = questions.filter(q => 
+                        this.selectedQuestionTypes.includes(q.type)
+                    );
+
+                    if (filteredQuestions.length > 0) {
+                        totalQuestions += filteredQuestions.length;
+                        distribution.push({
+                            file: bank.file,
+                            name: bank.name,
+                            questionCount: filteredQuestions.length,
+                            questions: filteredQuestions
+                        });
+                    }
+                });
+
+                // 计算百分比
+                return distribution.map(bank => ({
+                    ...bank,
+                    percentage: Math.round((bank.questionCount / totalQuestions) * 100)
+                }));
+            },
+            maxQuestionCount() {
+                return this.filteredBankDistribution.reduce(
+                    (sum, bank) => sum + bank.questionCount, 
+                    0
+                );
+            },
+            canStartCrossPractice() {
+                return this.selectedQuestionTypes.length > 0 && 
+                       this.crossPracticeCount > 0 && 
+                       this.crossPracticeCount <= this.maxQuestionCount &&
+                       this.filteredBankDistribution.length > 0;
+            },
+            showCrossPracticeModal: {
+                get() {
+                    return this._showCrossPracticeModal;
+                },
+                set(value) {
+                    this._showCrossPracticeModal = value;
+                    if (value) {
+                        // 打开模态框时初始化
+                        this.$nextTick(() => {
+                            this.updateBankDistribution();
+                            // 如果当前选择的题目数大于最大可选数，自动调整
+                            const totalAvailable = this.filteredBankDistribution.reduce((sum, bank) => sum + bank.availableQuestions, 0);
+                            if (this.crossPracticeCount > totalAvailable) {
+                                console.log(`[showCrossPracticeModal] Adjusting initial count from ${this.crossPracticeCount} to ${totalAvailable}`);
+                                this.crossPracticeCount = totalAvailable;
+                            }
+                        });
+                    }
+                }
             }
         },
         methods: {
@@ -1343,7 +1516,8 @@
                     questionId: q.uniqueId,
                     chosenAnswer: this.chosenAnswer,
                     chosenAnswers: this.chosenAnswers,
-                    correctAnswer: q.correct_answer
+                    correctAnswer: q.correct_answer,
+                    sourceBank: q.sourceBank
                 });
 
                 if (!q.uniqueId) return;
@@ -1408,7 +1582,8 @@
                 }
 
                 // 更新完成状态（非预览模式）
-                this.storageManager.updateQuestionCompletion(this.chosenSet.id, q.uniqueId, isCorrect);
+                const setId = this.chosenSet.isCrossPractice ? q.sourceBank : this.chosenSet.id;
+                this.storageManager.updateQuestionCompletion(setId, q.uniqueId, isCorrect);
                 this.showAnswer = true;
             },
 
@@ -1891,21 +2066,38 @@
                 const bankParam = urlParams.get('bank');
                 const stateParam = urlParams.get('state');
                 const modeParam = urlParams.get('mode');
+                const practiceModeParam = urlParams.get('practiceMode');
+                const countParam = urlParams.get('count');
                 
                 console.log('[handlePopState] URL parameters:', {
                     bank: bankParam,
                     state: stateParam,
-                    mode: modeParam
+                    mode: modeParam,
+                    practiceMode: practiceModeParam,
+                    count: countParam
                 });
                 
-                if (!bankParam) {
-                    console.log('[handlePopState] No bank parameter, resetting state');
+                if (!bankParam && modeParam !== 'cross') {
+                    console.log('[handlePopState] No bank parameter and not cross mode, resetting state');
                     this.resetAllState();
                     return;
                 }
                 
                 try {
-                    // 如果bank变化了，需要重新加载题库
+                    if (modeParam === 'cross') {
+                        // 跨卷练习模式
+                        if (this.chosenSet?.isCrossPractice) {
+                            // 已经在跨卷练习中，保持状态
+                            console.log('[handlePopState] Already in cross practice mode');
+                            return;
+                        }
+                        // 否则重置到首页
+                        console.log('[handlePopState] Invalid cross practice state, resetting');
+                        this.resetAllState();
+                        return;
+                    }
+
+                    // 普通题库模式
                     const currentFile = this.fileList.find(f => f.name === this.chosenSet?.name)?.file;
                     console.log('[handlePopState] Checking bank change:', {
                         current: currentFile,
@@ -2130,6 +2322,210 @@
                 this.questionManager.clearEditHistory();
                 this.showExportButton = false;
                 this.updatePageState('home');
+            },
+
+            // 获取题目所属的题库
+            getBankByQuestion(question) {
+                return this.filteredBankDistribution.find(
+                    bank => bank.questions.some(q => q.uniqueId === question.uniqueId)
+                );
+            },
+
+            // 开始跨卷练习
+            async startCrossPractice() {
+                if (!this.canStartCrossPractice) return;
+                
+                try {
+                    this.isLoading = true;
+                    
+                    // 先加载所有需要的题库
+                    const banksToLoad = this.filteredBankDistribution
+                        .filter(bank => !this.jsonLoader.loadedBanks.has(bank.file))
+                        .map(bank => bank.file);
+                    
+                    if (banksToLoad.length > 0) {
+                        await this.jsonLoader.loadMultipleBanks(banksToLoad);
+                    }
+
+                    // 收集所有符合条件的题目
+                    let allQuestions = [];
+                    this.filteredBankDistribution.forEach(bank => {
+                        const bankQuestions = this.jsonLoader.getQuestionsFromBank(bank.file)
+                            .filter(q => this.selectedQuestionTypes.includes(q.type));
+                        allQuestions = allQuestions.concat(bankQuestions);
+                    });
+
+                    if (allQuestions.length === 0) {
+                        throw new Error('没有找到符合条件的题目');
+                    }
+
+                    if (this.crossPracticeCount > allQuestions.length) {
+                        this.crossPracticeCount = allQuestions.length;
+                    }
+
+                    // 根据模式排序题目
+                    if (this.crossPracticeMode === 'error-rate') {
+                        allQuestions.sort((a, b) => {
+                            const statsA = this.storageManager.getQuestionStats(this.getBankByQuestion(a).file, a.uniqueId);
+                            const statsB = this.storageManager.getQuestionStats(this.getBankByQuestion(b).file, b.uniqueId);
+                            const errorRateA = statsA ? 1 - (statsA.correct / statsA.attempts) : 1;
+                            const errorRateB = statsB ? 1 - (statsB.correct / statsB.attempts) : 1;
+                            return errorRateB - errorRateA;
+                        });
+                    } else {
+                        // 随机模式
+                        allQuestions = this.shuffleArray(allQuestions);
+                    }
+
+                    // 选择指定数量的题目
+                    const selectedQuestions = allQuestions.slice(0, this.crossPracticeCount);
+
+                    // 为每个题目添加来源题库信息
+                    const questionsWithSource = selectedQuestions.map(q => ({
+                        ...q,
+                        sourceBank: this.getBankByQuestion(q).name || '未知题库'
+                    }));
+
+                    // 创建虚拟题库集合
+                    const virtualSet = {
+                        id: 'cross-practice-' + Date.now(),
+                        name: '跨卷练习',
+                        description: `从${this.filteredBankDistribution.length}个题库中选择的${this.crossPracticeCount}道题目\n\n包含题库：\n${this.filteredBankDistribution.map(bank => `- ${bank.name} (${bank.questionCount}题)`).join('\n')}`,
+                        isCrossPractice: true
+                    };
+
+                    // 初始化练习
+                    this.chosenSet = virtualSet;
+                    this.practiceManager.initPractice(questionsWithSource, this.crossPracticeMode);
+                    this.showCrossPracticeModal = false;
+                    this.updatePageState('quiz', { 
+                        mode: 'cross',
+                        practiceMode: this.crossPracticeMode,
+                        count: this.crossPracticeCount
+                    });
+                } catch (error) {
+                    console.error('Failed to start cross practice:', error);
+                    alert(error.message || '启动跨卷练习失败');
+                } finally {
+                    this.isLoading = false;
+                }
+            },
+
+            // 数组随机打乱
+            shuffleArray(array) {
+                for (let i = array.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [array[i], array[j]] = [array[j], array[i]];
+                }
+                return array;
+            },
+
+            // 验证题目数量
+            handleQuestionInput(event) {
+                const rawValue = event.target.value;
+                console.log('[handleQuestionInput] Input event:', {
+                    type: event.type,
+                    rawValue: rawValue,
+                    currentCount: this.crossPracticeCount
+                });
+
+                let value = parseInt(rawValue);
+                
+                // 允许输入框暂时为空或大于最大值
+                if (rawValue === '' || !isNaN(value)) {
+                    this.crossPracticeCount = rawValue;
+                }
+            },
+
+            // 在失去焦点时验证和更新值
+            handleQuestionBlur() {
+                console.log('[handleQuestionBlur] Validating value:', this.crossPracticeCount);
+                
+                let value = parseInt(this.crossPracticeCount);
+                if (isNaN(value) || value < 1) {
+                    value = 1;
+                } else if (value > this.maxQuestionCount) {
+                    value = this.maxQuestionCount;
+                }
+                
+                this.crossPracticeCount = value;
+                this.updateBankDistribution();
+            },
+
+            // 更新题库分布
+            updateBankDistribution() {
+                console.log('[updateBankDistribution] Updating with count:', this.crossPracticeCount);
+                
+                const totalRequestedQuestions = this.crossPracticeCount;
+                let remainingQuestions = totalRequestedQuestions;
+                
+                // 首先计算每个题库实际可用的题目数量
+                this.filteredBankDistribution.forEach(bank => {
+                    const bankQuestions = this.jsonLoader.getQuestionsFromBank(bank.file)
+                        .filter(q => this.selectedQuestionTypes.includes(q.type));
+                    bank.availableQuestions = bankQuestions.length;
+                    console.log(`[updateBankDistribution] Bank ${bank.name} has ${bank.availableQuestions} available questions`);
+                });
+
+                // 根据策略计算每个题库的题目数
+                if (this.crossPracticeStrategy === 'error-rate') {
+                    // 根据错误率和可用题目数分配
+                    let totalWeight = 0;
+                    this.filteredBankDistribution.forEach(bank => {
+                        const errorRate = 1 - (bank.stats.accuracy || 0) / 100;
+                        bank.weight = errorRate * bank.availableQuestions;
+                        totalWeight += bank.weight;
+                    });
+
+                    this.filteredBankDistribution.forEach(bank => {
+                        const proportion = bank.weight / totalWeight;
+                        bank.questionCount = Math.min(
+                            Math.round(totalRequestedQuestions * proportion),
+                            bank.availableQuestions
+                        );
+                        remainingQuestions -= bank.questionCount;
+                    });
+                } else {
+                    // 平均分配题目，但考虑每个题库的可用题目数
+                    const banksWithQuestions = this.filteredBankDistribution.filter(bank => bank.availableQuestions > 0);
+                    let avgQuestions = Math.floor(remainingQuestions / banksWithQuestions.length);
+
+                    this.filteredBankDistribution.forEach(bank => {
+                        if (bank.availableQuestions > 0) {
+                            bank.questionCount = Math.min(avgQuestions, bank.availableQuestions);
+                            remainingQuestions -= bank.questionCount;
+                        } else {
+                            bank.questionCount = 0;
+                        }
+                    });
+                }
+
+                // 处理剩余的题目（分配给还有可用题目的题库）
+                if (remainingQuestions > 0) {
+                    for (let bank of this.filteredBankDistribution) {
+                        const canAddMore = bank.availableQuestions - bank.questionCount;
+                        if (canAddMore > 0) {
+                            const toAdd = Math.min(remainingQuestions, canAddMore);
+                            bank.questionCount += toAdd;
+                            remainingQuestions -= toAdd;
+                            if (remainingQuestions === 0) break;
+                        }
+                    }
+                }
+
+                // 如果总的可用题目数小于请求的题目数，更新 crossPracticeCount
+                const totalAvailable = this.filteredBankDistribution.reduce((sum, bank) => sum + bank.questionCount, 0);
+                if (totalAvailable < totalRequestedQuestions) {
+                    console.log(`[updateBankDistribution] Adjusting requested count from ${totalRequestedQuestions} to ${totalAvailable} due to availability`);
+                    this.crossPracticeCount = totalAvailable;
+                }
+
+                console.log('[updateBankDistribution] Updated distribution:', this.filteredBankDistribution);
+            },
+            backToHome() {
+                if (this.showAnswer || confirm('确定要退出练习吗？当前进度将不会保存。')) {
+                    this.updatePageState('home');
+                }
             },
         }
     });
@@ -2665,6 +3061,128 @@
     background: #f5f5f5;
     border-radius: 8px;
     margin: 20px;
+}
+
+.cross-practice-btn {
+    width: 100%;
+    margin-top: 15px;
+    padding: 10px;
+    background-color: var(--theme-color);
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    font-size: 16px;
+    transition: all 0.3s ease;
+}
+
+.cross-practice-btn:hover {
+    opacity: 0.9;
+}
+
+.cross-practice-modal {
+    max-width: 600px;
+    width: 90%;
+}
+
+.setting-section {
+    margin-bottom: 24px;
+}
+
+.setting-section h3 {
+    margin-bottom: 12px;
+    color: #333;
+    font-size: 16px;
+}
+
+.question-types {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 12px;
+}
+
+.type-checkbox {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+}
+
+.practice-mode {
+    display: flex;
+    gap: 24px;
+}
+
+.mode-radio {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+}
+
+.question-count {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.count-input {
+    width: 100px;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.max-count {
+    color: #666;
+    font-size: 14px;
+    transition: color 0.3s ease;
+}
+
+.max-count.error {
+    color: #f44336;
+}
+
+.bank-distribution {
+    max-height: 200px;
+    overflow-y: auto;
+    margin-top: 12px;
+}
+
+.bank-item {
+    padding: 12px;
+    border: 1px solid #eee;
+    border-radius: 4px;
+    margin-bottom: 8px;
+}
+
+.bank-name {
+    font-weight: bold;
+    margin-bottom: 4px;
+}
+
+.bank-count {
+    color: #666;
+    font-size: 14px;
+    margin-bottom: 8px;
+}
+
+.bank-progress {
+    height: 4px;
+    background-color: #eee;
+    border-radius: 2px;
+    overflow: hidden;
+}
+
+.progress-bar {
+    height: 100%;
+    background-color: var(--theme-color);
+    transition: width 0.3s ease;
 }
 </style>
 </body>
