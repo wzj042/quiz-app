@@ -39,20 +39,98 @@
                 script.src = `${module}?v=${timestamp}`;
                 document.head.appendChild(script);
             });
+
+            // 添加键盘快捷键支持
+            document.addEventListener('keydown', function(e) {
+                // 如果正在输入，不处理快捷键
+                if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') {
+                    return;
+                }
+
+                // Alt + H: 返回首页
+                if (e.altKey && e.key === 'h') {
+                    e.preventDefault();
+                    const homeLink = document.querySelector('.nav-title-link');
+                    if (homeLink) homeLink.click();
+                }
+
+                // T: 打开标签筛选
+                if (e.key === 't' && !e.ctrlKey && !e.altKey && !e.shiftKey) {
+                    e.preventDefault();
+                    const tagsButton = document.querySelector('.tags-button');
+                    if (tagsButton) tagsButton.click();
+                }
+
+                // Esc: 关闭模态窗口
+                if (e.key === 'Escape') {
+                    const modalOverlay = document.querySelector('.modal-overlay');
+                    if (modalOverlay) {
+                        const closeBtn = modalOverlay.querySelector('.close-btn');
+                        if (closeBtn) closeBtn.click();
+                    }
+                }
+
+                // Ctrl + S: 导出修改
+                if (e.ctrlKey && e.key === 's') {
+                    e.preventDefault();
+                    const exportBtn = document.querySelector('.export-btn');
+                    if (exportBtn) exportBtn.click();
+                }
+            });
+
+            // 初始化焦点管理
+            initFocusManagement();
         });
+
+        function initFocusManagement() {
+            // 模态窗口焦点管理
+            const modalOverlay = document.querySelector('.modal-overlay');
+            if (modalOverlay) {
+                const focusableElements = modalOverlay.querySelectorAll(
+                    'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+                );
+                const firstFocusable = focusableElements[0];
+                const lastFocusable = focusableElements[focusableElements.length - 1];
+
+                // 焦点循环
+                modalOverlay.addEventListener('keydown', function(e) {
+                    if (e.key === 'Tab') {
+                        if (e.shiftKey) {
+                            if (document.activeElement === firstFocusable) {
+                                e.preventDefault();
+                                lastFocusable.focus();
+                            }
+                        } else {
+                            if (document.activeElement === lastFocusable) {
+                                e.preventDefault();
+                                firstFocusable.focus();
+                            }
+                        }
+                    }
+                });
+            }
+        }
     </script>
 </head>
 <body>
 <div id="app" class="container">
     <!-- 未保存修改的模态窗口 -->
-    <div v-if="showUnsavedModal" class="modal-overlay" @click.self="closeUnsavedModal">
-        <div class="modal-content">
-            <h3>未导出的修改</h3>
+    <div v-if="showUnsavedModal" 
+         class="modal-overlay" 
+         @click.self="closeUnsavedModal"
+         role="dialog"
+         aria-labelledby="unsaved-modal-title"
+         aria-modal="true"
+         @keydown.esc="closeUnsavedModal">
+        <div class="modal-content" tabindex="-1">
+            <h3 id="unsaved-modal-title">未导出的修改</h3>
             <div class="modal-body">
                 <p>当前题库有未导出的修改：</p>
-                <div class="modified-questions-list">
+                <div class="modified-questions-list" role="list">
                     <ul>
-                        <li v-for="q in groupedModifiedQuestions" :key="q.uniqueId">
+                        <li v-for="q in groupedModifiedQuestions" 
+                            :key="q.uniqueId"
+                            role="listitem">
                             题目ID: {{ q.uniqueId }}
                             <br>
                             <span class="question-preview">{{ truncateText(q.content, 50) }}</span>
@@ -60,38 +138,54 @@
                     </ul>
                 </div>
                 <div class="modal-actions">
-                    <div class="action-buttons">
-                        <button class="btn export-btn" @click="exportModifiedData">
-                            导出修改
-                        </button>
-                        <button class="btn close-btn" @click="closeUnsavedModalAndContinue">
-                            直接退出
-                        </button>
+                    <div class="modal-actions">
+                        <div class="action-buttons">
+                            <button class="btn export-btn" 
+                                    @click="exportModifiedData"
+                                    data-shortcut="Ctrl+S">
+                                导出修改
+                            </button>
+                            <button class="btn close-btn" 
+                                    @click="closeUnsavedModalAndContinue"
+                                    data-shortcut="Esc">
+                                直接退出
+                            </button>
+                        </div>
+                        <label class="dont-show-again">
+                            <input type="checkbox" 
+                                   v-model="dontShowExportReminder"
+                                   @keydown.enter="$event.target.click()">
+                            <span>不再提醒</span>
+                        </label>
                     </div>
-                    <label class="dont-show-again">
-                        <input type="checkbox" v-model="dontShowExportReminder">
-                        <span>不再提醒</span>
-                    </label>
                 </div>
             </div>
         </div>
     </div>
 
     <!-- 导航栏 -->
-    <div class="nav">
-        <a href="#" class="nav-title-link" @click="goHome" @mouseover="hoverTitle = true" @mouseout="hoverTitle = false">
+    <nav class="nav" role="navigation">
+        <a href="#" 
+           class="nav-title-link" 
+           @click="goHome" 
+           @mouseover="hoverTitle = true" 
+           @mouseout="hoverTitle = false">
             <span class="nav-title">Quiz App</span>
         </a>
-        <a href="https://github.com/wzj042/quiz-app" class="github-link" target="_blank" rel="noopener noreferrer" 
-            title="项目调试中，欢迎参与开发和反馈。可参考 demo.json 格式，Fork 项目后添加自己的题库。">
-            <svg class="github-icon" viewBox="0 0 16 16" width="24" height="24">
+        <a href="https://github.com/wzj042/quiz-app" 
+           class="github-link" 
+           target="_blank" 
+           rel="noopener noreferrer" 
+           aria-label="在 GitHub 上查看项目"
+           title="项目调试中，欢迎参与开发和反馈。可参考 demo.json 格式，Fork 项目后添加自己的题库。">
+            <svg class="github-icon" viewBox="0 0 16 16" width="24" height="24" aria-hidden="true">
                 <path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"></path>
             </svg>
         </a>
-    </div>
+    </nav>
 
     <!-- 列出题库 -->
-    <div v-if="isLoading" class="card">
+    <div v-if="isLoading" class="card" role="status">
         <p>正在处理，请稍后...</p>
     </div>
 
@@ -103,12 +197,12 @@
             </h1>
 
             <!-- 总体统计 -->
-            <div class="overall-stats">
-                <div class="stats-title">总体统计</div>
+            <div class="overall-stats" role="region" aria-label="总体统计">
+                <h2 class="stats-title">总体统计</h2>
                 <div class="stats-grid">
                     <div class="stats-item">
-                        <div class="stats-value">{{ totalStats.totalCompleted }}/{{ totalStats.totalQuestions }}</div>
-                        <div class="stats-label">总完成题数</div>
+                        <div class="stats-value">{{ totalStats.completedQuestions }}/{{ totalStats.totalAttempts }}</div>
+                        <div class="stats-label">总练习题数</div>
                     </div>
                     <div class="stats-item">
                         <div class="stats-value">{{ totalStats.averageAccuracy }}%</div>
@@ -123,39 +217,41 @@
 
             <!-- 题库列表 -->
             <template v-if="fileList.length > 0">
-                <ul class="horizontal-list">
+                <ul class="horizontal-list" role="list">
                     <!-- Tags筛选器 -->
-                    <div class="tags-filter">
+                    <div class="tags-filter" role="region" aria-label="标签筛选">
                         <div class="top-tags">
-                            <span 
-                                v-for="tag in topTags" 
-                                :key="tag.tag"
-                                :class="['tag-chip', { active: selectedTags.includes(tag.tag) }]"
-                                @click="toggleTag(tag.tag)"
-                            >
+                            <button v-for="tag in topTags" 
+                                    :key="tag.tag"
+                                    :class="['tag-chip', { active: selectedTags.includes(tag.tag) }]"
+                                    @click="toggleTag(tag.tag)"
+                                    :aria-pressed="selectedTags.includes(tag.tag)"
+                                    :aria-label="'选择标签: ' + tag.tag">
                                 {{ tag.tag }}
                                 <span v-if="selectedTags.includes(tag.tag)" class="tag-count">({{ tag.count }})</span>
-                            </span>
+                            </button>
                         </div>
-                        <button 
-                            :class="['tags-button', { 'has-active': selectedTags.length > 0 }]" 
-                            @click="showTagsModal = true"
-                        >
-                            <i class="fas fa-tags"></i>
+                        <button :class="['tags-button', { 'has-active': selectedTags.length > 0 }]" 
+                                @click="showTagsModal = true"
+                                aria-label="更多标签"
+                                data-shortcut="T">
+                            <i class="fas fa-tags" aria-hidden="true"></i>
                         </button>
                     </div>
 
                     <template v-for="(group, groupIndex) in filteredGroupedFileList" :key="groupIndex">
-                        <li class="category-header">
+                        <li class="category-header" role="separator">
                             <h2>{{ group[0] }}</h2>
                             <hr>
                         </li>
-                        <li
-                            v-for="(fileObj, idx) in group[1]"
+                        <li v-for="(fileObj, idx) in group[1]"
                             :key="idx"
                             class="quiz-item"
+                            role="button"
+                            tabindex="0"
                             @click="loadJsonFile(fileObj.file)"
-                        >
+                            @keydown.enter="loadJsonFile(fileObj.file)"
+                            @keydown.space.prevent="loadJsonFile(fileObj.file)">
                             <div class="quiz-item-content">
                                 <div class="quiz-item-title">{{ fileObj.name }}</div>
                                 <div class="quiz-item-tags" v-if="fileObj.tags && fileObj.tags.length">
@@ -163,20 +259,12 @@
                                         {{ tag }}
                                     </span>
                                 </div>
-                                <div class="quiz-item-stats" v-if="getBankStats(fileObj.file)">
+                                <div class="quiz-item-stats" v-if="bankStats[fileObj.file]">
                                     <div class="quiz-stat">
-                                        完成：{{ getBankStats(fileObj.file).completed }}/{{ getBankStats(fileObj.file).total }}
+                                        完成：{{ bankStats[fileObj.file].completed }}/{{ bankStats[fileObj.file].total }}
                                     </div>
                                     <div class="quiz-stat">
-                                        正确率：{{ getBankStats(fileObj.file).accuracy }}%
-                                    </div>
-                                    <div class="quiz-item-time" v-if="fileObj.createTime || fileObj.updateTime">
-                                        <div v-if="fileObj.updateTime" class="update-time">
-                                            更新：{{ formatDate(fileObj.updateTime) }}
-                                        </div>
-                                        <div v-else-if="fileObj.createTime" class="create-time">
-                                            创建：{{ formatDate(fileObj.createTime) }}
-                                        </div>
+                                        正确率：{{ bankStats[fileObj.file].accuracy }}%
                                     </div>
                                 </div>
                             </div>
@@ -187,14 +275,17 @@
 
             <!-- 如果列表为空 -->
             <template v-else>
-                <div class="empty-state">
+                <div class="empty-state" role="status">
                     没有找到可用的题库
                 </div>
             </template>
         </div>
 
         <!-- 题库详情页面 -->
-        <div v-else-if="pageState === 'setDescription'" class="card">
+        <div v-else-if="pageState === 'setDescription'" 
+            class="card"
+            @keydown.prevent="handleKeyNavigation"
+            tabindex="-1">
             <h1 class="title">
                 {{ chosenSet.name }}
                 <div class="time-info" v-if="chosenSet.createTime || chosenSet.updateTime">
@@ -211,84 +302,85 @@
             <!-- 题库统计信息 -->
             <div class="set-stats">
                 <div class="stats-grid">
-                    <div class="stats-item">
+                    <div class="stats-item" tabindex="0">
                         <div class="stats-value">{{ setStats.completedQuestions }}/{{ setStats.totalQuestions }}</div>
                         <div class="stats-label">已练习题数</div>
                     </div>
-                    <div class="stats-item">
+                    <div class="stats-item" tabindex="0">
                         <div class="stats-value">{{ setStats.averageAccuracy }}%</div>
                         <div class="stats-label">平均正确率</div>
                     </div>
-                    <div class="stats-item">
+                    <div class="stats-item" tabindex="0">
                         <div class="stats-value">{{ setStats.todayDistinctQuestions }}</div>
                         <div class="stats-label">今日练习题数</div>
                         <div class="stats-sublabel">正确: {{ setStats.todayCorrect }}</div>
                     </div>
                 </div>
-                <div class="stats-details">
-                    <div class="stats-row">
-                        <span class="stats-label">总练习次数：</span>
-                        <span class="stats-value">{{ setStats.totalAttempts }}次</span>
-                    </div>
-                    <div class="stats-row">
-                        <span class="stats-label">不同题目数：</span>
-                        <span class="stats-value">{{ setStats.distinctQuestionCount }}题</span>
-                    </div>
-                    <div class="stats-row">
-                        <span class="stats-label">总正确次数：</span>
-                        <span class="stats-value">{{ setStats.totalCorrect }}次</span>
-                    </div>
-                    <div class="stats-row">
-                        <span class="stats-label">总错误次数：</span>
-                        <span class="stats-value">{{ setStats.totalIncorrect }}次</span>
-                    </div>
-                    <div class="stats-row">
-                        <span class="stats-label">完成率：</span>
-                        <span class="stats-value">{{ setStats.completionRate }}%</span>
-                    </div>
-                </div>
             </div>
 
-            <!-- 当前题目统计 -->
-            <div v-if="currentQuestion && !isPreviewMode" class="question-stats">
-                <h4>当前题目统计</h4>
-                <div class="stats-details">
-                    <div class="stats-row" v-if="questionStats">
-                        <span class="stats-label">练习次数：</span>
-                        <span class="stats-value">{{ questionStats.totalAttempts }}次</span>
-                    </div>
-                    <div class="stats-row" v-if="questionStats">
-                        <span class="stats-label">正确次数：</span>
-                        <span class="stats-value">{{ questionStats.correctCount }}次</span>
-                    </div>
-                    <div class="stats-row" v-if="questionStats">
-                        <span class="stats-label">错误次数：</span>
-                        <span class="stats-value">{{ questionStats.incorrectCount }}次</span>
-                    </div>
-                    <div class="stats-row" v-if="questionStats">
-                        <span class="stats-label">连续正确：</span>
-                        <span class="stats-value">{{ questionStats.consecutiveCorrect }}次</span>
-                    </div>
-                    <div class="stats-row" v-if="questionStats && questionStats.lastAttemptDate">
-                        <span class="stats-label">上次练习：</span>
-                        <span class="stats-value">{{ formatDate(questionStats.lastAttemptDate) }}</span>
-                        <span :class="['status-indicator', questionStats.lastCorrect ? 'correct' : 'incorrect']">
-                            {{ questionStats.lastCorrect ? '正确' : '错误' }}
-                        </span>
-                    </div>
-                </div>
-            </div>
-
-            <div style="margin-top: 20px;">
-                <button type="button" class="btn" @click="enterQuizMode">顺序答题</button>
-                <button type="button" class="btn" @click="enterOrderQuizMode" style="margin-left: 10px;">
-                    按错误率答题
+            <!-- 练习模式选择 -->
+            <div class="mode-selection" 
+                role="group" 
+                aria-label="练习模式选择">
+                <button 
+                    class="mode-btn" 
+                    @click="enterQuizMode"
+                    @keydown.enter.prevent="enterQuizMode"
+                    @keydown.space.prevent="enterQuizMode"
+                    @keydown.left.prevent="focusPrevButton($event)"
+                    @keydown.right.prevent="focusNextButton($event)"
+                    @keydown.up.prevent="focusUpButton($event)"
+                    @keydown.down.prevent="focusDownButton($event)"
+                    tabindex="0"
+                    role="button"
+                    data-nav="mode-btn">
+                    全部练习
+                    <span class="mode-description">按顺序练习所有题目</span>
                 </button>
-                <button type="button" class="btn" @click="enterRandomQuizMode" style="margin-left: 10px;">
-                    随机答题
+                <button 
+                    class="mode-btn" 
+                    @click="enterOrderQuizMode"
+                    @keydown.enter.prevent="enterOrderQuizMode"
+                    @keydown.space.prevent="enterOrderQuizMode"
+                    @keydown.left.prevent="focusPrevButton($event)"
+                    @keydown.right.prevent="focusNextButton($event)"
+                    @keydown.up.prevent="focusUpButton($event)"
+                    @keydown.down.prevent="focusDownButton($event)"
+                    tabindex="0"
+                    role="button"
+                    data-nav="mode-btn">
+                    错题练习
+                    <span class="mode-description">专注于之前答错的题目</span>
                 </button>
-                <button type="button" class="btn" @click="enterPreviewMode" style="margin-left: 10px;">
+                <button 
+                    class="mode-btn" 
+                    @click="enterRandomQuizMode"
+                    @keydown.enter.prevent="enterRandomQuizMode"
+                    @keydown.space.prevent="enterRandomQuizMode"
+                    @keydown.left.prevent="focusPrevButton($event)"
+                    @keydown.right.prevent="focusNextButton($event)"
+                    @keydown.up.prevent="focusUpButton($event)"
+                    @keydown.down.prevent="focusDownButton($event)"
+                    tabindex="0"
+                    role="button"
+                    data-nav="mode-btn">
+                    随机练习
+                    <span class="mode-description">随机顺序练习题目</span>
+                </button>
+                <button 
+                    class="mode-btn" 
+                    @click="enterPreviewMode"
+                    @keydown.enter.prevent="enterPreviewMode"
+                    @keydown.space.prevent="enterPreviewMode"
+                    @keydown.left.prevent="focusPrevButton($event)"
+                    @keydown.right.prevent="focusNextButton($event)"
+                    @keydown.up.prevent="focusUpButton($event)"
+                    @keydown.down.prevent="focusDownButton($event)"
+                    tabindex="0"
+                    role="button"
+                    data-nav="mode-btn">
                     预览模式
+                    <span class="mode-description">查看所有题目和答案</span>
                 </button>
             </div>
         </div>
@@ -297,8 +389,15 @@
         <div v-else-if="pageState === 'quiz' || pageState === 'orderQuiz' || pageState === 'randomQuiz'" class="card">
             <div class="question-header">
                 <div class="header-row">
-                    <button class="back-button" @click="goBack">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <button 
+                        class="back-button" 
+                        @click="goBack"
+                        @keydown.left="focusPreviousButton($event)"
+                        @keydown.right="focusNextButton($event)"
+                        tabindex="0"
+                        role="button"
+                        aria-label="返回上一页">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
                             <path d="M19 12H5M12 19l-7-7 7-7"/>
                         </svg>
                         返回
@@ -556,6 +655,49 @@
                 selectedTags: [],
                 topTags: [],
                 allTags: [],
+                bankStats: {},
+            }
+        },
+        mounted() {
+            this.$nextTick(() => {
+                if (this.pageState === 'setDescription') {
+                    console.log('Page mounted in setDescription state');
+                    const buttons = document.querySelectorAll('.mode-btn');
+                    console.log('Initial mode buttons state:', {
+                        totalButtons: buttons.length,
+                        buttonElements: Array.from(buttons).map(btn => ({
+                            text: btn.textContent.trim(),
+                            tabIndex: btn.tabIndex,
+                            hasClickHandler: btn.onclick !== null,
+                            hasKeydownHandler: btn.onkeydown !== null
+                        }))
+                    });
+                }
+            });
+        },
+        watch: {
+            pageState: {
+                handler(newState, oldState) {
+                    console.log('Page state changed:', {
+                        from: oldState,
+                        to: newState
+                    });
+                    if (newState === 'setDescription') {
+                        this.$nextTick(() => {
+                            const buttons = document.querySelectorAll('.mode-btn');
+                            console.log('Mode buttons after state change:', {
+                                totalButtons: buttons.length,
+                                buttonElements: Array.from(buttons).map(btn => ({
+                                    text: btn.textContent.trim(),
+                                    tabIndex: btn.tabIndex,
+                                    hasClickHandler: btn.onclick !== null,
+                                    hasKeydownHandler: btn.onkeydown !== null
+                                }))
+                            });
+                        });
+                    }
+                },
+                immediate: true
             }
         },
         async created() {
@@ -584,14 +726,12 @@
             totalStats() {
                 const stats = this.storageManager.getAllBanksStats();
                 console.log('[totalStats computed] Raw stats from storage:', stats);
-                const result = {
-                    totalCompleted: stats.totalCompleted || 0,
-                    totalQuestions: stats.totalQuestions || 0,
+                return {
+                    completedQuestions: stats.completedQuestions || 0,
+                    totalAttempts: stats.totalAttempts || 0,
                     averageAccuracy: stats.averageAccuracy || 0,
-                    todayPracticed: stats.todayPracticed || 0
+                    todayPracticed: stats.todayPracticed || 0,
                 };
-                console.log('[totalStats computed] Processed stats:', result);
-                return result;
             },
             setStats() {
                 if (!this.chosenSet) return null;
@@ -659,19 +799,6 @@
                 }).filter(([_, items]) => items.length > 0);
             }
         },
-        watch: {
-            chosenAnswer: {
-                handler(newVal, oldVal) {
-                    console.log('chosenAnswer changed:', {
-                        newValue: newVal,
-                        oldValue: oldVal,
-                        questionId: this.currentQuestion?.uniqueId,
-                        timestamp: new Date().toISOString()
-                    });
-                },
-                immediate: true
-            }
-        },
         methods: {
             // 加载题库列表
             async loadBankList() {
@@ -682,6 +809,11 @@
                     const data = await response.json();
                     this.fileList = data.banks || [];
                     this.updateTime = data.updateTime;
+                    
+                    // 加载每个题库的统计信息
+                    for (const bank of this.fileList) {
+                        await this.loadBankStats(bank.file);
+                    }
                     
                     // 加载每个题库的sets信息以获取category和tags
                     const fileCategories = {};
@@ -767,6 +899,24 @@
                     alert('加载题库失败: ' + error.message);
                 } finally {
                     this.isLoading = false;
+                }
+            },
+
+            // 开始练习
+            startQuiz(mode) {
+                switch (mode) {
+                    case 'all':
+                        this.enterQuizMode();
+                        break;
+                    case 'wrong':
+                        this.enterOrderQuizMode();
+                        break;
+                    case 'random':
+                        this.enterRandomQuizMode();
+                        break;
+                    case 'preview':
+                        this.enterPreviewMode();
+                        break;
                 }
             },
 
@@ -1284,6 +1434,262 @@
             },
             clearTags() {
                 this.selectedTags = [];
+            },
+            async loadBankStats(fileName) {
+                try {
+                    // 先加载题库文件
+                    const data = await this.jsonLoader.loadFile(fileName);
+                    // 然后获取统计信息
+                    this.bankStats[fileName] = this.storageManager.getBankStats(fileName, this.jsonLoader);
+                    this.$forceUpdate(); // 强制更新视图
+                } catch (error) {
+                    console.error('Error loading bank stats:', error);
+                }
+            },
+            focusPrevButton(event) {
+                console.log('focusPrevButton triggered', {
+                    eventTarget: event.target,
+                    eventType: event.type,
+                    currentActiveElement: document.activeElement
+                });
+                
+                const buttons = Array.from(document.querySelectorAll('.mode-btn'));
+                console.log('Found mode buttons:', {
+                    totalButtons: buttons.length,
+                    buttonTexts: buttons.map(btn => btn.textContent.trim())
+                });
+                
+                const currentIndex = buttons.indexOf(event.target);
+                console.log('Current button index:', currentIndex);
+                
+                const prevIndex = (currentIndex - 1 + buttons.length) % buttons.length;
+                console.log('Will focus on button index:', prevIndex);
+                
+                buttons[prevIndex].focus();
+                console.log('Focus set to:', {
+                    buttonText: buttons[prevIndex].textContent.trim(),
+                    newActiveElement: document.activeElement
+                });
+            },
+            focusNextButton(event) {
+                console.log('focusNextButton triggered', {
+                    eventTarget: event.target,
+                    eventType: event.type,
+                    currentActiveElement: document.activeElement
+                });
+                
+                const buttons = Array.from(document.querySelectorAll('.mode-btn'));
+                console.log('Found mode buttons:', {
+                    totalButtons: buttons.length,
+                    buttonTexts: buttons.map(btn => btn.textContent.trim())
+                });
+                
+                const currentIndex = buttons.indexOf(event.target);
+                console.log('Current button index:', currentIndex);
+                
+                const nextIndex = (currentIndex + 1) % buttons.length;
+                console.log('Will focus on button index:', nextIndex);
+                
+                buttons[nextIndex].focus();
+                console.log('Focus set to:', {
+                    buttonText: buttons[nextIndex].textContent.trim(),
+                    newActiveElement: document.activeElement
+                });
+            },
+            focusUpButton(event) {
+                console.log('focusUpButton triggered', {
+                    eventTarget: event.target,
+                    eventType: event.type,
+                    currentActiveElement: document.activeElement
+                });
+                
+                const buttons = Array.from(document.querySelectorAll('.mode-btn'));
+                console.log('Found mode buttons:', {
+                    totalButtons: buttons.length,
+                    buttonTexts: buttons.map(btn => btn.textContent.trim())
+                });
+                
+                const currentIndex = buttons.indexOf(event.target);
+                console.log('Current button index:', currentIndex);
+                
+                const COLS = window.innerWidth <= 600 ? 1 : 2;
+                console.log('Grid layout:', {
+                    columns: COLS,
+                    windowWidth: window.innerWidth
+                });
+                
+                const prevIndex = currentIndex - COLS;
+                console.log('Calculated previous index:', prevIndex);
+                
+                if (prevIndex >= 0) {
+                    console.log('Moving up to index:', prevIndex);
+                    buttons[prevIndex].focus();
+                } else {
+                    // 如果到达顶部，跳转到最后一行的相同列
+                    const sameColBottom = currentIndex % COLS + Math.floor((buttons.length - 1) / COLS) * COLS;
+                    console.log('Wrapping to bottom, calculated index:', {
+                        currentCol: currentIndex % COLS,
+                        lastRowStart: Math.floor((buttons.length - 1) / COLS) * COLS,
+                        targetIndex: sameColBottom
+                    });
+                    
+                    if (sameColBottom < buttons.length) {
+                        buttons[sameColBottom].focus();
+                    } else {
+                        buttons[buttons.length - 1].focus();
+                    }
+                }
+                
+                console.log('Focus set to:', {
+                    buttonText: document.activeElement.textContent.trim(),
+                    newActiveElement: document.activeElement
+                });
+            },
+            focusDownButton(event) {
+                console.log('focusDownButton triggered', {
+                    eventTarget: event.target,
+                    eventType: event.type,
+                    currentActiveElement: document.activeElement
+                });
+                
+                const buttons = Array.from(document.querySelectorAll('.mode-btn'));
+                console.log('Found mode buttons:', {
+                    totalButtons: buttons.length,
+                    buttonTexts: buttons.map(btn => btn.textContent.trim())
+                });
+                
+                const currentIndex = buttons.indexOf(event.target);
+                console.log('Current button index:', currentIndex);
+                
+                const COLS = window.innerWidth <= 600 ? 1 : 2;
+                console.log('Grid layout:', {
+                    columns: COLS,
+                    windowWidth: window.innerWidth
+                });
+                
+                const nextIndex = currentIndex + COLS;
+                console.log('Calculated next index:', nextIndex);
+                
+                if (nextIndex < buttons.length) {
+                    console.log('Moving down to index:', nextIndex);
+                    buttons[nextIndex].focus();
+                } else {
+                    // 如果到达底部，跳转到第一行的相同列
+                    const sameColTop = currentIndex % COLS;
+                    console.log('Wrapping to top, calculated index:', {
+                        currentCol: currentIndex % COLS,
+                        targetIndex: sameColTop
+                    });
+                    buttons[sameColTop].focus();
+                }
+                
+                console.log('Focus set to:', {
+                    buttonText: document.activeElement.textContent.trim(),
+                    newActiveElement: document.activeElement
+                });
+            },
+            handleKeyNavigation(event) {
+                // 如果不是在题库详情页，不处理
+                if (this.pageState !== 'setDescription') {
+                    return;
+                }
+
+                // 获取所有模式按钮
+                const buttons = Array.from(document.querySelectorAll('.mode-btn'));
+                if (!buttons.length) return;
+
+                // 获取当前焦点按钮的索引
+                const currentIndex = buttons.findIndex(btn => btn === document.activeElement);
+                let nextIndex = currentIndex;
+
+                // 定义网格布局
+                const COLS = window.innerWidth <= 600 ? 1 : 2;
+                const ROWS = Math.ceil(buttons.length / COLS);
+
+                // 计算当前位置
+                const currentRow = Math.floor(currentIndex / COLS);
+                const currentCol = currentIndex % COLS;
+
+                switch (event.key) {
+                    case 'ArrowRight':
+                        nextIndex = currentIndex + 1;
+                        if (nextIndex >= buttons.length) {
+                            nextIndex = 0; // 循环到第一个
+                        }
+                        break;
+                    case 'ArrowLeft':
+                        nextIndex = currentIndex - 1;
+                        if (nextIndex < 0) {
+                            nextIndex = buttons.length - 1; // 循环到最后一个
+                        }
+                        break;
+                    case 'ArrowDown':
+                        // 向下移动，如果到底则循环到顶部同列
+                        nextIndex = currentIndex + COLS;
+                        if (nextIndex >= buttons.length) {
+                            // 如果超出范围，回到顶部同列
+                            nextIndex = currentCol;
+                        }
+                        break;
+                    case 'ArrowUp':
+                        // 向上移动，如果到顶则循环到底部同列
+                        nextIndex = currentIndex - COLS;
+                        if (nextIndex < 0) {
+                            // 如果超出范围，去到底部同列
+                            nextIndex = currentCol + (ROWS - 1) * COLS;
+                            // 确保不超出实际按钮数量
+                            if (nextIndex >= buttons.length) {
+                                nextIndex = buttons.length - 1;
+                            }
+                        }
+                        break;
+                    case 'Tab':
+                        // Tab 键循环
+                        nextIndex = event.shiftKey ? 
+                            (currentIndex - 1 + buttons.length) % buttons.length :
+                            (currentIndex + 1) % buttons.length;
+                        break;
+                    default:
+                        return; // 其他键不处理
+                }
+
+                // 阻止默认行为
+                event.preventDefault();
+
+                // 设置焦点
+                if (nextIndex >= 0 && nextIndex < buttons.length) {
+                    buttons[nextIndex].focus();
+                }
+            },
+            getFocusableElements() {
+                // 获取当前页面中所有可聚焦的元素
+                if (this.pageState === 'setDescription') {
+                    // 在题库详情页中，只获取模式按钮
+                    return Array.from(document.querySelectorAll('.mode-btn'))
+                        .filter(el => {
+                            const style = window.getComputedStyle(el);
+                            return style.display !== 'none' && style.visibility !== 'hidden';
+                        });
+                }
+                
+                const selector = 'button, [tabindex="0"], a[href], input:not([disabled]), select:not([disabled]), textarea:not([disabled])';
+                return Array.from(this.$el.querySelectorAll(selector))
+                    .filter(el => {
+                        // 确保元素是可见的
+                        const style = window.getComputedStyle(el);
+                        return style.display !== 'none' && style.visibility !== 'hidden';
+                    });
+            },
+            initModeButtonsFocus() {
+                // 确保第一个按钮获得焦点
+                if (this.pageState === 'setDescription') {
+                    this.$nextTick(() => {
+                        const firstBtn = this.$refs.firstModeBtn;
+                        if (firstBtn) {
+                            firstBtn.focus();
+                        }
+                    });
+                }
             },
         }
     });

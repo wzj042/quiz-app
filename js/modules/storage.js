@@ -171,14 +171,13 @@ export default class StorageManager {
         };
     }
 
-    getBankStats(fileName) {
+    getBankStats(fileName, jsonLoader) {
         try {
             console.log('[getBankStats] Checking stats for:', fileName);
             console.log('[getBankStats] Current data:', this.data);
             
             const prefix = fileName.replace('.json', '');
             let completed = 0;
-            let total = 0;
             let attempts = 0;
             let correct = 0;
 
@@ -189,7 +188,6 @@ export default class StorageManager {
                     for (const questionId in setData) {
                         const qStats = setData[questionId];
                         if (qStats && typeof qStats === 'object') {
-                            total++;
                             if (qStats.completed) completed++;
                             attempts += qStats.totalAttempts || 0;
                             correct += qStats.correctCount || 0;
@@ -197,6 +195,9 @@ export default class StorageManager {
                     }
                 }
             }
+
+            // 获取题库的实际题目总数
+            let total = jsonLoader ? jsonLoader.questions.length : 0;
 
             const stats = {
                 completed,
@@ -224,15 +225,12 @@ export default class StorageManager {
         console.log('[getAllBanksStats] Starting calculation with data:', this.data);
         
         let totalStats = {
-            totalQuestions: 0,
-            totalCompleted: 0,
-            totalAttempts: 0,
-            totalCorrect: 0,
-            todayPracticed: 0,
-            todayCorrect: 0,
-            distinctQuestionCount: 0,
-            totalQuestionAttempts: 0,
-            todayDistinctQuestions: new Set()
+            totalQuestions: 0,        // 所有题库的题目总数
+            completedQuestions: 0,    // 已练习过的题目总数（包括所有题库）
+            totalAttempts: 0,         // 总练习次数（包括重复练习）
+            totalCorrect: 0,          // 总正确次数
+            todayPracticed: 0,        // 今日练习题目数
+            averageAccuracy: 0        // 平均正确率
         };
 
         const today = new Date().toISOString().split('T')[0];
@@ -247,45 +245,43 @@ export default class StorageManager {
                 // 遍历题库中的每个问题
                 for (const questionId in setData) {
                     const qStats = setData[questionId];
-                    // 确保qStats包含所需的所有属性
+                    
+                    // 确保qStats是有效的统计数据对象
                     if (qStats && typeof qStats === 'object') {
                         totalStats.totalQuestions++;
+
+                        // 统计已练习的题目（直接累加，不去重）
                         if (qStats.completed) {
-                            totalStats.totalCompleted++;
+                            totalStats.completedQuestions++;
                         }
-                        // 使用0作为默认值，避免NaN
+
+                        // 累加练习次数和正确次数
                         totalStats.totalAttempts += qStats.totalAttempts || 0;
                         totalStats.totalCorrect += qStats.correctCount || 0;
-                        totalStats.distinctQuestionCount++;
-                        totalStats.totalQuestionAttempts += qStats.totalAttempts || 0;
 
+                        // 统计今日练习
                         if (qStats.lastAttemptDate?.startsWith(today)) {
                             totalStats.todayPracticed++;
-                            if (qStats.lastCorrect) {
-                                totalStats.todayCorrect++;
-                            }
-                            totalStats.todayDistinctQuestions.add(questionId);
                         }
                     }
                 }
             }
         }
 
-        console.log('[getAllBanksStats] Final stats:', {
+        // 计算最终统计结果
+        const result = {
+            totalQuestions: totalStats.totalQuestions,
+            completedQuestions: totalStats.completedQuestions,
             totalAttempts: totalStats.totalAttempts,
             totalCorrect: totalStats.totalCorrect,
-            averageAccuracy: totalStats.totalAttempts > 0
+            todayPracticed: totalStats.todayPracticed,
+            averageAccuracy: totalStats.totalAttempts > 0 
                 ? Math.round((totalStats.totalCorrect / totalStats.totalAttempts) * 100)
                 : 0
-        });
-
-        return {
-            ...totalStats,
-            averageAccuracy: totalStats.totalAttempts > 0
-                ? Math.round((totalStats.totalCorrect / totalStats.totalAttempts) * 100)
-                : 0,
-            todayDistinctQuestions: totalStats.todayDistinctQuestions.size
         };
+
+        console.log('[getAllBanksStats] Final stats:', result);
+        return result;
     }
 
     // 清除所有数据

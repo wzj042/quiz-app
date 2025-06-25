@@ -65,6 +65,8 @@ body {
     font-size: 14px;
     text-decoration: none;
     transition: background-color 0.2s ease;
+    position: relative;
+    outline: none;
 }
 .btn:focus{
     outline: 2px solid #91a881;
@@ -72,6 +74,12 @@ body {
 }
 .btn:hover {
     background-color: #91a881;
+}
+
+.btn:focus-visible {
+    outline: 2px solid var(--focus-color);
+    outline-offset: 2px;
+    box-shadow: 0 0 8px var(--focus-outline-color);
 }
 
 .card {
@@ -125,6 +133,8 @@ body {
     margin-bottom: 8px;
     cursor: pointer;
     transition: background-color 0.2s ease;
+    position: relative;
+    outline: none;
 }
 
 .option-item:hover {
@@ -141,6 +151,11 @@ body {
 .option-item:focus {
     outline: 2px solid #91a881;
     box-shadow: 0 0 8px rgba(145, 168, 129, 0.4);
+}
+.option-item:focus-visible {
+    outline: 2px solid var(--focus-color);
+    outline-offset: 2px;
+    box-shadow: 0 0 8px var(--focus-outline-color);
 }
 .question-header {
     display: flex;
@@ -181,7 +196,7 @@ body {
     display: inline-block; /* 重要：使项目以 inline-block 方式排列 */
     position: relative; /* 为进度条定位 */
     overflow: hidden;
-
+    outline: none;
 }
 .horizontal-list .quiz-item-content {
     z-index: 1;
@@ -194,6 +209,11 @@ body {
 .horizontal-list .quiz-item:focus {
     outline: 2px solid #91a881;
     box-shadow: 0 0 8px rgba(145, 168, 129, 0.4);
+}
+.horizontal-list .quiz-item:focus-visible {
+    outline: 2px solid var(--focus-color);
+    outline-offset: 2px;
+    box-shadow: 0 0 8px var(--focus-outline-color);
 }
 .quiz-item-progress {
     position: absolute;
@@ -328,55 +348,107 @@ body {
     margin: 10px 0;
 }
 
+/* 统计卡片网格布局 */
 .stats-grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 10px;
-    margin: 15px 0;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 20px;
+    margin-top: 15px;
 }
 
 .stats-item {
+    background: #fff;
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     text-align: center;
-    padding: 12px 8px;
-    background: #f5f5f5;
-    border-radius: 8px;
-    min-width: 0; /* 允许子元素收缩 */
-    overflow: hidden; /* 防止内容溢出 */
+    transition: transform 0.2s ease;
+}
+
+.stats-item:hover {
+    transform: translateY(-2px);
 }
 
 .stats-value {
-    font-size: 20px;
+    font-size: 1.8em;
     font-weight: bold;
-    color: #B0C1A2;
-    white-space: nowrap; /* 数字不换行 */
-    overflow: hidden;
-    text-overflow: ellipsis; /* 超出显示省略号 */
+    color: #91a881;
+    margin-bottom: 5px;
 }
 
 .stats-label {
-    font-size: 12px;
+    font-size: 1em;
     color: #666;
-    margin-top: 4px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    margin-bottom: 3px;
 }
 
+.stats-sublabel {
+    font-size: 0.8em;
+    color: #888;
+    margin-top: 3px;
+}
+
+/* 练习模式选择按钮 */
+.mode-selection {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* 固定为2列布局 */
+    gap: 15px;
+    margin-top: 20px;
+    width: 100%;
+}
+
+.mode-btn {
+    flex: 1;
+    width: 100%;
+    padding: 16px;
+    border: none;
+    border-radius: 8px;
+    background: #B0C1A2;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    position: relative;
+}
+
+.mode-btn:hover {
+    background: #91a881;
+    transform: translateY(-2px);
+}
+
+.mode-btn:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(145, 168, 129, 0.5);
+    transform: translateY(-2px);
+}
+
+.mode-btn:focus:not(:focus-visible) {
+    box-shadow: none;
+    transform: none;
+}
+
+.mode-btn:focus-visible {
+    outline: 2px solid #91a881;
+    outline-offset: 2px;
+    box-shadow: 0 0 0 4px rgba(145, 168, 129, 0.2);
+    transform: translateY(-2px);
+}
+
+.mode-btn .mode-description {
+    font-size: 14px;
+    margin-top: 8px;
+    opacity: 0.9;
+}
+
+/* 响应式调整 */
 @media (max-width: 600px) {
-    .stats-grid {
-        gap: 8px;
-    }
-
-    .stats-item {
-        padding: 8px 6px;
-    }
-
-    .stats-value {
-        font-size: 16px;
-    }
-
-    .stats-label {
-        font-size: 11px;
+    .mode-selection {
+        grid-template-columns: 1fr; /* 在小屏幕上改为单列 */
     }
 }
 
@@ -432,6 +504,12 @@ body {
     padding: 24px;
     max-height: 80vh;
     overflow-y: auto;
+    outline: none;
+}
+
+.modal-content:focus-visible {
+    outline: 2px solid var(--focus-color);
+    box-shadow: 0 0 8px var(--focus-outline-color);
 }
 
 .modal-content h3 {
@@ -603,4 +681,293 @@ body {
         width: 100%;
         padding: 12px;
     }
+}
+
+/* 全局焦点样式 */
+:root {
+    --focus-color: #91a881;
+    --focus-outline-color: rgba(145, 168, 129, 0.4);
+}
+
+/* 移除默认的焦点轮廓，使用自定义样式 */
+*:focus {
+    outline: none;
+}
+
+/* 为所有可交互元素添加键盘焦点样式 */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+[tabindex]:focus-visible {
+    outline: 2px solid var(--focus-color);
+    outline-offset: 2px;
+    box-shadow: 0 0 8px var(--focus-outline-color);
+}
+
+/* 标签切换样式 */
+.tag-chip {
+    outline: none;
+}
+
+.tag-chip:focus-visible {
+    outline: 2px solid var(--focus-color);
+    outline-offset: 2px;
+    box-shadow: 0 0 8px var(--focus-outline-color);
+}
+
+/* 键盘快捷键提示 */
+.keyboard-shortcuts {
+    margin-top: 20px;
+    padding: 15px;
+    background-color: #f5f5f5;
+    border-radius: 8px;
+}
+
+.shortcuts-title {
+    font-weight: bold;
+    margin-bottom: 10px;
+    color: #666;
+}
+
+.shortcuts-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 10px;
+}
+
+.shortcut-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #666;
+}
+
+kbd {
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 2px 6px;
+    font-family: monospace;
+    font-size: 0.9em;
+    box-shadow: 0 1px 1px rgba(0,0,0,0.2);
+}
+
+/* 预览模式样式 */
+.preview-mode {
+    background-color: #f0f0f0;
+    color: #666;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 0.8em;
+    margin-left: 8px;
+}
+
+/* 无障碍隐藏元素 */
+.visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+/* 键盘快捷键说明 */
+.keyboard-shortcuts {
+    margin-top: 20px;
+    padding: 16px;
+    background: rgba(176, 193, 162, 0.1);
+    border-radius: 4px;
+}
+
+.keyboard-shortcuts h3 {
+    color: #666;
+    font-size: 14px;
+    margin: 0 0 8px 0;
+}
+
+.keyboard-shortcuts ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 8px;
+}
+
+.keyboard-shortcuts li {
+    font-size: 13px;
+    color: #666;
+    padding: 4px 8px;
+    background: rgba(255, 255, 255, 0.5);
+    border-radius: 3px;
+    display: flex;
+    align-items: center;
+}
+
+/* 标签切换样式增强 */
+.tag-chip {
+    position: relative;
+    cursor: pointer;
+    padding: 4px 8px;
+    border-radius: 4px;
+    background: #f0f0f0;
+    border: 1px solid transparent;
+    transition: all 0.2s ease;
+    margin: 2px;
+    font-size: 14px;
+}
+
+.tag-chip:hover,
+.tag-chip:focus {
+    background: #e0e0e0;
+    border-color: var(--focus-color);
+}
+
+.tag-chip.active {
+    background: var(--focus-color);
+    color: white;
+}
+
+.tag-chip:focus-visible {
+    outline: 2px solid var(--focus-color);
+    outline-offset: 2px;
+    box-shadow: 0 0 8px var(--focus-outline-color);
+}
+
+/* 笔记输入框样式 */
+.note-input {
+    width: 100%;
+    min-height: 100px;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    margin-top: 16px;
+    resize: vertical;
+    font-family: inherit;
+    line-height: 1.5;
+}
+
+.note-input:focus {
+    border-color: var(--focus-color);
+    box-shadow: 0 0 8px var(--focus-outline-color);
+    outline: none;
+}
+
+/* 练习控制按钮组 */
+.practice-controls {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+}
+
+/* 响应式调整 */
+@media (max-width: 600px) {
+    .keyboard-shortcuts ul {
+        grid-template-columns: 1fr;
+    }
+
+    .practice-controls {
+        flex-direction: column;
+    }
+
+    .practice-controls .btn {
+        width: 100%;
+    }
+}
+
+.stats-title {
+    font-size: 1.5em;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 15px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid #91a881;
+}
+
+/* 返回按钮样式 */
+.back-button {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 6px;
+    background-color: #f5f5f5;
+    color: #333;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.back-button:hover {
+    background-color: #e8e8e8;
+}
+
+.back-button svg {
+    width: 20px;
+    height: 20px;
+}
+
+/* 可聚焦元素的通用焦点样式 */
+[tabindex="0"]:focus,
+button:focus,
+a:focus,
+input:focus,
+select:focus,
+textarea:focus {
+    outline: 2px solid #91a881;
+    outline-offset: 2px;
+    box-shadow: 0 0 0 4px rgba(145, 168, 129, 0.2);
+}
+
+[tabindex="0"]:focus:not(:focus-visible),
+button:focus:not(:focus-visible),
+a:focus:not(:focus-visible),
+input:focus:not(:focus-visible),
+select:focus:not(:focus-visible),
+textarea:focus:not(:focus-visible) {
+    outline: none;
+    box-shadow: none;
+}
+
+[tabindex="0"]:focus-visible,
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+    outline: 2px solid #91a881;
+    outline-offset: 2px;
+    box-shadow: 0 0 0 4px rgba(145, 168, 129, 0.2);
+}
+
+/* 统计卡片焦点样式 */
+.stats-item {
+    position: relative;
+    cursor: pointer;
+}
+
+.stats-item:focus {
+    transform: translateY(-2px);
+}
+
+/* 练习模式按钮焦点样式 */
+.mode-btn {
+    position: relative;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.mode-btn:focus {
+    transform: translateY(-2px);
+}
+
+/* 确保容器可以接收键盘事件 */
+.card[tabindex="-1"] {
+    outline: none;
 }
