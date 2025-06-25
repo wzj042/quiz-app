@@ -1,0 +1,280 @@
+{
+    "questions": [
+        {
+            "type": "single-choice",
+            "content": "在瀑布模型中，（ ）阶段紧随需求分析之后",
+            "options": [
+                "编码",
+                "设计",
+                "测试",
+                "维护"
+            ],
+            "correct_answer": ["设计"]
+        },
+        {
+            "type": "single-choice",
+            "content": "在下面列出的基本成分中, ( )不是数据流程图的基本成分。",
+            "options": [
+                "信息处理",
+                "系统状态",
+                "信息存储",
+                "外部实体"
+            ],
+            "correct_answer": ["系统状态"]
+        },
+        {
+            "type": "single-choice",
+            "content": "数据字典是软件需求分析阶段的最重要的工具之一,其最基本的功能是( )",
+            "options": [
+                "数据库设计",
+                "数据通讯",
+                "数据定义",
+                "数据维护"
+            ],
+            "correct_answer": ["数据定义"]
+        },
+        {
+            "type": "single-choice",
+            "content": "估算软件规模的技术有功能点技术和( )",
+            "options": [
+                "用例技术",
+                "代码行技术",
+                "静态单变量模型",
+                "动态多变量模型"
+            ],
+            "correct_answer": ["代码行技术"]
+        },
+        {
+            "type": "single-choice",
+            "content": "耦合是对一个软件结构内（ ）之间互连程度的度量。",
+            "options": [
+                "不同模块",
+                "不同程序",
+                "不同子系统",
+                "不同数据"
+            ],
+            "correct_answer": ["不同模块"]
+        },
+        {
+            "type": "single-choice",
+            "content": "在下图中，“成绩”属于( )的属性。\n![](https://p.ananas.chaoxing.com/star3/origin/d3dc7253a6990411ad5ee6c5529f08ba.png)",
+            "options": [
+                "教师",
+                "学生",
+                "关系“教”",
+                "关系“学”"
+            ],
+            "correct_answer": ["学生"]
+        },
+        {
+            "type": "single-choice",
+            "content": "软件详细设计主要采用的方法是( )。",
+            "options": [
+                "模块设计",
+                "结构化设计",
+                "PDL语言",
+                "结构化程序设计"
+            ],
+            "correct_answer": ["PDL语言"]
+        },
+        {
+            "type": "single-choice",
+            "content": "甘特图是制定（ ）计划的工具。",
+            "options": [
+                "成本",
+                "质量",
+                "进度",
+                "配置"
+            ],
+            "correct_answer": ["进度"]
+        },
+        {
+            "type": "single-choice",
+            "content": "软件项目管理的主要目标是 （ ）",
+            "options": [
+                "在预算和时间内交付满足需求的软件",
+                "编写高质量代码",
+                "使用最新技术",
+                "减少文档工作量"
+            ],
+            "correct_answer": ["在预算和时间内交付满足需求的软件"]
+        },
+        {
+            "type": "single-choice",
+            "content": "下列关于模块扇入扇出的说法正确的是（ ）",
+            "options": [
+                "扇入表示有多少个上层模块直接或间接调用它",
+                "模块扇出表示一个模块直接或间接控制下层模块的个数",
+                "一个模块的扇出太多，说明该模块过分复杂，缺少中间层",
+                "一个模块的扇入太多，说明该模块过分复杂，缺少中间层"
+            ],
+            "correct_answer": ["一个模块的扇出太多，说明该模块过分复杂，缺少中间层"]
+        },
+        {
+            "type": "fill-in-blank",
+            "content": "可行性研究一般可以从( )可行性、( )可行性、操作可行性、法律可行性和社会可行性等方面来研究。",
+            "blanks": [
+                "空1",
+                "空2"
+            ],
+            "correct_answer": [
+                "经济",
+                "技术"
+            ]
+        },
+        {
+            "type": "fill-in-blank",
+            "content": "详细设计的工具有( )、( )和语言工具。",
+            "blanks": [
+                "空1",
+                "空2"
+            ],
+            "correct_answer": [
+                "图形",
+                "表格"
+            ]
+        },
+        {
+            "type": "fill-in-blank",
+            "content": "软件生命周期由（ ）、（ ）和软件维护三个时期组成。",
+            "blanks": [
+                "空1",
+                "空2"
+            ],
+            "correct_answer": [
+                "软件定义",
+                "软件开发"
+            ]
+        },
+        {
+            "type": "fill-in-blank",
+            "content": "实体-联系图中数据对象彼此间相互连接的关系包括一对一联系，一对多联系和( )。",
+            "blanks": [
+                "空1"
+            ],
+            "correct_answer": [
+                "多对多联系"
+            ]
+        },
+        {
+            "type": "fill-in-blank",
+            "content": "结构化分析可以通过( )建模、( )建模、( )建模对系统进行分析。",
+            "blanks": [
+                "空1",
+                "空2",
+                "空3"
+            ],
+            "correct_answer": [
+                "功能",
+                "数据",
+                "行为"
+            ]
+        },
+        {
+            "type": "single-choice",
+            "content": "开发人员属于可行性分析中的技术可行性分析方面的内容。",
+            "options": [
+                "对",
+                "错"
+            ],
+            "correct_answer": ["对"]
+        },
+        {
+            "type": "single-choice",
+            "content": "在一张状态图中只能有一个初态，而终态则可以有0至多个。",
+            "options": [
+                "对",
+                "错"
+            ],
+            "correct_answer": ["对"]
+        },
+        {
+            "type": "single-choice",
+            "content": "某文档的版本号为1.2，该文档处于正式发布状态。",
+            "options": [
+                "对",
+                "错"
+            ],
+            "correct_answer": ["错"]
+        },
+        {
+            "type": "single-choice",
+            "content": "正确性证明的基本思想是证明程序没有错误。",
+            "options": [
+                "对",
+                "错"
+            ],
+            "correct_answer": ["对"]
+        },
+        {
+            "type": "single-choice",
+            "content": "软件质量可以通过后期测试得以提高",
+            "options": [
+                "对",
+                "错"
+            ],
+            "correct_answer": ["错"]
+        },
+        {
+            "type": "single-choice",
+            "content": "在网络图中，主要将项目中各个活动(任务)及各个活动(任务)直接的关系表示出来。",
+            "options": [
+                "对",
+                "错"
+            ],
+            "correct_answer": ["对"]
+        },
+        {
+            "type": "single-choice",
+            "content": "在进行模块设计时要尽量避免内容耦合。",
+            "options": [
+                "对",
+                "错"
+            ],
+            "correct_answer": ["对"]
+        },
+        {
+            "type": "single-choice",
+            "content": "软件危机的主要表现有：对软件开发成本和进度估计不准确、用户对“已完成”的软件不满意等。",
+            "options": [
+                "对",
+                "错"
+            ],
+            "correct_answer": ["对"]
+        },
+        {
+            "type": "single-choice",
+            "content": "在编码阶段，开发人员不需要考虑代码的可读性、可维护性和可测试性，只需确保代码能够正确实现功能即可。",
+            "options": [
+                "对",
+                "错"
+            ],
+            "correct_answer": ["错"]
+        },
+        {
+            "type": "single-choice",
+            "content": "结构化设计只关注系统的功能分解，而不涉及数据的组织和存储设计。",
+            "options": [
+                "对",
+                "错"
+            ],
+            "correct_answer": ["错"]
+        },
+        {
+            "type": "short-answer",
+            "content": "某商业公司数据库中有三个实体集，一是“公司”，属性有公司编号、公司名、地址等;二是“仓库”，属性有仓库编号、仓库名、地址等；三是“职工”，属性有职工编号、姓名、性别等。每个公司有若干个仓库，每个仓库只能属于1个公司，每个仓库可聘用若干职工，每个职工只能在一个仓库工作，仓库聘用职工有聘期和工资。请画出E-R图。",
+            "correct_answer": ["![](https://p.ananas.chaoxing.com/star3/origin/03bbf81996e61113720afadc3d864306.png)"]
+        }
+    ],
+    "sets": [
+        {
+            "id": "rjgc-4",
+            "name": "04-软工-期中",
+            "category": "软件工程",
+            "tags": ["软件生命周期", "软件设计"],
+            "createTime": "2025-05-09 15:50:00",
+            "updateTime": "2025-06-25 20:39:00",
+            "description": "[期中试卷](https://mooc1.chaoxing.com/exam-ans/exam/test/reVersionPaperMarkContentNew?courseId=227327462&classId=115629904&p=1&id=155095296&ut=s&newMooc=true&qbanksystem=1&qbankbackurl=%2Fexam-ans%2Fexam%2Ftest%2Flook%3FcourseId%3D227327462%26classId%3D115629904%26examId%3D6771798%26examAnswerId%3D155095296%26cpi%3D411759952&cpi=411759952&openc=678c26fa8df65495568bb2fd214cda5f)，包含单选、填空、判断、简答题。"
+        }
+    ]
+}

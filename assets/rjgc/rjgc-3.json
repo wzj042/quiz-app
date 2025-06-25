@@ -1,0 +1,217 @@
+{
+    "questions": [
+        {
+            "type": "single-choice",
+            "content": "实现包括（ ）。",
+            "options": [
+                "设计和编码",
+                "编码和测试",
+                "需求分析和设计",
+                "设计和测试"
+            ],
+            "correct_answer": ["编码和测试"]
+        },
+        {
+            "type": "single-choice",
+            "content": "一般来说，高级语言（ ）汇编语言",
+            "options": [
+                "优于",
+                "差于"
+            ],
+            "correct_answer": ["优于"]
+        },
+        {
+            "type": "single-choice",
+            "content": "（ ）测试按照程序内部的逻辑测试程序，检测程序中的主要执行通路是否都能按预定要求正确工作。",
+            "options": [
+                "黑盒",
+                "白盒",
+                "功能",
+                "单元"
+            ],
+            "correct_answer": ["白盒"]
+        },
+        {
+            "type": "single-choice",
+            "content": "下列语句中，使用逻辑覆盖法进行测试，a,b,c的哪一个取值可以达到判定覆盖？\n![](https://p.ananas.chaoxing.com/star3/origin/2d01f19558613bb7cd86ac2293872897.png)",
+            "options": [
+                "(a,b,c)=(5,3,2)、(-4,-8,12)",
+                "(a,b,c)=(6,6,1)、(-4,-5,7)",
+                "(a,b,c)=(5,-7,-3)、(-4,10,2)",
+                "(a,b,c)=(3,6,1)、(-4,-5,7)"
+            ],
+            "correct_answer": ["(a,b,c)=(5,-7,-3)、(-4,10,2)"]
+        },
+        {
+            "type": "single-choice",
+            "content": "使用白盒测试方法时，确定测试数据应根据（ ）和指定的覆盖标准。",
+            "options": [
+                "使用说明书",
+                "程序的复杂程度",
+                "程序的功能",
+                "程序的内部逻辑"
+            ],
+            "correct_answer": ["程序的内部逻辑"]
+        },
+        {
+            "type": "single-choice",
+            "content": "白盒方法中常用的方法是( )方法。",
+            "options": [
+                "路径测试",
+                "因果图",
+                "等价类",
+                "归纳测试"
+            ],
+            "correct_answer": ["路径测试"]
+        },
+        {
+            "type": "single-choice",
+            "content": "对下面程序中满足语句覆盖测试用例的是( )\n```c\nif(a<800) result=0;\nelse if(a<=1500) result=0.05;\nelse if(a<2000) result=0.08;\nelse b=0.1;\n```",
+            "options": [
+                "a=(800,801,1999,2000)",
+                "a= (799,1500,1999,2000)",
+                "a=(800,1500,2000,2001)",
+                "a=(799,1499,2000,2001)"
+            ],
+            "correct_answer": ["a= (799,1500,1999,2000)"]
+        },
+        {
+            "type": "single-choice",
+            "content": "黑盒测试是通过分析程序的( )来设置测试用例的方法",
+            "options": [
+                "功能",
+                "模块",
+                "内部逻辑",
+                "输入数据"
+            ],
+            "correct_answer": ["功能"]
+        },
+        {
+            "type": "single-choice",
+            "content": "如果输入条件规定了取值范围，可定义（ ）个有效等价类和（ ）个无效等价类。",
+            "options": [
+                "3,4",
+                "1,2",
+                "1,3",
+                "1,4"
+            ],
+            "correct_answer": ["1,2"]
+        },
+        {
+            "type": "fill-in-blank",
+            "content": "( )测试完全不考虑程序的内部结构和处理过程。",
+            "blanks": ["空1"],
+            "correct_answer": ["黑盒"]
+        },
+        {
+            "type": "fill-in-blank",
+            "content": "集成测试可以使用( )集成和( )集成方法来进行测试。",
+            "blanks": ["空1", "空2"],
+            "correct_answer": ["自顶向下", "自底向上"]
+        },
+        {
+            "type": "fill-in-blank",
+            "content": "黑盒测试主要包括( )、( )、错误推测法三种方法",
+            "blanks": ["空1", "空2"],
+            "correct_answer": ["等价类划分", "边界值分析"]
+        },
+        {
+            "type": "multiple-choice",
+            "content": "单元测试主要关注以下哪些方面？",
+            "options": [
+                "接口",
+                "局部数据结构",
+                "边界条件",
+                "执行通路",
+                "出错处理通路",
+                "集成情况"
+            ],
+            "correct_answer": [
+                "接口",
+                "局部数据结构",
+                "边界条件",
+                "执行通路",
+                "出错处理通路"
+            ]
+        },
+        {
+            "type": "multiple-choice",
+            "content": "确认测试可以通过两种方法来进行测试。",
+            "options": [
+                "Alpha测试",
+                "Beta测试",
+                "回归测试",
+                "用户测试"
+            ],
+            "correct_answer": [
+                "Alpha测试",
+                "Beta测试"
+            ]
+        },
+        {
+            "type": "single-choice",
+            "content": "测试主要用来证明程序是对的。",
+            "options": [
+                "对",
+                "错"
+            ],
+            "correct_answer": ["错"]
+        },
+        {
+            "type": "single-choice",
+            "content": "测试可由程序员本身或第三方来做。",
+            "options": [
+                "对",
+                "错"
+            ],
+            "correct_answer": ["对"]
+        },
+        {
+            "type": "single-choice",
+            "content": "所有测试都应该能追溯到用户需求，测试的目的是发现错误，最严重的是不能满足用户需求。",
+            "options": [
+                "对",
+                "错"
+            ],
+            "correct_answer": ["对"]
+        },
+        {
+            "type": "single-choice",
+            "content": "测试计划应该在开始测试工作的时候编制。",
+            "options": [
+                "对",
+                "错"
+            ],
+            "correct_answer": ["错"]
+        },
+        {
+            "type": "single-choice",
+            "content": "调用函数时，测试其参数是否传递正确属于单元测试。",
+            "options": [
+                "对",
+                "错"
+            ],
+            "correct_answer": ["对"]
+        },
+        {
+            "type": "single-choice",
+            "content": "比起验收测试，系统测试更需要用户的参与。",
+            "options": [
+                "对",
+                "错"
+            ],
+            "correct_answer": ["错"]
+        }
+    ],
+    "sets": [
+        {
+            "id": "rjcs-3",
+            "name": "03-结构化编码和测试",
+            "category": "软件工程",
+            "tags": ["编码", "测试", "结构化"],
+            "createTime": "2025-06-25 20:10:00",
+            "updateTime": "2025-06-25 20:10:00",
+            "description": "第4章 结构化编码和测试，包含单选、填空、多选和判断题。"
+        }
+    ]
+}

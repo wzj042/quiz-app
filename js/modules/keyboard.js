@@ -41,11 +41,6 @@ export default class KeyboardManager {
     }
 
     handleKeyDown(e) {
-        // 如果快捷键被禁用或正在编辑，直接返回
-        if (!this.enabled || this.app.isEditing) {
-            return;
-        }
-
         // 检查当前焦点元素是否为输入框
         const activeElement = document.activeElement;
         const isInputFocused = activeElement.tagName === 'INPUT' || 
@@ -55,24 +50,36 @@ export default class KeyboardManager {
         
         // 如果输入框获得焦点或在模态框内，不拦截任何按键
         if (isInputFocused) {
+            // 特殊处理：Ctrl+S 保存
+            if (e.ctrlKey && e.key === 's') {
+                e.preventDefault();
+                if (this.app.isEditing && this.app.questionManager.checkUnsavedChanges()) {
+                    this.app.saveCurrentEdit();
+                }
+            }
             return;
         }
 
         const focusable = this.getFocusableElements();
         
-        // 预览模式下的快捷键
-        if (this.app.practiceManager?.isPreviewMode) {
-            if (e.key === 'q') {
-                this.app.practiceManager.previousQuestion();
+        // 上一题/下一题快捷键
+        if (e.key === 'q') {
+            if (this.app.practiceManager?.currentIndex > 0) {
+                this.app.prevQuestion();
                 e.preventDefault();
-                return;
             }
-            if (e.key === 'e') {
-                this.app.practiceManager.nextQuestion();
+            return;
+        }
+        if (e.key === 'e') {
+            if (this.app.practiceManager?.currentIndex < this.app.practiceManager?.questions.length - 1) {
+                this.app.nextQuestion();
                 e.preventDefault();
-                return;
             }
-            // 在预览模式下，不处理其他快捷键
+            return;
+        }
+
+        // 如果快捷键被禁用或正在编辑，对其他快捷键不响应
+        if (!this.enabled || this.app.isEditing) {
             return;
         }
 

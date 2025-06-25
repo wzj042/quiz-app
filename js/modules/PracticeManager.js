@@ -173,4 +173,18 @@ export default class PracticeManager {
         this.currentIndex = 0;
         this.answers.clear();
     }
+
+    // 获取当前模式的中文名称
+    getModeDisplayName() {
+        switch (this.currentMode) {
+            case 'sequence':
+                return '顺序练习';
+            case 'error-rate':
+                return '错误率练习';
+            case 'random':
+                return '随机练习';
+            default:
+                return '';
+        }
+    }
 } 

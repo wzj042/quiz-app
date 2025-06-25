@@ -4,9 +4,14 @@ const path = require('path');
 // 配置要忽略的目录
 const IGNORE_DIRS = ['archive'];
 
-async function scanDirectory(dir) {
+async function scanDirectory(dir, baseDir = null) {
     const files = await fs.readdir(dir);
     const bankList = [];
+    
+    // 如果baseDir未设置，将其设置为当前目录（用于第一次调用）
+    if (!baseDir) {
+        baseDir = dir;
+    }
 
     for (const file of files) {
         const fullPath = path.join(dir, file);
@@ -20,7 +25,7 @@ async function scanDirectory(dir) {
                 continue;
             }
             // 如果不是被忽略的目录，则递归扫描
-            const subList = await scanDirectory(fullPath);
+            const subList = await scanDirectory(fullPath, baseDir);
             bankList.push(...subList);
         } else if (file.endsWith('.json') && file !== 'list.json') {
             try {
@@ -28,11 +33,14 @@ async function scanDirectory(dir) {
                 const content = await fs.readFile(fullPath, 'utf8');
                 const data = JSON.parse(content);
                 
+                // 计算相对路径
+                const relativePath = path.relative(baseDir, fullPath).replace(/\\/g, '/');
+                
                 // 确保文件包含必要的数据
                 if (data.sets && data.sets.length > 0) {
                     bankList.push({
-                        file: file,
-                        name: data.sets[0].name || file.replace('.json', ''),
+                        file: relativePath,
+                        name: data.sets[0].name || path.basename(relativePath, '.json'),
                         category: data.sets[0].category || '未分类'
                     });
                 }

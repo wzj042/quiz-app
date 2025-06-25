@@ -1,0 +1,235 @@
+{
+    "questions": [
+        {
+            "type": "single-choice",
+            "content": "软件项目管理的主要目标是：",
+            "options": [
+                "在预算和时间内交付满足需求的软件",
+                "编写高质量代码",
+                "使用最新技术",
+                "减少文档工作量"
+            ],
+            "correct_answer": ["在预算和时间内交付满足需求的软件"],
+            "analysis": "软件项目管理的核心目标是平衡时间、成本和质量，确保在约束条件下交付符合需求的软件。"
+        },
+        {
+            "type": "single-choice",
+            "content": "以下哪项不属于软件项目管理的核心活动？",
+            "options": [
+                "风险管理",
+                "进度计划",
+                "代码调试",
+                "资源分配"
+            ],
+            "correct_answer": ["代码调试"],
+            "analysis": "代码调试属于开发阶段的技术活动，而项目管理的核心活动包括计划、风险管理、资源分配等。"
+        },
+        {
+            "type": "single-choice",
+            "content": "估算软件规模的技术有功能点技术、( )：",
+            "options": [
+                "用例技术",
+                "代码行技术",
+                "静态单变量模型",
+                "动态多变量模型"
+            ],
+            "correct_answer": ["代码行技术"],
+            "analysis": "功能点分析（FPA）和代码行（LOC）是两种经典的软件规模估算方法。"
+        },
+        {
+            "type": "single-choice",
+            "content": "甘特图是制定（ ）计划的工具。",
+            "options": [
+                "成本",
+                "质量",
+                "进度",
+                "配置"
+            ],
+            "correct_answer": ["进度"],
+            "analysis": "甘特图（Gantt Chart）是可视化项目进度计划的工具，展示任务时间安排。"
+        },
+        {
+            "type": "single-choice",
+            "content": "什么图示可以显示任务的基本信息，并且能方便地查看任务的工期、开始时间、结束时间以及资源的信息？",
+            "options": [
+                "资源图",
+                "网络图",
+                "里程碑图",
+                "甘特图"
+            ],
+            "correct_answer": ["甘特图"],
+            "analysis": "甘特图直观展示任务的时间跨度、起止时间及资源分配，适合快速了解项目进度。"
+        },
+        {
+            "type": "single-choice",
+            "content": "项目范围变更的典型原因是:",
+            "options": [
+                "客户需求变化",
+                "开发工具升级",
+                "团队成员离职",
+                "天气影响"
+            ],
+            "correct_answer": ["客户需求变化"],
+            "analysis": "需求变更是项目范围变更的最常见原因，需通过变更管理流程控制。"
+        },
+        {
+            "type": "single-choice",
+            "content": "功能点分析(FPA)的估算依据是:",
+            "options": [
+                "代码行数",
+                "用户需求的功能复杂度",
+                "开发团队规模",
+                "项目持续时间"
+            ],
+            "correct_answer": ["用户需求的功能复杂度"],
+            "analysis": "功能点分析基于用户需求的功能模块复杂度（如输入、输出、数据存储等）估算规模。"
+        },
+        {
+            "type": "single-choice",
+            "content": "基线(Baseline)在配置管理中指:",
+            "options": [
+                "项目启动时间",
+                "风险清单",
+                "团队成员的绩效标准",
+                "已批准的阶段性成果"
+            ],
+            "correct_answer": ["已批准的阶段性成果"],
+            "analysis": "基线是经过正式评审并固定的阶段性成果（如需求文档、设计文档），作为后续开发的基准。"
+        },
+        {
+            "type": "single-choice",
+            "content": "版本控制工具(如Git)的主要作用是:",
+            "options": [
+                "管理代码变更历史",
+                "自动化测试",
+                "估算项目成本",
+                "跟踪项目进度"
+            ],
+            "correct_answer": ["管理代码变更历史"],
+            "analysis": "版本控制工具（如Git）的核心功能是记录代码变更、支持协作和回溯。"
+        },
+        {
+            "type": "single-choice",
+            "content": "软件质量的定义不包括:",
+            "options": [
+                "符合需求",
+                "用户满意度",
+                "代码行数",
+                "可靠性"
+            ],
+            "correct_answer": ["代码行数"],
+            "analysis": "软件质量关注功能性、可靠性、可用性等，代码行数与质量无直接关联。"
+        },
+        {
+            "type": "single-choice",
+            "content": "软件项目管理的目标是确保项目在预算、时间和质量约束下完成。",
+            "options": [
+                "对",
+                "错"
+            ],
+            "correct_answer": ["对"],
+            "analysis": "项目管理需在时间、成本、质量三角约束中达成平衡。"
+        },
+        {
+            "type": "single-choice",
+            "content": "项目管理仅适用于大型软件项目，小型项目不需要。",
+            "options": [
+                "对",
+                "错"
+            ],
+            "correct_answer": ["错"],
+            "analysis": "无论项目大小，管理活动（如计划、跟踪）均不可或缺，但可灵活简化流程。"
+        },
+        {
+            "type": "single-choice",
+            "content": "软件质量只有通过后期测试才能提高。",
+            "options": [
+                "对",
+                "错"
+            ],
+            "correct_answer": ["错"],
+            "analysis": "质量需通过全过程控制（如需求评审、设计规范、代码审查、持续测试）提升，而非仅依赖后期测试。"
+        },
+        {
+            "type": "single-choice",
+            "content": "一个(些)配置项形成并通过审核，即形成基线。",
+            "options": [
+                "对",
+                "错"
+            ],
+            "correct_answer": ["对"],
+            "analysis": "基线是配置项通过评审后的稳定版本，标志阶段性成果的固化。"
+        },
+        {
+            "type": "single-choice",
+            "content": "软件质量是代码正确的程度。",
+            "options": [
+                "对",
+                "错"
+            ],
+            "correct_answer": ["错"],
+            "analysis": "软件质量包括功能性、可靠性、用户体验等多维度，代码正确性仅为一部分。"
+        },
+        {
+            "type": "single-choice",
+            "content": "甘特图可以清晰展示任务间的依赖关系。",
+            "options": [
+                "对",
+                "错"
+            ],
+            "correct_answer": ["错"],
+            "analysis": "甘特图擅长展示时间轴任务，但任务依赖关系需通过网络图（如PERT图）更清晰表达。"
+        },
+        {
+            "type": "single-choice",
+            "content": "一个软件配置项可能有多个标识。",
+            "options": [
+                "对",
+                "错"
+            ],
+            "correct_answer": ["对"],
+            "analysis": "同一配置项的不同版本可能有多个标识（如v1.0、v2.0），但每个版本标识唯一。"
+        },
+        {
+            "type": "single-choice",
+            "content": "风险识别仅在项目启动阶段进行。",
+            "options": [
+                "对",
+                "错"
+            ],
+            "correct_answer": ["错"],
+            "analysis": "风险识别需贯穿项目全生命周期（启动、规划、执行、收尾），动态更新风险清单。"
+        },
+        {
+            "type": "single-choice",
+            "content": "测试覆盖率100%意味着软件无缺陷。",
+            "options": [
+                "对",
+                "错"
+            ],
+            "correct_answer": ["错"],
+            "analysis": "测试覆盖率仅表示代码执行范围，无法保证逻辑覆盖所有异常场景，更不能证明无缺陷。"
+        },
+        {
+            "type": "single-choice",
+            "content": "配置管理仅在开发阶段实施。",
+            "options": [
+                "对",
+                "错"
+            ],
+            "correct_answer": ["错"],
+            "analysis": "配置管理需覆盖软件全生命周期（开发、测试、运维），确保版本可控、变更可追溯。"
+        }
+    ],
+    "sets": [
+        {
+            "id": "rjgc-2",
+            "name": "02-软件项目管理",
+            "category": "软件工程",
+            "tags": ["项目管理"],
+            "createTime": "2025-06-25 20:17:00",
+            "updateTime": "2025-06-25 20:18:00",
+            "description": "软件项目管理相关题目，[学习通](https://mooc1.chaoxing.com/mooc-ans/mooc2/work/view?courseId=227327462&classId=115629904&cpi=411759952&workId=42796166&answerId=53583065&enc=6d757a2a617a1fc093aecad2384af220)"
+        }
+    ]
+}

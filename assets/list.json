@@ -1,5 +1,5 @@
 {
-  "updateTime": "2025-06-25 17:36:01",
+  "updateTime": "2025-06-25 23:04:05",
   "banks": [
     {
       "file": "demo.json",
@@ -7,8 +7,33 @@
       "category": "未分类"
     },
     {
-      "file": "rjgc-1.json",
+      "file": "rjgc/rigc-4.json",
+      "name": "04-软工-期中",
+      "category": "软件工程"
+    },
+    {
+      "file": "rjgc/rjgc-1.json",
       "name": "01-软件工程-概述",
+      "category": "软件工程"
+    },
+    {
+      "file": "rjgc/rjgc-2.json",
+      "name": "02-软件项目管理",
+      "category": "软件工程"
+    },
+    {
+      "file": "rjgc/rjgc-3.json",
+      "name": "03-结构化编码和测试",
+      "category": "软件工程"
+    },
+    {
+      "file": "rjgc/rjgc-5.json",
+      "name": "05-软工-作业4",
+      "category": "软件工程"
+    },
+    {
+      "file": "rjgc/rjgc-6.json",
+      "name": "06-软工-作业5",
       "category": "软件工程"
     }
   ]
