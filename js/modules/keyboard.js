@@ -5,14 +5,31 @@ export default class KeyboardManager {
         this.currentFocusIndex = -1;
         this.enabled = true;
         this.handleKeyDown = this.handleKeyDown.bind(this);
+    }
+
+    async init() {
+        // 初始化时不需要特别的异步操作
+        return Promise.resolve();
+    }
+
+    initKeyboardEvents() {
         this.addEventListeners();
+        // 如果在题库详情页面，初始化模式按钮的焦点
+        if (this.app.appState.pageState === 'setDescription') {
+            setTimeout(() => {
+                const buttons = document.querySelectorAll('.mode-btn');
+                if (buttons.length > 0) {
+                    buttons[0].focus();
+                }
+            }, 0);
+        }
     }
 
     addEventListeners() {
         document.addEventListener('keydown', this.handleKeyDown);
     }
 
-    destroy() {
+    cleanup() {
         document.removeEventListener('keydown', this.handleKeyDown);
     }
 

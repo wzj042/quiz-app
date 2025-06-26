@@ -9,6 +9,23 @@ export default class JsonLoader {
         this.loadedBanks = new Map(); // 存储已加载的题库
     }
 
+    async init() {
+        try {
+            // 加载题库列表
+            const response = await fetch('assets/list.json');
+            const data = await response.json();
+            
+            // 初始化基本数据
+            this.bankList = data.banks || [];
+            this.updateTime = data.updateTime;
+            
+            return true;
+        } catch (error) {
+            console.error('[JsonLoader] Failed to initialize:', error);
+            throw error;
+        }
+    }
+
     // 生成唯一ID
     generateUniqueId(setId, index, content) {
         // 使用内容的哈希值来确保唯一性
