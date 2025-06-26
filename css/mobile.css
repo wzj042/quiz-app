@@ -1745,3 +1745,46 @@ textarea:focus-visible {
     background-color: var(--theme-color);
     transition: width 0.3s ease;
 }
+
+/* 简答题答案样式 */
+.correct-answer {
+    margin-top: 16px;
+    padding: 16px;
+    background: rgba(176, 193, 162, 0.1);
+    border-radius: 4px;
+}
+
+.correct-answer h4 {
+    margin: 0 0 8px 0;
+    color: #666;
+    font-size: 14px;
+}
+
+.short-answer-content {
+    font-size: 14px;
+    line-height: 1.6;
+    color: #333;
+}
+
+.short-answer-content:not(:last-child) {
+    margin-bottom: 12px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.short-answer-content img {
+    max-width: 100%;
+    height: auto;
+    margin: 8px 0;
+    border-radius: 4px;
+}
+
+.short-answer-content p {
+    margin: 8px 0;
+}
+
+.short-answer-content ul,
+.short-answer-content ol {
+    margin: 8px 0;
+    padding-left: 20px;
+}

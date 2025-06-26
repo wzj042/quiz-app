@@ -504,6 +504,15 @@
                     class="full-width-input"
                     placeholder="请输入你的答案"
                 ></textarea>
+                <!-- 显示正确答案 -->
+                <div v-if="showAnswer" class="correct-answer">
+                    <h4>参考答案：</h4>
+                    <div v-for="(answer, index) in currentQuestion.correct_answer" 
+                         :key="index"
+                         v-html="renderMarkdownWithLatex(answer)"
+                         class="short-answer-content">
+                    </div>
+                </div>
             </div>
 
             <div v-else-if="currentQuestion.type === 'fill-in-blank'">
@@ -1421,45 +1430,46 @@
 
                 document.body.appendChild(dialog);
 
-                // 点击遮罩层关闭对话框（继续编辑）
-                dialog.addEventListener('click', (e) => {
-                    if (e.target === dialog) {
+                // 确保元素已经添加到DOM后再添加事件监听器
+                const continueEditBtn = dialog.querySelector('#continueEdit');
+                const saveAndExportBtn = dialog.querySelector('#saveAndExport');
+                const discardBtn = dialog.querySelector('#discardAndContinue');
+
+                if (continueEditBtn && saveAndExportBtn && discardBtn) {
+                    // 点击遮罩层关闭对话框（继续编辑）
+                    dialog.addEventListener('click', (e) => {
+                        if (e.target === dialog) {
+                            document.body.removeChild(dialog);
+                        }
+                    });
+
+                    // 继续编辑
+                    continueEditBtn.addEventListener('click', () => {
                         document.body.removeChild(dialog);
-                    }
-                });
+                    });
 
-                // 继续编辑
-                dialog.querySelector('#continueEdit').addEventListener('click', () => {
-                    document.body.removeChild(dialog);
-                });
+                    // 保存并导出
+                    saveAndExportBtn.addEventListener('click', () => {
+                        this.questionManager.saveCurrentEdit();
+                        this.exportModifiedData();
+                        document.body.removeChild(dialog);
+                        
+                        // 根据action执行相应操作
+                        this.handleActionAfterSave(action);
+                    });
 
-                // 保存并导出
-                dialog.querySelector('#saveAndExport').addEventListener('click', () => {
-                    this.questionManager.saveCurrentEdit();
-                    this.exportModifiedData();
+                    // 放弃修改并继续
+                    discardBtn.addEventListener('click', () => {
+                        this.questionManager.cancelEditing();
+                        document.body.removeChild(dialog);
+                        
+                        // 根据action执行相应操作
+                        this.handleActionAfterSave(action);
+                    });
+                } else {
+                    console.error('Failed to find dialog buttons');
                     document.body.removeChild(dialog);
-                    
-                    // 根据action执行相应操作
-                    this.handleActionAfterSave(action);
-                });
-
-                // 仅保存
-                dialog.querySelector('#saveAndContinue').addEventListener('click', () => {
-                    this.questionManager.saveCurrentEdit();
-                    document.body.removeChild(dialog);
-                    
-                    // 根据action执行相应操作
-                    this.handleActionAfterSave(action);
-                });
-
-                // 放弃修改并继续
-                dialog.querySelector('#discardAndContinue').addEventListener('click', () => {
-                    this.questionManager.cancelEditing();
-                    document.body.removeChild(dialog);
-                    
-                    // 根据action执行相应操作
-                    this.handleActionAfterSave(action);
-                });
+                }
             },
 
             // 处理保存后的操作

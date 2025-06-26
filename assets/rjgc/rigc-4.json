@@ -20,7 +20,8 @@
                 "信息存储",
                 "外部实体"
             ],
-            "correct_answer": ["系统状态"]
+            "correct_answer": ["系统状态"],
+            "analysis": "数据流程图主要关心的是数据如何流动以及如何被处理，而不是系统本身在某个时间点“处于什么状态”。描述系统状态通常用的是另一种图，叫做“状态转换图”(State Transition Diagram)。。"
         },
         {
             "type": "single-choice",
@@ -64,7 +65,7 @@
                 "关系“教”",
                 "关系“学”"
             ],
-            "correct_answer": ["学生"]
+            "correct_answer": ["关系“学”"]
         },
         {
             "type": "single-choice",
@@ -75,7 +76,7 @@
                 "PDL语言",
                 "结构化程序设计"
             ],
-            "correct_answer": ["PDL语言"]
+            "correct_answer": ["结构化程序设计"]
         },
         {
             "type": "single-choice",
@@ -108,7 +109,8 @@
                 "一个模块的扇出太多，说明该模块过分复杂，缺少中间层",
                 "一个模块的扇入太多，说明该模块过分复杂，缺少中间层"
             ],
-            "correct_answer": ["一个模块的扇出太多，说明该模块过分复杂，缺少中间层"]
+            "correct_answer": ["一个模块的扇出太多，说明该模块过分复杂，缺少中间层"],
+            "analysis": "扇入表示有多少个下层模块直接调用它![Image](https://img20.360buyimg.com/openfeedback/jfs/t1/310199/14/12615/9133/685d520eFd59b8865/c54d1c0f2450fe90.png)\n 扇出表示一个模块直接控制下层模块的个数。![Image](https://img20.360buyimg.com/openfeedback/jfs/t1/304164/25/13711/10269/685d51b0F7e30a399/6f5c7a2120ec2e5f.png)"
         },
         {
             "type": "fill-in-blank",
@@ -195,7 +197,7 @@
                 "对",
                 "错"
             ],
-            "correct_answer": ["错"]
+            "correct_answer": ["对"]
         },
         {
             "type": "single-choice",
@@ -204,7 +206,7 @@
                 "对",
                 "错"
             ],
-            "correct_answer": ["对"]
+            "correct_answer": ["错"]
         },
         {
             "type": "single-choice",
@@ -213,7 +215,7 @@
                 "对",
                 "错"
             ],
-            "correct_answer": ["错"]
+            "correct_answer": ["对"]
         },
         {
             "type": "single-choice",
@@ -240,7 +242,7 @@
                 "对",
                 "错"
             ],
-            "correct_answer": ["对"]
+            "correct_answer": ["错"]
         },
         {
             "type": "single-choice",
@@ -258,12 +260,14 @@
                 "对",
                 "错"
             ],
-            "correct_answer": ["错"]
+            "correct_answer": ["错"],
+            "analysis": "结构化设计方法中，经常会用到像「数据流图」(DFD) 这样的工具。「数据流图」里面就有专门的符号表示“数据存储”。"
         },
         {
             "type": "short-answer",
             "content": "某商业公司数据库中有三个实体集，一是“公司”，属性有公司编号、公司名、地址等;二是“仓库”，属性有仓库编号、仓库名、地址等；三是“职工”，属性有职工编号、姓名、性别等。每个公司有若干个仓库，每个仓库只能属于1个公司，每个仓库可聘用若干职工，每个职工只能在一个仓库工作，仓库聘用职工有聘期和工资。请画出E-R图。",
-            "correct_answer": ["![](https://p.ananas.chaoxing.com/star3/origin/03bbf81996e61113720afadc3d864306.png)"]
+            "correct_answer": ["![](https://p.ananas.chaoxing.com/star3/origin/03bbf81996e61113720afadc3d864306.png)"],
+            "analysis": "E-R图是实体-联系图(Entity-Relationship Diagram)的缩写，它是一种用于表示实体、属性和它们之间关系的图形化工具。在E-R图中，实体用矩形表示，属性用椭圆表示，关系用菱形表示。"
         }
     ],
     "sets": [
