@@ -3,6 +3,9 @@ export default class StorageManager {
     constructor() {
         this.STORAGE_KEY = 'quiz-app-storage';
         this.version = '1.0.0';
+        this.maxRetries = 3;
+        this.retryDelay = 1000; // 1秒
+        this.currentSetId = null; // Track current setId
         try {
             const savedData = JSON.parse(localStorage.getItem(this.STORAGE_KEY));
             this.data = savedData?.data || {};
@@ -12,310 +15,408 @@ export default class StorageManager {
         }
     }
 
-    loadData() {
-        try {
-            const savedData = JSON.parse(localStorage.getItem(this.STORAGE_KEY));
-            if (!savedData) return {};
-            return savedData.data || {};
-        } catch (error) {
-            console.error('Failed to load data:', error);
-            return {};
+    // Set current setId
+    setCurrentSetId(setId) {
+        if (!setId) {
+            console.warn('[setCurrentSetId] Invalid setId:', setId);
+            return;
         }
+        
+        // Normalize the setId by removing .json and any leading/trailing slashes
+        this.currentSetId = setId
+            .replace('.json', '')
+            .replace(/^\/+|\/+$/g, '');
+            
+        // Validate the format
+        if (!this.currentSetId.match(/^[a-zA-Z0-9\-_/]+$/)) {
+            console.warn('[setCurrentSetId] Invalid setId format:', this.currentSetId);
+            this.currentSetId = null;
+            return;
+        }
+        
+        console.log('[setCurrentSetId] Set current setId:', this.currentSetId);
     }
 
-    saveData() {
-        try {
-            console.log('[saveData] Saving data to localStorage:', this.data);
-            localStorage.setItem(this.STORAGE_KEY, JSON.stringify({
-                version: this.version,
-                data: this.data
-            }));
-        } catch (error) {
-            console.error('[saveData] Failed to save data:', error);
+    // Get current setId
+    getCurrentSetId() {
+        return this.currentSetId;
+    }
+
+    async loadData() {
+        let retries = 0;
+        while (retries < this.maxRetries) {
+            try {
+                const savedData = JSON.parse(localStorage.getItem(this.STORAGE_KEY));
+                if (!savedData) return {};
+                return savedData.data || {};
+            } catch (error) {
+                console.error(`[loadData] Failed to load data (attempt ${retries + 1}):`, error);
+                retries++;
+                if (retries < this.maxRetries) {
+                    await new Promise(resolve => setTimeout(resolve, this.retryDelay));
+                }
+            }
         }
+        console.error('[loadData] Max retries reached, returning empty data');
+        return {};
+    }
+
+    async saveData() {
+        let retries = 0;
+        while (retries < this.maxRetries) {
+            try {
+                console.log('[saveData] Saving data to localStorage:', this.data);
+                localStorage.setItem(this.STORAGE_KEY, JSON.stringify({
+                    version: this.version,
+                    data: this.data
+                }));
+                return true;
+            } catch (error) {
+                console.error(`[saveData] Failed to save data (attempt ${retries + 1}):`, error);
+                retries++;
+                if (retries < this.maxRetries) {
+                    await new Promise(resolve => setTimeout(resolve, this.retryDelay));
+                }
+            }
+        }
+        console.error('[saveData] Max retries reached, failed to save data');
+        return false;
     }
 
     getQuestionCompletion(setId, questionId) {
         try {
-            const data = JSON.parse(localStorage.getItem(this.STORAGE_KEY));
-            return data?.data?.[`${setId}-${questionId}`] || null;
+            // Try to use provided setId, fallback to current setId
+            const effectiveSetId = setId || this.currentSetId;
+            
+            // Early validation with detailed logging
+            if (!effectiveSetId) {
+                console.warn('[getQuestionCompletion] No setId provided and no current setId set');
+                return null;
+            }
+            
+            // If questionId is a number, convert it to string
+            const questionKey = questionId?.toString();
+            if (!questionKey) {
+                console.warn('[getQuestionCompletion] No questionId provided');
+                return null;
+            }
+
+            // Log the actual values being used
+            console.log('[getQuestionCompletion] Using values:', {
+                providedSetId: setId,
+                currentSetId: this.currentSetId,
+                effectiveSetId,
+                questionKey
+            });
+
+            const storageKey = effectiveSetId.replace('.json', '');
+            const result = this.data[storageKey]?.[questionKey];
+            
+            console.log('[getQuestionCompletion] Result:', {
+                storageKey,
+                hasData: !!this.data[storageKey],
+                hasQuestionData: !!result
+            });
+            
+            return result || null;
         } catch (error) {
-            console.error('Error getting question completion:', error);
+            console.error('[getQuestionCompletion] Error:', error);
             return null;
         }
     }
 
-    updateQuestionCompletion(setId, questionId, isCorrect) {
-        console.log('[updateQuestionCompletion] Updating stats:', { setId, questionId, isCorrect });
-        
-        // 确保使用一致的键格式
-        const storageKey = setId.replace('.json', '');
-        console.log('[updateQuestionCompletion] Using storage key:', storageKey);
-        
-        if (!this.data[storageKey]) {
-            this.data[storageKey] = {};
-        }
-        
-        if (!this.data[storageKey][questionId]) {
-            this.data[storageKey][questionId] = {
-                totalAttempts: 0,
-                correctCount: 0,
-                incorrectCount: 0,
-                consecutiveCorrect: 0,
-                lastAttemptDate: null,
-                lastCorrect: false,
-                firstAttemptDate: null,
-                completed: false
-            };
+    async updateQuestionCompletion(setId, questionId, isCorrect) {
+        if (!setId) {
+            console.error('[updateQuestionCompletion] Missing setId');
+            return null;
         }
 
-        const stats = this.data[storageKey][questionId];
-        const now = new Date().toISOString();
-
-        // 更新统计数据
-        stats.totalAttempts++;
-        stats.completed = true; // 只要提交过就算完成
-        if (isCorrect) {
-            stats.correctCount++;
-            stats.consecutiveCorrect++;
-            stats.lastCorrect = true;
-        } else {
-            stats.incorrectCount++;
-            stats.consecutiveCorrect = 0;
-            stats.lastCorrect = false;
+        // If questionId is a number, convert it to string
+        const questionKey = questionId?.toString();
+        if (!questionKey) {
+            console.error('[updateQuestionCompletion] Missing questionId');
+            return null;
         }
 
-        // 更新时间
-        if (!stats.firstAttemptDate) {
-            stats.firstAttemptDate = now;
-        }
-        stats.lastAttemptDate = now;
+        try {
+            console.log('[updateQuestionCompletion] Updating stats:', { setId, questionKey, isCorrect });
+            
+            // Normalize the storage key
+            const storageKey = setId.replace('.json', '');
+            console.log('[updateQuestionCompletion] Using storage key:', storageKey);
+            
+            // Initialize data structure if needed
+            if (!this.data[storageKey]) {
+                this.data[storageKey] = {};
+            }
+            
+            // Initialize question stats if needed
+            if (!this.data[storageKey][questionKey]) {
+                this.data[storageKey][questionKey] = {
+                    totalAttempts: 0,
+                    correctCount: 0,
+                    incorrectCount: 0,
+                    consecutiveCorrect: 0,
+                    lastAttemptDate: null,
+                    lastCorrect: false,
+                    firstAttemptDate: null,
+                    completed: false,
+                    todayAttempts: 0,
+                    todayCorrect: 0,
+                    todayIncorrect: 0,
+                    lastSubmissionTime: null
+                };
+            }
 
-        console.log('[updateQuestionCompletion] Updated stats:', stats);
-        console.log('[updateQuestionCompletion] Current storage data:', this.data);
-        
-        this.saveData();
-        return stats;
+            const stats = this.data[storageKey][questionKey];
+            const now = new Date().toISOString();
+            const today = now.split('T')[0];
+
+            // Only check for duplicate submissions if it's the same answer type (correct/incorrect)
+            const isDuplicateSubmission = stats.lastSubmissionTime && 
+                (new Date(now) - new Date(stats.lastSubmissionTime)) < 2000 &&
+                stats.lastCorrect === isCorrect;
+                
+            if (isDuplicateSubmission) {
+                console.log('[updateQuestionCompletion] Duplicate submission detected, skipping update');
+                return stats;
+            }
+
+            // Reset daily stats if it's a new day
+            if (stats.lastAttemptDate && !stats.lastAttemptDate.startsWith(today)) {
+                console.log('[updateQuestionCompletion] New day detected, resetting daily stats');
+                stats.todayAttempts = 0;
+                stats.todayCorrect = 0;
+                stats.todayIncorrect = 0;
+            }
+
+            // Update stats
+            stats.totalAttempts++;
+            stats.todayAttempts++;
+            stats.completed = true;
+
+            if (isCorrect) {
+                stats.correctCount++;
+                stats.todayCorrect++;
+                stats.consecutiveCorrect++;
+                stats.lastCorrect = true;
+            } else {
+                stats.incorrectCount++;
+                stats.todayIncorrect++;
+                stats.consecutiveCorrect = 0;
+                stats.lastCorrect = false;
+            }
+
+            // Update timestamps
+            if (!stats.firstAttemptDate) {
+                stats.firstAttemptDate = now;
+            }
+            stats.lastAttemptDate = now;
+            stats.lastSubmissionTime = now;
+
+            console.log('[updateQuestionCompletion] Updated stats:', stats);
+            
+            // Save data
+            const saved = await this.saveData();
+            if (!saved) {
+                throw new Error('Failed to save data after multiple retries');
+            }
+            
+            return stats;
+        } catch (error) {
+            console.error('[updateQuestionCompletion] Error:', error);
+            return null;
+        }
     }
 
     getQuestionStats(setId, questionId) {
-        const storageKey = setId.replace('.json', '');
-        console.log('[getQuestionStats] Getting stats for:', {
-            setId,
-            storageKey,
-            questionId,
-            hasData: this.data[storageKey] && this.data[storageKey][questionId]
-        });
-        
-        if (!this.data[storageKey] || !this.data[storageKey][questionId]) {
+        try {
+            if (!setId || !questionId) {
+                console.error('[getQuestionStats] Invalid parameters:', { setId, questionId });
+                return null;
+            }
+
+            const storageKey = setId.replace('.json', '');
+            console.log('[getQuestionStats] Getting stats for:', {
+                setId,
+                storageKey,
+                questionId,
+                hasData: this.data[storageKey] && this.data[storageKey][questionId]
+            });
+            
+            return this.data[storageKey]?.[questionId] || null;
+        } catch (error) {
+            console.error('[getQuestionStats] Error:', error);
             return null;
         }
-        return this.data[storageKey][questionId];
     }
 
     getSetStats(setId, questions) {
-        if (!this.data[setId]) {
-            return {
-                totalAttempts: 0,
-                totalCorrect: 0,
-                totalIncorrect: 0,
-                averageAccuracy: 0,
-                completedQuestions: 0,
+        try {
+            if (!setId || !Array.isArray(questions)) {
+                console.error('[getSetStats] Invalid parameters:', { setId, hasQuestions: !!questions });
+                return null;
+            }
+
+            const storageKey = setId.replace('.json', '');
+            const setData = this.data[storageKey] || {};
+            
+            const stats = {
                 totalQuestions: questions.length,
-                completionRate: 0,
+                completedQuestions: 0,
+                correctQuestions: 0,
+                totalAttempts: 0,
+                correctAttempts: 0,
+                incorrectAttempts: 0,
+                averageAccuracy: 0,
                 todayAttempts: 0,
                 todayCorrect: 0,
-                distinctQuestionCount: 0, // 添加不同题目数统计
-                totalQuestionAttempts: 0  // 添加总题目练习数（含重复）
+                todayIncorrect: 0
             };
-        }
 
-        const today = new Date().toISOString().split('T')[0];
-        let stats = {
-            totalAttempts: 0,
-            totalCorrect: 0,
-            totalIncorrect: 0,
-            completedQuestions: 0,
-            todayAttempts: 0,
-            todayCorrect: 0,
-            distinctQuestionCount: 0,
-            totalQuestionAttempts: 0,
-            todayDistinctQuestions: new Set()
-        };
+            // 获取今天的日期
+            const today = new Date().toISOString().split('T')[0];
 
-        // 用于统计今日不同的题目数
-        const todayQuestions = new Set();
-
-        questions.forEach(q => {
-            const qStats = this.data[setId][q.uniqueId];
-            if (qStats) {
-                stats.totalAttempts += qStats.totalAttempts;
-                stats.totalCorrect += qStats.correctCount;
-                stats.totalIncorrect += qStats.incorrectCount;
-                
-                // 只要提交过就算完成
-                if (qStats.completed) {
-                    stats.completedQuestions++;
+            // 遍历题目数组
+            for (const question of questions) {
+                const questionId = question.uniqueId;
+                if (!questionId) {
+                    console.warn('[getSetStats] Question missing uniqueId:', question);
+                    continue;
                 }
 
-                // 统计练习过的不同题目数
-                stats.distinctQuestionCount++;
-                stats.totalQuestionAttempts += qStats.totalAttempts;
+                const questionStats = setData[questionId];
+                if (questionStats) {
+                    stats.totalAttempts += questionStats.totalAttempts;
+                    stats.correctAttempts += questionStats.correctCount;
+                    stats.incorrectAttempts += questionStats.incorrectCount;
 
-                // 统计今日数据
-                if (qStats.lastAttemptDate?.startsWith(today)) {
-                    stats.todayAttempts++;
-                    if (qStats.lastCorrect) {
-                        stats.todayCorrect++;
+                    if (questionStats.completed) {
+                        stats.completedQuestions++;
                     }
-                    todayQuestions.add(q.uniqueId);
+                    if (questionStats.lastCorrect) {
+                        stats.correctQuestions++;
+                    }
+
+                    // 统计今日数据
+                    if (questionStats.lastAttemptDate?.startsWith(today)) {
+                        stats.todayAttempts += questionStats.todayAttempts;
+                        stats.todayCorrect += questionStats.todayCorrect;
+                        stats.todayIncorrect += questionStats.todayIncorrect;
+                    }
                 }
             }
-        });
 
-        return {
-            ...stats,
-            averageAccuracy: stats.totalAttempts > 0 
-                ? Math.round((stats.totalCorrect / stats.totalAttempts) * 100)
-                : 0,
-            completionRate: (stats.completedQuestions / questions.length * 100).toFixed(1),
-            totalQuestions: questions.length,
-            todayDistinctQuestions: todayQuestions.size
-        };
+            // 计算正确率
+            stats.averageAccuracy = stats.totalAttempts > 0
+                ? Math.round((stats.correctAttempts / stats.totalAttempts) * 100)
+                : 0;
+
+            console.log('[getSetStats] Calculated stats:', {
+                setId,
+                storageKey,
+                stats
+            });
+
+            return stats;
+        } catch (error) {
+            console.error('[getSetStats] Error:', error);
+            return null;
+        }
     }
 
     getAllBanksStats() {
-        console.log('[getAllBanksStats] Starting calculation');
-        console.log('[getAllBanksStats] Storage data:', this.data);
-        
-        let totalStats = {
-            completedQuestions: 0,
-            totalAttempts: 0,
-            totalCorrect: 0,
-            todayPracticed: 0,
-            averageAccuracy: 0
-        };
+        try {
+            console.log('[getAllBanksStats] Starting calculation');
+            const stats = {
+                completedQuestions: 0,
+                totalAttempts: 0,
+                averageAccuracy: 0,
+                todayPracticed: 0
+            };
 
-        const today = new Date().toISOString().split('T')[0];
-        console.log('[getAllBanksStats] Today:', today);
+            let totalCorrect = 0;
+            const today = new Date().toISOString().split('T')[0];
 
-        // 遍历每个题库的数据
-        for (const setId in this.data) {
-            console.log(`[getAllBanksStats] Processing set: ${setId}`);
-            const setData = this.data[setId];
-            
-            // 确保setData是一个对象且不是null
-            if (setData && typeof setData === 'object') {
-                // 遍历题库中的每个问题
-                for (const questionId in setData) {
-                    const qStats = setData[questionId];
-                    console.log(`[getAllBanksStats] Processing question ${questionId}:`, qStats);
-                    
-                    // 确保qStats是有效的统计数据对象
-                    if (qStats && typeof qStats === 'object') {
-                        // 统计已练习的题目
-                        if (qStats.completed) {
-                            totalStats.completedQuestions++;
-                            console.log(`[getAllBanksStats] Question ${questionId} is completed, total completed:`, totalStats.completedQuestions);
-                        }
+            // 遍历所有题库的数据
+            for (const [bankKey, bankData] of Object.entries(this.data)) {
+                // 跳过非题库数据
+                if (bankKey === 'settings' || !bankData) continue;
 
-                        // 累加练习次数和正确次数
-                        totalStats.totalAttempts += qStats.totalAttempts || 0;
-                        totalStats.totalCorrect += qStats.correctCount || 0;
-                        console.log(`[getAllBanksStats] Question ${questionId} stats - attempts: ${qStats.totalAttempts}, correct: ${qStats.correctCount}`);
+                // 遍历题库中的每个题目
+                for (const [questionKey, questionStats] of Object.entries(bankData)) {
+                    if (questionStats.completed) {
+                        stats.completedQuestions++;
+                    }
+                    stats.totalAttempts += questionStats.totalAttempts;
+                    totalCorrect += questionStats.correctCount;
 
-                        // 统计今日练习
-                        if (qStats.lastAttemptDate === today) {
-                            totalStats.todayPracticed++;
-                            console.log(`[getAllBanksStats] Question ${questionId} practiced today, total today:`, totalStats.todayPracticed);
-                        }
+                    // 统计今日练习题目数
+                    if (questionStats.lastAttemptDate?.startsWith(today)) {
+                        stats.todayPracticed++;
                     }
                 }
-            } else {
-                console.log(`[getAllBanksStats] Invalid data structure for set ${setId}:`, setData);
             }
+
+            // 计算平均正确率
+            stats.averageAccuracy = stats.totalAttempts > 0
+                ? Math.round((totalCorrect / stats.totalAttempts) * 100)
+                : 0;
+
+            console.log('[getAllBanksStats] Calculated stats:', stats);
+            return stats;
+        } catch (error) {
+            console.error('[getAllBanksStats] Error:', error);
+            return {
+                completedQuestions: 0,
+                totalAttempts: 0,
+                averageAccuracy: 0,
+                todayPracticed: 0
+            };
         }
-
-        // 计算最终统计结果
-        const result = {
-            completedQuestions: totalStats.completedQuestions,
-            totalAttempts: totalStats.totalAttempts,
-            averageAccuracy: totalStats.totalAttempts > 0 
-                ? Math.round((totalStats.totalCorrect / totalStats.totalAttempts) * 100)
-                : 0,
-            todayPracticed: totalStats.todayPracticed
-        };
-
-        console.log('[getAllBanksStats] Final stats:', result);
-        return result;
     }
 
     async getBankStats(fileName, jsonLoader) {
         try {
+            if (!fileName || !jsonLoader) {
+                console.error('[getBankStats] Missing parameters:', { fileName, hasJsonLoader: !!jsonLoader });
+                return null;
+            }
+
             console.log('[getBankStats] Checking stats for:', fileName);
-            console.log('[getBankStats] Storage data:', this.data);
-            
-            // 处理文件路径，移除目录部分和.json后缀
-            const prefix = fileName.split('/').pop().replace('.json', '');
-            console.log('[getBankStats] Looking for prefix:', prefix);
-            
-            let stats = {
-                completed: 0,
-                total: 0,
-                attempts: 0,
-                correct: 0,
-                accuracy: 0
-            };
 
-            // 获取题库的实际题目总数
-            if (jsonLoader) {
-                console.log('[getBankStats] JsonLoader available, checking loaded banks:', Array.from(jsonLoader.loadedBanks.keys()));
-                const questions = jsonLoader.getQuestionsFromBank(fileName) || [];
-                stats.total = questions.length;
-                console.log('[getBankStats] Total questions in bank:', stats.total);
+            // 获取题库数据
+            const data = await jsonLoader.loadFile(fileName);
+            if (!data || !data.questions || !Array.isArray(data.questions)) {
+                console.error('[getBankStats] Failed to load questions');
+                return null;
             }
 
-            // 查找并统计该题库的数据
-            if (this.data[prefix] && typeof this.data[prefix] === 'object') {
-                console.log(`[getBankStats] Found data for prefix ${prefix}:`, this.data[prefix]);
-                for (const questionId in this.data[prefix]) {
-                    const qStats = this.data[prefix][questionId];
-                    if (qStats && typeof qStats === 'object') {
-                        if (qStats.completed) {
-                            stats.completed++;
-                        }
-                        stats.attempts += qStats.totalAttempts || 0;
-                        stats.correct += qStats.correctCount || 0;
-                    }
-                }
-            } else {
-                console.log(`[getBankStats] No data found for prefix ${prefix}`);
-            }
-
-            // 计算正确率
-            stats.accuracy = stats.attempts > 0 ? Math.round((stats.correct / stats.attempts) * 100) : 0;
-            
-            console.log(`[getBankStats] Final stats for ${fileName}:`, stats);
-            return stats;
+            // 获取题库统计数据
+            return this.getSetStats(fileName, data.questions);
         } catch (error) {
-            console.error('[getBankStats] Error calculating stats:', error);
-            return {
-                completed: 0,
-                total: 0,
-                attempts: 0,
-                correct: 0,
-                accuracy: 0
-            };
+            console.error('[getBankStats] Error:', error);
+            return null;
         }
     }
 
     // 清除所有数据
-    clearAll() {
-        try {
-            localStorage.removeItem(this.STORAGE_KEY);
-            this.data = {};
-        } catch (error) {
-            console.error('Error clearing storage:', error);
+    async clearAll() {
+        let retries = 0;
+        while (retries < this.maxRetries) {
+            try {
+                await localStorage.removeItem(this.STORAGE_KEY);
+                this.data = {};
+                return true;
+            } catch (error) {
+                console.error(`[clearAll] Failed to clear storage (attempt ${retries + 1}):`, error);
+                retries++;
+                if (retries < this.maxRetries) {
+                    await new Promise(resolve => setTimeout(resolve, this.retryDelay));
+                }
+            }
         }
+        console.error('[clearAll] Max retries reached, failed to clear storage');
+        return false;
     }
 } 

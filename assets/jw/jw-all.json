@@ -1,0 +1,730 @@
+{
+    "questions": [
+      {
+        "type": "single-choice",
+        "content": "OSI模型中负责路由选择的层是( )",
+        "options": ["物理层", "数据链路层", "网络层", "传输层"],
+        "correct_answer": ["网络层"],
+        "analysis": ""
+      },
+      {
+        "type": "single-choice",
+        "content": "分组交换中，数据分割的单位称为( )",
+        "options": ["帧", "报文", "分组", "比特流"],
+        "correct_answer": ["分组"],
+        "analysis": ""
+      },
+      {
+        "type": "single-choice",
+        "content": "光纤通信的主要优势是( )",
+        "options": ["成本低", "抗干扰能力强", "传输距离短", "安装简单"],
+        "correct_answer": ["抗干扰能力强"],
+        "analysis": ""
+      },
+      {
+        "type": "single-choice",
+        "content": "CSMA/CD协议用于( )",
+        "options": ["以太网冲突检测", "无线局域网", "广域网路由", "光纤通信"],
+        "correct_answer": ["以太网冲突检测"],
+        "analysis": ""
+      },
+      {
+        "type": "single-choice",
+        "content": "IPv4地址10.0.0.1/8的网络地址是( )",
+        "options": ["10.0.0.0", "10.255.255.255", "0.0.0.0", "255.255.255.255"],
+        "correct_answer": ["10.0.0.0"],
+        "analysis": ""
+      },
+      {
+        "type": "single-choice",
+        "content": "TCP协议中，用于拥塞控制的机制是( )",
+        "options": ["三次握手", "滑动窗口", "慢启动", "快速重传"],
+        "correct_answer": ["慢启动"],
+        "analysis": ""
+      },
+      {
+        "type": "single-choice",
+        "content": "千兆以太网(1000BASE-T)使用的传输介质是( )",
+        "options": ["同轴电缆", "双绞线", "光纤", "无线电波"],
+        "correct_answer": ["双绞线"],
+        "analysis": ""
+      },
+      {
+        "type": "single-choice",
+        "content": "HTTP协议的默认端口是( )",
+        "options": ["21", "25", "80", "443"],
+        "correct_answer": ["80"],
+        "analysis": ""
+      },
+      {
+        "type": "single-choice",
+        "content": "非对称加密的特点是( )",
+        "options": ["加密解密密钥相同", "计算复杂度低", "适合密钥分发", "加密速度快"],
+        "correct_answer": ["适合密钥分发"],
+        "analysis": ""
+      },
+      {
+        "type": "single-choice",
+        "content": "防火墙的包过滤功能基于( )",
+        "options": ["MAC地址", "IP地址和端口", "应用层协议", "物理层信号"],
+        "correct_answer": ["IP地址和端口"],
+        "analysis": ""
+      },
+      {
+        "type": "single-choice",
+        "content": "数据链路层的功能包括( )",
+        "options": ["信号调制", "帧同步", "路由选择", "数据加密"],
+        "correct_answer": ["帧同步"],
+        "analysis": ""
+      },
+      {
+        "type": "single-choice",
+        "content": "时分复用(TDM)适用于( )",
+        "options": ["模拟信号", "数字信号", "光信号", "无线信号"],
+        "correct_answer": ["数字信号"],
+        "analysis": ""
+      },
+      {
+        "type": "single-choice",
+        "content": "奇偶校验用于( )",
+        "options": ["差错检测", "数据加密", "流量控制", "路由选择"],
+        "correct_answer": ["差错检测"],
+        "analysis": ""
+      },
+      {
+        "type": "single-choice",
+        "content": "以太网帧的最大长度是( )",
+        "options": ["46字节", "64字节", "1500字节", "1518字节"],
+        "correct_answer": ["1518字节"],
+        "analysis": ""
+      },
+      {
+        "type": "single-choice",
+        "content": "交换机的主要功能是( )",
+        "options": ["物理连接", "数据转发", "应用服务", "数据加密"],
+        "correct_answer": ["数据转发"],
+        "analysis": ""
+      },
+      {
+        "type": "single-choice",
+        "content": "RARP协议的作用是( )",
+        "options": ["IP到域名", "MAC到IP", "域名到IP", "IP到MAC"],
+        "correct_answer": ["MAC到IP"],
+        "analysis": ""
+      },
+      {
+        "type": "single-choice",
+        "content": "TCP协议中，FIN标志位的作用是( )",
+        "options": ["确认应答", "连接请求", "紧急指针", "结束连接"],
+        "correct_answer": ["结束连接"],
+        "analysis": ""
+      },
+      {
+        "type": "single-choice",
+        "content": "TCP协议的优势是( )",
+        "options": ["高可靠性", "低延迟", "无连接", "简单高效"],
+        "correct_answer": ["高可靠性"],
+        "analysis": ""
+      },
+      {
+        "type": "single-choice",
+        "content": "DNS资源记录MX用于( )",
+        "options": ["主机地址", "邮件服务器", "别名映射", "域名服务器"],
+        "correct_answer": ["邮件服务器"],
+        "analysis": ""
+      },
+      {
+        "type": "single-choice",
+        "content": "HTTP协议的无连接性指( )",
+        "options": ["不保存连接信息", "不支持加密", "只能传输文本", "需要手动刷新"],
+        "correct_answer": ["不保存连接信息"],
+        "analysis": ""
+      },
+      {
+        "type": "single-choice",
+        "content": "VLAN通过( )标识不同的虚拟局域网。",
+        "options": ["IP地址", "MAC地址", "VLAN ID", "端口号"],
+        "correct_answer": ["VLAN ID"],
+        "analysis": ""
+      },
+      {
+        "type": "single-choice",
+        "content": "Ping命令使用的协议是( )",
+        "options": ["TCP", "UDP", "ICMP", "ARP"],
+        "correct_answer": ["ICMP"],
+        "analysis": ""
+      },
+      {
+        "type": "single-choice",
+        "content": "IPv6的主要改进是( )",
+        "options": ["地址长度增加", "安全性降低", "报头更复杂", "不支持多播"],
+        "correct_answer": ["地址长度增加"],
+        "analysis": ""
+      },
+      {
+        "type": "single-choice",
+        "content": "RIP路由协议属于( )",
+        "options": ["距离向量", "链路状态", "路径向量", "混合类型"],
+        "correct_answer": ["距离向量"],
+        "analysis": ""
+      },
+      {
+        "type": "single-choice",
+        "content": "1000BASE-T中的\"1000\"表示( )",
+        "options": ["传输距离", "传输速率", "设备数量", "网络直径"],
+        "correct_answer": ["传输速率"],
+        "analysis": ""
+      },
+      {
+        "type": "single-choice",
+        "content": "TCP的序列号表示( )",
+        "options": ["已发送字节数", "期望接收字节数", "窗口大小", "数据长度"],
+        "correct_answer": ["已发送字节数"],
+        "analysis": ""
+      },
+      {
+        "type": "single-choice",
+        "content": "SMTP协议默认端口是( )",
+        "options": ["20", "25", "80", "110"],
+        "correct_answer": ["25"],
+        "analysis": ""
+      },
+      {
+        "type": "single-choice",
+        "content": "非对称加密中用于加密的密钥是( )",
+        "options": ["公钥", "私钥", "共享密钥", "会话密钥"],
+        "correct_answer": ["公钥"],
+        "analysis": ""
+      },
+      {
+        "type": "single-choice",
+        "content": "入侵防御系统(IPS)主要用于( )",
+        "options": ["防火墙", "攻击检测与阻止", "数据加密", "地址转换"],
+        "correct_answer": ["攻击检测与阻止"],
+        "analysis": ""
+      },
+      {
+        "type": "single-choice",
+        "content": "TCP/IP模型中对应OSI传输层的协议是( )",
+        "options": ["IP", "TCP", "HTTP", "Ethernet"],
+        "correct_answer": ["TCP"],
+        "analysis": ""
+      },
+      {
+        "type": "single-choice",
+        "content": "无线局域网的主要优势是( )",
+        "options": ["传输速率高", "移动性强", "抗干扰强", "成本低"],
+        "correct_answer": ["移动性强"],
+        "analysis": ""
+      },
+      {
+        "type": "single-choice",
+        "content": "用于差错检测的海明码属于( )",
+        "options": ["前向纠错", "自动重传", "奇偶校验", "循环冗余校验"],
+        "correct_answer": ["前向纠错"],
+        "analysis": ""
+      },
+      {
+        "type": "single-choice",
+        "content": "路由选择协议OSPF属于( )",
+        "options": ["距离向量", "链路状态", "路径向量", "混合类型"],
+        "correct_answer": ["链路状态"],
+        "analysis": ""
+      },
+      {
+        "type": "single-choice",
+        "content": "TCP协议的特点是( )",
+        "options": ["无连接", "不可靠传输", "流量控制", "简单高效"],
+        "correct_answer": ["流量控制"],
+        "analysis": ""
+      },
+      {
+        "type": "single-choice",
+        "content": "万兆以太网(10GBASE-T)使用的传输介质是( )",
+        "options": ["同轴电缆", "双绞线", "光纤", "无线电波"],
+        "correct_answer": ["双绞线"],
+        "analysis": ""
+      },
+      {
+        "type": "single-choice",
+        "content": "DNS资源记录PTR用于( )",
+        "options": ["域名解析", "反向地址解析", "IPv6地址", "别名映射"],
+        "correct_answer": ["反向地址解析"],
+        "analysis": ""
+      },
+      {
+        "type": "single-choice",
+        "content": "对称加密的特点是( )",
+        "options": ["加解密密钥不同", "计算效率低", "适合密钥分发", "加密速度快"],
+        "correct_answer": ["加密速度快"],
+        "analysis": ""
+      },
+      {
+        "type": "single-choice",
+        "content": "DHCP的主要作用是( )",
+        "options": ["域名解析", "动态分配IP地址", "流量控制", "错误检测"],
+        "correct_answer": ["动态分配IP地址"],
+        "analysis": ""
+      },
+      {
+        "type": "single-choice",
+        "content": "物理层的电气特性定义了( )",
+        "options": ["接口形状", "信号电平", "信号意义", "操作顺序"],
+        "correct_answer": ["信号电平"],
+        "analysis": ""
+      },
+      {
+        "type": "single-choice",
+        "content": "波分复用按( )划分信道",
+        "options": ["频率", "时间片", "编码", "波长"],
+        "correct_answer": ["波长"],
+        "analysis": ""
+      },
+      {
+        "type": "single-choice",
+        "content": "海明码用于( )",
+        "options": ["差错检测与纠正", "数据加密", "流量控制", "路由选择"],
+        "correct_answer": ["差错检测与纠正"],
+        "analysis": ""
+      },
+      {
+        "type": "single-choice",
+        "content": "千兆以太网传输速率是( )",
+        "options": ["10Mbps", "100Mbps", "1Gbps", "10Gbps"],
+        "correct_answer": ["1Gbps"],
+        "analysis": ""
+      },
+      {
+        "type": "single-choice",
+        "content": "路由器的核心功能是( )",
+        "options": ["数据转发", "协议转换", "数据加密", "物理连接"],
+        "correct_answer": ["数据转发"],
+        "analysis": ""
+      },
+      {
+        "type": "single-choice",
+        "content": "ARP协议的作用是( )",
+        "options": ["IP到域名", "IP到MAC", "域名到IP", "MAC到IP"],
+        "correct_answer": ["IP到MAC"],
+        "analysis": ""
+      },
+      {
+        "type": "single-choice",
+        "content": "TCP协议中，SYN标志位的作用是( )",
+        "options": ["确认应答", "连接请求", "紧急指针", "结束连接"],
+        "correct_answer": ["连接请求"],
+        "analysis": ""
+      },
+      {
+        "type": "single-choice",
+        "content": "UDP协议的优势是( )",
+        "options": ["高可靠性", "低延迟", "流量控制", "拥塞控制"],
+        "correct_answer": ["低延迟"],
+        "analysis": ""
+      },
+      {
+        "type": "single-choice",
+        "content": "DNS资源记录AAAA用于( )",
+        "options": ["IPv4地址", "IPv6地址", "别名映射", "域名服务器"],
+        "correct_answer": ["IPv6地址"],
+        "analysis": ""
+      },
+      {
+        "type": "single-choice",
+        "content": "TLS协议工作在( )",
+        "options": ["传输层", "网络层", "应用层", "物理层"],
+        "correct_answer": ["传输层"],
+        "analysis": ""
+      },
+      {
+        "type": "single-choice",
+        "content": "数字签名使用( )",
+        "options": ["对称加密", "哈希函数", "非对称加密", "物理加密"],
+        "correct_answer": ["非对称加密"],
+        "analysis": ""
+      },
+      {
+        "type": "single-choice",
+        "content": "VLAN的主要作用是( )",
+        "options": ["扩展传输距离", "隔离广播域", "提高传输速率", "数据加密"],
+        "correct_answer": ["隔离广播域"],
+        "analysis": ""
+      },
+      {
+        "type": "single-choice",
+        "content": "Traceroute命令基于( )协议",
+        "options": ["ARP", "ICMP", "DNS", "HTTP"],
+        "correct_answer": ["ICMP"],
+        "analysis": ""
+      },
+      {
+        "type": "single-choice",
+        "content": "IPv6的主要优势是( )",
+        "options": ["地址长度增加", "安全性增强", "报头更复杂", "兼容性差"],
+        "correct_answer": ["安全性增强"],
+        "analysis": ""
+      },
+      {
+        "type": "single-choice",
+        "content": "EIGRP路由协议属于( )",
+        "options": ["距离向量", "链路状态", "混合类型", "路径向量"],
+        "correct_answer": ["混合类型"],
+        "analysis": ""
+      },
+      {
+        "type": "single-choice",
+        "content": "1000BASE-SX中的\"SX\"表示( )",
+        "options": ["传输介质", "传输速率", "设备数量", "网络类型"],
+        "correct_answer": ["传输介质"],
+        "analysis": ""
+      },
+      {
+        "type": "single-choice",
+        "content": "TCP的确认号表示( )",
+        "options": ["已发送字节数", "期望接收字节数", "窗口大小", "数据长度"],
+        "correct_answer": ["期望接收字节数"],
+        "analysis": ""
+      },
+      {
+        "type": "single-choice",
+        "content": "POP3协议默认端口是( )",
+        "options": ["20", "25", "80", "110"],
+        "correct_answer": ["110"],
+        "analysis": ""
+      },
+      {
+        "type": "single-choice",
+        "content": "PKI的核心组件是( )",
+        "options": ["ISP", "CA", "DNS", "DHCP"],
+        "correct_answer": ["CA"],
+        "analysis": ""
+      },
+      {
+        "type": "single-choice",
+        "content": "入侵检测系统(IDS)主要用于( )",
+        "options": ["防火墙", "攻击检测", "数据加密", "地址转换"],
+        "correct_answer": ["攻击检测"],
+        "analysis": ""
+      },
+      {
+        "type": "single-choice",
+        "content": "数字证书的颁发机构是( )",
+        "options": ["ISP", "CA", "DNS", "DHCP"],
+        "correct_answer": ["CA"],
+        "analysis": ""
+      },
+      {
+        "type": "fill-in-blank",
+        "content": "奈奎斯特定理和香农定理的公式:奈奎斯特定理的公式是____;香农定理的公式是____。",
+        "blanks": ["空1", "空2"],
+        "correct_answer": ["C=2Blog₂M", "C=Blog₂(1+S/N)"],
+        "analysis": ""
+      },
+      {
+        "type": "fill-in-blank",
+        "content": "复用技术:光纤通信中常用的复用技术是____;物理层复用技术中，按频率划分信道的是____。",
+        "blanks": ["空1", "空2"],
+        "correct_answer": ["波分复用(WDM)", "频分复用(FDM)"],
+        "analysis": ""
+      },
+      {
+        "type": "fill-in-blank",
+        "content": "差分曼彻斯特编码特点:差分曼彻斯特编码的特点是____。",
+        "blanks": ["空1"],
+        "correct_answer": ["每位开始时有跳变表示0，无跳变表示1"],
+        "analysis": ""
+      },
+      {
+        "type": "fill-in-blank",
+        "content": "数据通信系统三要素:数据通信系统三要素是信源、____和信道。",
+        "blanks": ["空1"],
+        "correct_answer": ["信宿"],
+        "analysis": ""
+      },
+      {
+        "type": "fill-in-blank",
+        "content": "数据链路层的差错控制方法:包括检错和____。",
+        "blanks": ["空1"],
+        "correct_answer": ["纠错"],
+        "analysis": ""
+      },
+      {
+        "type": "fill-in-blank",
+        "content": "以太网MAC帧地址字段长度:源地址字段长度为____字节;目的地址字段长度为____字节。",
+        "blanks": ["空1", "空2"],
+        "correct_answer": ["6", "6"],
+        "analysis": ""
+      },
+      {
+        "type": "fill-in-blank",
+        "content": "数据链路层传输速率单位:数据链路层传输速率单位是____。",
+        "blanks": ["空1"],
+        "correct_answer": ["bps(比特每秒)"],
+        "analysis": ""
+      },
+      {
+        "type": "fill-in-blank",
+        "content": "VLAN跨交换机通信技术:VLAN通过____技术实现跨交换机通信。",
+        "blanks": ["空1"],
+        "correct_answer": ["802.1Q"],
+        "analysis": ""
+      },
+      {
+        "type": "fill-in-blank",
+        "content": "IP地址长度:IPv4地址长度是____位;IPv6地址长度是____位。",
+        "blanks": ["空1", "空2"],
+        "correct_answer": ["32", "128"],
+        "analysis": ""
+      },
+      {
+        "type": "fill-in-blank",
+        "content": "IPv4报头协议字段作用:IPv4报头中协议字段的作用是____。",
+        "blanks": ["空1"],
+        "correct_answer": ["标识上层协议类型"],
+        "analysis": ""
+      },
+      {
+        "type": "fill-in-blank",
+        "content": "IPv6报头流标签字段作用:IPv6报头中流标签字段的作用是____。",
+        "blanks": ["空1"],
+        "correct_answer": ["标识特定数据流以实现实时QoS"],
+        "analysis": ""
+      },
+      {
+        "type": "fill-in-blank",
+        "content": "ARP协议功能:ARP协议的主要功能是____。",
+        "blanks": ["空1"],
+        "correct_answer": ["将IP地址解析为MAC地址"],
+        "analysis": ""
+      },
+      {
+        "type": "fill-in-blank",
+        "content": "RARP协议功能:RARP协议用于解析MAC地址到____地址。",
+        "blanks": ["空1"],
+        "correct_answer": ["IP"],
+        "analysis": ""
+      },
+      {
+        "type": "fill-in-blank",
+        "content": "分组交换类型:分组交换的两大类型是数据报和____。",
+        "blanks": ["空1"],
+        "correct_answer": ["虚电路"],
+        "analysis": ""
+      },
+      {
+        "type": "fill-in-blank",
+        "content": "交换机和路由器工作的OSI层:交换机工作在OSI模型的____层;路由器工作在OSI模型的____层。",
+        "blanks": ["空1", "空2"],
+        "correct_answer": ["第二(数据链路)", "第三(网络)"],
+        "analysis": ""
+      },
+      {
+        "type": "fill-in-blank",
+        "content": "TCP连接建立和释放:TCP连接建立需要____次握手;连接释放过程称为____握手。",
+        "blanks": ["空1", "空2"],
+        "correct_answer": ["3", "4次"],
+        "analysis": ""
+      },
+      {
+        "type": "fill-in-blank",
+        "content": "TCP拥塞避免算法:TCP协议中用于拥塞避免的算法是____。",
+        "blanks": ["空1"],
+        "correct_answer": ["加法增大乘法减小(AIMD)"],
+        "analysis": ""
+      },
+      {
+        "type": "fill-in-blank",
+        "content": "TCP报头最小长度:TCP报头长度最小为____字节。",
+        "blanks": ["空1"],
+        "correct_answer": ["20"],
+        "analysis": ""
+      },
+      {
+        "type": "fill-in-blank",
+        "content": "网络时延:网络性能指标中，数据从发送到接收所需的时间称为____;信号在介质中传播的时间称为____。",
+        "blanks": ["空1", "空2"],
+        "correct_answer": ["端到端时延", "传播时延"],
+        "analysis": ""
+      },
+      {
+        "type": "fill-in-blank",
+        "content": "电子邮件协议:电子邮件发送协议是____;接收协议是____。",
+        "blanks": ["空1", "空2"],
+        "correct_answer": ["SMTP", "POP3/IMAP"],
+        "analysis": ""
+      },
+      {
+        "type": "fill-in-blank",
+        "content": "DNS顶级域名含义:DNS顶级域名:.org表示____;.net表示____。",
+        "blanks": ["空1", "空2"],
+        "correct_answer": ["非盈利组织", "网络服务机构"],
+        "analysis": ""
+      },
+      {
+        "type": "fill-in-blank",
+        "content": "HTTP状态码含义:HTTP状态码:404表示____;302表示____。",
+        "blanks": ["空1", "空2"],
+        "correct_answer": ["未找到", "临时重定向"],
+        "analysis": ""
+      },
+      {
+        "type": "fill-in-blank",
+        "content": "非对称加密密钥用途:非对称加密中:用于签名的密钥是____;用于解密的密钥是____。",
+        "blanks": ["空1", "空2"],
+        "correct_answer": ["私钥", "私钥"],
+        "analysis": ""
+      },
+      {
+        "type": "fill-in-blank",
+        "content": "安全通信技术:VPN通过____技术实现安全通信;SSL实现安全通信的核心技术是____;IPsec的两种工作模式是传输模式和____。",
+        "blanks": ["空1", "空2", "空3"],
+        "correct_answer": ["隧道", "加密", "隧道模式"],
+        "analysis": ""
+      },
+      {
+        "type": "fill-in-blank",
+        "content": "防火墙部署方式:防火墙的部署方式包括包过滤、____和代理服务。",
+        "blanks": ["空1"],
+        "correct_answer": ["状态检测"],
+        "analysis": ""
+      },
+      {
+        "type": "fill-in-blank",
+        "content": "电路交换数据基本单位:电路交换中数据的基本单位是____。",
+        "blanks": ["空1"],
+        "correct_answer": ["时隙"],
+        "analysis": ""
+      },
+      {
+        "type": "short-answer",
+        "content": "比较OSI七层模型与TCP/IP四层模型的异同，并分析电路交换、分组交换(数据报、虚电路)的优缺点及适用场景。",
+        "correct_answer": [
+          "- OSI与TCP/IP比较:\n  · 相同点: 分层架构、网络功能相似。\n  · 不同点: 层数不同(7vs4)、OSI偏理论/TCP/IP实践、TCP/IP合并上三层\n- 交换技术:\n  · 电路交换: 专用通路，时延小但资源利用率低，适用语音等实时互动\n  · 分组交换-数据报: 无连接，灵活但无序，适用突发数据\n  · 分组交换-虚电路: 面向连接，有序但需先建连接，适用长时通信"
+        ],
+        "analysis": ""
+      },
+      {
+        "type": "short-answer",
+        "content": "详细说明CSMA/CD和CSMA/CA协议的工作流程，并解释它们分别应用于何种网络环境。",
+        "correct_answer": [
+          "- CSMA/CD(以太网):\n1) 先侦听信道\n2) 空闲则发送\n3) 发送时持续侦听\n4) 检测冲突则停止\n5) 随机退避后重试\n应用于有线以太网\n- CSMA/CA(无线网络):\n1) 信道空闲检测\n2) 发送RTS请求\n3) 接收CTS确认\n4) 数据传输\n5) ACK确认\n应用于WiFi等无线网络"
+        ],
+        "analysis": ""
+      },
+      {
+        "type": "short-answer",
+        "content": "阐述IP地址的结构和分类(IPv4)，说明子网掩码的作用、子网划分的目的与方法(包括CIDR概念)，并解释IP地址与MAC地址的关系及ARP协议的作用。",
+        "correct_answer": [
+          "- IPv4结构：\n分类:A(1-126), B(128-191), C(192-223)\n组成: 网络号+主机号\n- 子网掩码:区分网络/主机部分\n- 子网划分:提高地址利用率，通过借用主机位\n- CIDR:无类域间路由，格式如192.168.1.0/24\n- IP与MAC:IP是逻辑地址(网络层)，MAC是物理地址(链路层)\n- ARP:实现IP到MAC的地址解析"
+        ],
+        "analysis": ""
+      },
+      {
+        "type": "short-answer",
+        "content": "详细描述TCP连接建立(三次握手)和连接终止(四次挥手)的过程，并深入解释这两个过程为何是必要的。",
+        "correct_answer": [
+          "- 三次握手:\n1) SYN=1, seq=x\n2) SYN=1, ACK=1, seq=y, ack=x+1\n3) ACK=1, seq=x+1, ack=y+1\n必要性:同步初始号，确认双方收发能力"
+        ],
+        "analysis": ""
+      },
+      {
+        "type": "short-answer",
+        "content": "解释TCP的流量控制机制(接收窗口)和拥塞控制机制(重点描述慢启动阶段)，阐述滑动窗口协议的工作原理及其在TCP中的作用，并全面比较TCP与UDP协议的特性、优缺点和典型应用场景。",
+        "correct_answer": [
+          "- 流量控制通过接收窗口大小调节发送速率\n- 拥塞控制:\n慢启动:窗口指数增长至阈值\n拥塞避免:线性增长\n快重传/快恢复\n- 滑动窗口:允许连续发送多个分组，提高效率\n- TCP vs UDP:\nTCP:可靠、有序、面向连接，适用文件传输\nUDP:无连接、高效、无保序，适用视频流"
+        ],
+        "analysis": ""
+      },
+      {
+        "type": "short-answer",
+        "content": "阐述公钥基础设施(PKI)的核心组成及其主要作用，说明数字证书的功能及其验证过程，并解释数字签名的生成和验证原理及其实现的目标(认证、完整性、不可否认性)。",
+        "correct_answer": [
+          "- PKI组成CA、RA、证书库、密钥管理系统\n- 数字证书绑定公钥与身份，包含CA签名\n验证过程称验证CA签名，查看有效期等\n- 数字签名：\n生成摘要+私钥加密\n验证: 公钥解密+摘要比对\n目标身份认证、数据完整、不可否认"
+        ],
+        "analysis": ""
+      },
+      {
+        "type": "short-answer",
+        "content": "描述数据链路层实现透明传输所采用的字节填充(字符填充)法，解释其解决的问题和具体操作步骤。",
+        "correct_answer": [
+          "- 问题: 帧定界符与数据冲突\n- 方法:\n发送端在特定字符前插入转义字符\n接收端删除转义字符\n- 示例: PPP协议使用0x7E作为帧定界符，数据中的0x7E转义为0x7D 0x5E"
+        ],
+        "analysis": ""
+      },
+      {
+        "type": "short-answer",
+        "content": "详细描述路由器接收到一个数据包后进行转发决策和处理的过程(包括路由表查询和封装解封装)。",
+        "correct_answer": [
+          "1) 查看目的IP\n2) 查询路由表:\n- 最长前缀匹配\n- 确定下一跳\n3) TTL减1，重算校验和\n4) ARP解析下一跳MAC\n5) 重新封装帧头\n6) 从相应接口转发"
+        ],
+        "analysis": ""
+      },
+      {
+        "type": "short-answer",
+        "content": "说明防火墙进行包过滤(Packet Filtering)的基本原理，列出其通常依据的规则字段。",
+        "correct_answer": [
+          "- 原理:根据预定义规则允许/拒绝数据包\n- 过滤字段：\n源/目的IP\n源/目的端口\n协议类型(TCP/UDP/ICMP)\n接口方向\nTCP标志位\n时间等"
+        ],
+        "analysis": ""
+      },
+      {
+        "type": "short-answer",
+        "content": "信道带宽4kHz，信噪比为30dB，求最大数据传输速率。",
+        "correct_answer": [
+          "由香农公式C=Blog2(1 + S/N)得：\nS/N = 10^(30/10) = 1000\nlog2(1001)≈9.97\n故 C = 4000 x log2(1+1000) \n≈ 39880bps, 约等于40kbps"
+        ],
+        "analysis": ""
+      },
+      {
+        "type": "short-answer",
+        "content": "网络地址段172.16.0.0/16，划分至少20个子网，每子网≥500主机。",
+        "correct_answer": [
+          "主机位 h 需满足 2^h - 2 ≥ 500, 最少为 9 \n子网位数 s 需满足 2^s  ≥ 20,  最少为 5，32个子网\n子网掩码为 /23 (32 - 9)，255.255.254.0\n172.16.0.0/23 → 172.16.0.1 - 172.16.1.254"
+        ],
+        "analysis": ""
+      },
+      {
+        "type": "short-answer",
+        "content": "TCP慢启动:初始阈值=16MSS，求第5轮次拥塞窗口大小。",
+        "correct_answer": [
+          "第5轮cwnd=16MSS\n慢启动：1→2→4→8→16;\nTCP慢启动按指数增长(每轮次翻倍)，直至达到阈值\n(ssthresh=16 MSS)"
+        ],
+        "analysis": ""
+      },
+      {
+        "type": "short-answer",
+        "content": "信道带宽8kHz，信噪比为25dB，求最大数据传输速率。",
+        "correct_answer": [
+          "香农公式 C=Blog2(1 + S/N)\n已知 B=8kHz=8000Hz\n信噪比 25dB转换为线性值：S/N=10^(25/10) =10^2.5 ≈ 316.22 \nlog2(317.22)≈8.31 (因2^8 = 256,2^9 =512),故:\nC ≈ 8000 x 8.31 = 66480bps = 66.48kbps"
+        ],
+        "analysis": ""
+      },
+      {
+        "type": "short-answer",
+        "content": "IP地址172.16.1.100/26，求网络地址和可用主机范围。",
+        "correct_answer": [
+          "/26 = 255.255.255.192\nIP 地址二进制\n10101100.00010000.00000001.01100100\n与子网掩码按位与得网络地址\n按位与运算：\n11111111.11111111.11111111.11000000\n→ 172.16.1.64\n可用主机范围：\n网络地址：172.16.1.64\n广播地址：即172.16.1.127（主机位，后6位，全为1，64+63）\n可用主机:172 .16.1.65至172.16.1 . 126，2^6 - 2 =62 个地址\n可用主机范围：172.16.1.65-172.16.1.126"
+        ],
+        "analysis": ""
+      },
+      {
+        "type": "short-answer",
+        "content": "TCP拥塞控制:初始阈值=8MSS，第2轮次后超时，求第4轮次窗口大小。",
+        "correct_answer": [
+          "第四轮结束时，拥塞窗口的大小为 3MSS\n---\n拥塞窗口 (cwnd) = 1 MSS\n初始阈值 (ssthresh) = 8 MSS\n---\nRTT1, cwnd 翻倍 = 2MSS\nRTT2, cwnd 翻倍 = 4MSS\nRTT2 超时, sshresh = cur cwnd / 2 = 2MSS, cwnd 重置为 1MSS\nRTT3, cwnd = 1MSS, ssthresh=2MSS, cwnd 翻倍 = 2MSS\nRTT4, cwnd = ssthresh, 拥塞避免, 每轮增加 1MSS, cwnd = 2+1 = 3MSS"
+        ],
+        "analysis": ""
+      }
+    ],
+    "sets": [
+        {
+            "id": "jw-x",
+            "name": "00-计网-复习题",
+            "category": "计算机网络",
+            "tags": ["计算机网络", "复习题"],
+            "createTime": "2025-05-09 15:50:00",
+            "updateTime": "2025-06-26 15:50:00",
+            "description": "[学习通](https://mooc1-api.chaoxing.com/mooc-ans/mooc2/work/dowork?courseId=249851816&classId=118164853&cpi=411759952&workId=44385949&answerId=0&standardEnc=787fff33aa13215fdc4fa7963106d4a9&enc=094405ca8beecacb54e9d1ed3d59d6d2)"
+        }
+    ]
+  }

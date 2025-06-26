@@ -10,7 +10,8 @@
                 "减少文档工作量"
             ],
             "correct_answer": ["在预算和时间内交付满足需求的软件"],
-            "analysis": "软件项目管理的核心目标是平衡时间、成本和质量，确保在约束条件下交付符合需求的软件。"
+            "analysis": "软件项目管理的核心目标是平衡时间、成本和质量，确保在约束条件下交付符合需求的软件。",
+            "uniqueId": "rjgc-2-001"
         },
         {
             "type": "single-choice",
@@ -22,7 +23,8 @@
                 "资源分配"
             ],
             "correct_answer": ["代码调试"],
-            "analysis": "代码调试属于开发阶段的技术活动，而项目管理的核心活动包括计划、风险管理、资源分配等。"
+            "analysis": "代码调试属于开发阶段的技术活动，而项目管理的核心活动包括计划、风险管理、资源分配等。",
+            "uniqueId": "rjgc-2-002"
         },
         {
             "type": "single-choice",
@@ -34,7 +36,8 @@
                 "动态多变量模型"
             ],
             "correct_answer": ["代码行技术"],
-            "analysis": "功能点分析（FPA）和代码行（LOC）是两种经典的软件规模估算方法。"
+            "analysis": "功能点分析（FPA）和代码行（LOC）是两种经典的软件规模估算方法。",
+            "uniqueId": "rjgc-2-003"
         },
         {
             "type": "single-choice",
@@ -46,7 +49,8 @@
                 "配置"
             ],
             "correct_answer": ["进度"],
-            "analysis": "甘特图（Gantt Chart）是可视化项目进度计划的工具，展示任务时间安排。"
+            "analysis": "甘特图（Gantt Chart）是可视化项目进度计划的工具，展示任务时间安排。",
+            "uniqueId": "rjgc-2-004"
         },
         {
             "type": "single-choice",
@@ -58,7 +62,8 @@
                 "甘特图"
             ],
             "correct_answer": ["甘特图"],
-            "analysis": "甘特图直观展示任务的时间跨度、起止时间及资源分配，适合快速了解项目进度。"
+            "analysis": "甘特图直观展示任务的时间跨度、起止时间及资源分配，适合快速了解项目进度。",
+            "uniqueId": "rjgc-2-005"
         },
         {
             "type": "single-choice",
@@ -70,7 +75,8 @@
                 "天气影响"
             ],
             "correct_answer": ["客户需求变化"],
-            "analysis": "需求变更是项目范围变更的最常见原因，需通过变更管理流程控制。"
+            "analysis": "需求变更是项目范围变更的最常见原因，需通过变更管理流程控制。",
+            "uniqueId": "rjgc-2-006"
         },
         {
             "type": "single-choice",
@@ -82,7 +88,8 @@
                 "项目持续时间"
             ],
             "correct_answer": ["用户需求的功能复杂度"],
-            "analysis": "功能点分析基于用户需求的功能模块复杂度（如输入、输出、数据存储等）估算规模。"
+            "analysis": "功能点分析基于用户需求的功能模块复杂度（如输入、输出、数据存储等）估算规模。",
+            "uniqueId": "rjgc-2-007"
         },
         {
             "type": "single-choice",
@@ -94,7 +101,8 @@
                 "已批准的阶段性成果"
             ],
             "correct_answer": ["已批准的阶段性成果"],
-            "analysis": "基线是经过正式评审并固定的阶段性成果（如需求文档、设计文档），作为后续开发的基准。"
+            "analysis": "基线是经过正式评审并固定的阶段性成果（如需求文档、设计文档），作为后续开发的基准。",
+            "uniqueId": "rjgc-2-008"
         },
         {
             "type": "single-choice",
@@ -106,7 +114,8 @@
                 "跟踪项目进度"
             ],
             "correct_answer": ["管理代码变更历史"],
-            "analysis": "版本控制工具（如Git）的核心功能是记录代码变更、支持协作和回溯。"
+            "analysis": "版本控制工具（如Git）的核心功能是记录代码变更、支持协作和回溯。",
+            "uniqueId": "rjgc-2-009"
         },
         {
             "type": "single-choice",
@@ -118,7 +127,8 @@
                 "可靠性"
             ],
             "correct_answer": ["代码行数"],
-            "analysis": "软件质量关注功能性、可靠性、可用性等，代码行数与质量无直接关联。"
+            "analysis": "软件质量关注功能性、可靠性、可用性等，代码行数与质量无直接关联。",
+            "uniqueId": "rjgc-2-010"
         },
         {
             "type": "single-choice",
@@ -128,7 +138,8 @@
                 "错"
             ],
             "correct_answer": ["对"],
-            "analysis": "项目管理需在时间、成本、质量三角约束中达成平衡。"
+            "analysis": "项目管理需在时间、成本、质量三角约束中达成平衡。",
+            "uniqueId": "rjgc-2-011"
         },
         {
             "type": "single-choice",
@@ -138,7 +149,8 @@
                 "错"
             ],
             "correct_answer": ["错"],
-            "analysis": "无论项目大小，管理活动（如计划、跟踪）均不可或缺，但可灵活简化流程。"
+            "analysis": "无论项目大小，管理活动（如计划、跟踪）均不可或缺，但可灵活简化流程。",
+            "uniqueId": "rjgc-2-012"
         },
         {
             "type": "single-choice",
@@ -148,7 +160,8 @@
                 "错"
             ],
             "correct_answer": ["错"],
-            "analysis": "质量需通过全过程控制（如需求评审、设计规范、代码审查、持续测试）提升，而非仅依赖后期测试。"
+            "analysis": "质量需通过全过程控制（如需求评审、设计规范、代码审查、持续测试）提升，而非仅依赖后期测试。",
+            "uniqueId": "rjgc-2-013"
         },
         {
             "type": "single-choice",
@@ -158,7 +171,8 @@
                 "错"
             ],
             "correct_answer": ["对"],
-            "analysis": "基线是配置项通过评审后的稳定版本，标志阶段性成果的固化。"
+            "analysis": "基线是配置项通过评审后的稳定版本，标志阶段性成果的固化。",
+            "uniqueId": "rjgc-2-014"
         },
         {
             "type": "single-choice",
@@ -168,7 +182,8 @@
                 "错"
             ],
             "correct_answer": ["错"],
-            "analysis": "软件质量包括功能性、可靠性、用户体验等多维度，代码正确性仅为一部分。"
+            "analysis": "软件质量包括功能性、可靠性、用户体验等多维度，代码正确性仅为一部分。",
+            "uniqueId": "rjgc-2-015"
         },
         {
             "type": "single-choice",
@@ -178,7 +193,8 @@
                 "错"
             ],
             "correct_answer": ["错"],
-            "analysis": "甘特图擅长展示时间轴任务，但任务依赖关系需通过网络图（如PERT图）更清晰表达。"
+            "analysis": "甘特图擅长展示时间轴任务，但任务依赖关系需通过网络图（如PERT图）更清晰表达。",
+            "uniqueId": "rjgc-2-016"
         },
         {
             "type": "single-choice",
@@ -188,7 +204,8 @@
                 "错"
             ],
             "correct_answer": ["对"],
-            "analysis": "同一配置项的不同版本可能有多个标识（如v1.0、v2.0），但每个版本标识唯一。"
+            "analysis": "同一配置项的不同版本可能有多个标识（如v1.0、v2.0），但每个版本标识唯一。",
+            "uniqueId": "rjgc-2-017"
         },
         {
             "type": "single-choice",
@@ -198,7 +215,8 @@
                 "错"
             ],
             "correct_answer": ["错"],
-            "analysis": "风险识别需贯穿项目全生命周期（启动、规划、执行、收尾），动态更新风险清单。"
+            "analysis": "风险识别是持续过程，需要在项目全生命周期中不断识别和评估新风险。",
+            "uniqueId": "rjgc-2-018"
         },
         {
             "type": "single-choice",
@@ -227,9 +245,9 @@
             "name": "02-软件项目管理",
             "category": "软件工程",
             "tags": ["项目管理", "软件工程"],
-            "createTime": "2025-06-25 20:17:00",
-            "updateTime": "2025-06-25 20:18:00",
-            "description": "软件项目管理相关题目，[学习通](https://mooc1.chaoxing.com/mooc-ans/mooc2/work/view?courseId=227327462&classId=115629904&cpi=411759952&workId=42796166&answerId=53583065&enc=6d757a2a617a1fc093aecad2384af220)"
+            "createTime": "2025-06-23 22:48:00",
+            "updateTime": "2025-06-25 08:48:00",
+            "description": "软件项目管理基础知识"
         }
     ]
 }

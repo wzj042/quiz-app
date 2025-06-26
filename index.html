@@ -108,6 +108,27 @@
 </head>
 <body>
 <div id="app" class="container">
+    <!-- 导航栏 -->
+    <nav class="nav" role="navigation">
+        <a href="#" 
+           class="nav-title-link" 
+           @click="goHome" 
+           @mouseover="hoverTitle = true" 
+           @mouseout="hoverTitle = false">
+            <span class="nav-title">Quiz App</span>
+        </a>
+        <a href="https://github.com/wzj042/quiz-app" 
+           class="github-link" 
+           target="_blank" 
+           rel="noopener noreferrer" 
+           aria-label="在 GitHub 上查看项目"
+           title="项目调试中，欢迎参与开发和反馈。可参考 demo.json 格式，Fork 项目后添加自己的题库。">
+            <svg class="github-icon" viewBox="0 0 16 16" width="24" height="24" aria-hidden="true">
+                <path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"></path>
+            </svg>
+        </a>
+    </nav>
+
     <!-- 未保存修改的模态窗口 -->
     <div v-if="showUnsavedModal" 
          class="modal-overlay" 
@@ -156,27 +177,6 @@
             </div>
         </div>
     </div>
-
-    <!-- 导航栏 -->
-    <nav class="nav" role="navigation">
-        <a href="#" 
-           class="nav-title-link" 
-           @click="goHome" 
-           @mouseover="hoverTitle = true" 
-           @mouseout="hoverTitle = false">
-            <span class="nav-title">Quiz App</span>
-        </a>
-        <a href="https://github.com/wzj042/quiz-app" 
-           class="github-link" 
-           target="_blank" 
-           rel="noopener noreferrer" 
-           aria-label="在 GitHub 上查看项目"
-           title="项目调试中，欢迎参与开发和反馈。可参考 demo.json 格式，Fork 项目后添加自己的题库。">
-            <svg class="github-icon" viewBox="0 0 16 16" width="24" height="24" aria-hidden="true">
-                <path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"></path>
-            </svg>
-        </a>
-    </nav>
 
     <!-- 列出题库 -->
     <div v-if="isLoading" class="card" role="status">
@@ -259,10 +259,7 @@
                                 </div>
                                 <div class="quiz-item-stats" v-if="bankStats[fileObj.file]">
                                     <div class="quiz-stat">
-                                        完成：{{ bankStats[fileObj.file].completed }}/{{ bankStats[fileObj.file].total }}
-                                    </div>
-                                    <div class="quiz-stat">
-                                        正确率：{{ bankStats[fileObj.file].accuracy }}%
+                                        共{{  bankStats[fileObj.file].totalQuestions }}题
                                     </div>
                                 </div>
                             </div>
@@ -298,7 +295,7 @@
             <p v-if="chosenSet.description" class="pre-wrap" v-html="renderMarkdown(chosenSet.description)"></p>
             
             <!-- 题库统计信息 -->
-            <div class="set-stats">
+            <!-- <div class="set-stats">
                 <div class="stats-grid">
                     <div class="stats-item" tabindex="0">
                         <div class="stats-value">{{ setStats.completedQuestions }}/{{ setStats.totalQuestions }}</div>
@@ -309,12 +306,12 @@
                         <div class="stats-label">平均正确率</div>
                     </div>
                     <div class="stats-item" tabindex="0">
-                        <div class="stats-value">{{ setStats.todayDistinctQuestions }}</div>
-                        <div class="stats-label">今日练习题数</div>
+                        <div class="stats-value">{{ setStats.todayAttempts }}</div>
+                        <div class="stats-label">今日练习次数</div>
                         <div class="stats-sublabel">正确: {{ setStats.todayCorrect }}</div>
                     </div>
                 </div>
-            </div>
+            </div> -->
 
             <!-- 练习模式选择 -->
             <div class="mode-selection" 
@@ -534,14 +531,16 @@
                     v-if="practiceManager?.currentIndex > 0"
                     class="btn"
                     @click="prevQuestion"
+                    title="快捷键：q"
                 >
-                    上一题
+                    <i class="fas fa-chevron-left"></i> 上一题
                 </button>
                 <button
                     type="button"
                     v-if="!showAnswer"
                     class="btn"
                     @click="submitAnswer"
+                    title="快捷键：空格"
                 >
                     提交答案
                 </button>
@@ -551,8 +550,18 @@
                     class="btn"
                     @click="nextQuestion"
                     :disabled="practiceManager?.currentIndex === quizList.length - 1 && isPreviewMode"
+                    title="快捷键：空格"
                 >
-                    下一题 
+                    下一题 <i class="fas fa-chevron-right"></i>
+                </button>
+                <button
+                    type="button"
+                    v-if="practiceManager?.currentIndex < quizList.length - 1"
+                    class="btn"
+                    @click="nextQuestion"
+                    title="快捷键：e"
+                >
+                    跳过 <i class="fas fa-forward"></i>
                 </button>
             </div>
 
@@ -700,11 +709,11 @@
                         <div class="bank-name">{{ bank.name }}</div>
                         <div class="bank-count">
                             {{ bank.questionCount }}/{{ bank.availableQuestions }}题
-                            ({{ Math.round((bank.questionCount / bank.availableQuestions) * 100) }}%)
+                            ({{ calculateBankPercentage(bank) }}%)
                         </div>
                         <div class="bank-progress">
                             <div class="progress-bar" 
-                                 class="progress-bar" :style="{ width: Math.round((bank.questionCount / bank.availableQuestions) * 100) + '%' }"></div>
+                                 :style="{ width: calculateBankPercentage(bank) + '%' }"></div>
                         </div>
                     </div>
                 </div>
@@ -749,7 +758,7 @@
                 editingField: null,
                 editingContent: '',
                 showExportButton: false,
-                chosenAnswer: '',
+                chosenAnswer: null,
                 chosenAnswers: [],
                 shortAnswerText: '',
                 fillInAnswers: [],
@@ -766,6 +775,7 @@
                 allTags: [],
                 bankStats: {},
                 _altHPressed: false,
+                hoverTitle: false,  // 添加 hoverTitle 数据属性
                 // 跨卷练习相关
                 _showCrossPracticeModal: false,
                 selectedQuestionTypes: ['single-choice', 'multiple-choice', 'fill-in-blank', 'short-answer'],
@@ -980,7 +990,6 @@
             filteredBankDistribution() {
                 // 获取符合当前标签和题型筛选的题库及题目数
                 const distribution = [];
-                let totalQuestions = 0;
 
                 // 遍历所有题库
                 this.fileList.forEach(bank => {
@@ -997,28 +1006,27 @@
                     );
 
                     if (filteredQuestions.length > 0) {
-                        totalQuestions += filteredQuestions.length;
                         distribution.push({
                             file: bank.file,
                             name: bank.name,
-                            questionCount: filteredQuestions.length,
+                            questionCount: 0, // 初始化为0，实际分配由updateBankDistribution处理
+                            availableQuestions: filteredQuestions.length,
                             questions: filteredQuestions
                         });
                     }
                 });
 
-                // 计算百分比
-                return distribution.map(bank => ({
-                    ...bank,
-                    percentage: Math.round((bank.questionCount / totalQuestions) * 100)
-                }));
+                return distribution;
             },
+
             maxQuestionCount() {
+                // 计算所有可用题目的总数
                 return this.filteredBankDistribution.reduce(
-                    (sum, bank) => sum + bank.questionCount, 
+                    (sum, bank) => sum + bank.availableQuestions, 
                     0
                 );
             },
+
             canStartCrossPractice() {
                 return this.selectedQuestionTypes.length > 0 && 
                        this.crossPracticeCount > 0 && 
@@ -1034,13 +1042,15 @@
                     if (value) {
                         // 打开模态框时初始化
                         this.$nextTick(() => {
+                            // 先更新题库分布
                             this.updateBankDistribution();
                             // 如果当前选择的题目数大于最大可选数，自动调整
-                            const totalAvailable = this.filteredBankDistribution.reduce((sum, bank) => sum + bank.availableQuestions, 0);
-                            if (this.crossPracticeCount > totalAvailable) {
-                                console.log(`[showCrossPracticeModal] Adjusting initial count from ${this.crossPracticeCount} to ${totalAvailable}`);
-                                this.crossPracticeCount = totalAvailable;
+                            if (this.crossPracticeCount > this.maxQuestionCount) {
+                                console.log(`[showCrossPracticeModal] Adjusting initial count from ${this.crossPracticeCount} to ${this.maxQuestionCount}`);
+                                this.crossPracticeCount = this.maxQuestionCount;
                             }
+                            // 再次更新分布以确保百分比正确
+                            this.updateBankDistribution();
                         });
                     }
                 }
@@ -1167,7 +1177,11 @@
                         questionCount: data.questions?.length
                     });
                     
-                    this.chosenSet = data.sets[0];
+                    // Set chosenSet with proper id
+                    this.chosenSet = {
+                        ...data.sets[0],
+                        id: fileName.replace('.json', '') // Ensure id matches the file name without extension
+                    };
                     
                     // 更新统计数据
                     console.log('[loadJsonFile] Updating bank stats');
@@ -1476,34 +1490,17 @@
             },
 
             goBack() {
-                console.log('[goBack] Called, pageState:', this.pageState, 'isEditing:', this.isEditing);
-                if (this.isEditing) {
-                    if (this.questionManager.checkUnsavedChanges()) {
-                        this.showUnsavedDialog('setDescription');
-                        return;
-                    } else {
-                        this.exitEntireEditMode();
+                if (this.pageState === 'quiz') {
+                    // 如果有完成的题目，显示确认对话框
+                    if (this.currentSessionCompleted.size > 0) {
+                        if (!confirm('确定要退出练习吗？当前进度将不会保存。')) {
+                            return;
+                        }
                     }
                 }
                 
-                // 获取当前题库文件名
-                const currentFile = this.fileList.find(f => f.name === this.chosenSet?.name)?.file;
-                console.log('[goBack] Current bank file:', currentFile);
-                
-                // 返回题库描述页面时保持bank参数
-                console.log('[goBack] updatePageState to setDescription');
-                this.updatePageState('setDescription', { bank: currentFile });
-            },
-
-            goHome() {
-                console.log('[goHome] Called, pageState:', this.pageState);
-                if (this.isEditing) {
-                    this.exitEntireEditMode();
-                }
-                // 清除所有状态和URL参数
-                this.chosenSet = null;
-                this.questionManager.clearEditHistory();
-                this.showExportButton = false;
+                // 重置状态
+                this.resetAllState();
                 this.updatePageState('home');
             },
 
@@ -1616,7 +1613,10 @@
                     chosenAnswerType: typeof this.chosenAnswer,
                     isChosen: String(this.chosenAnswer) === String(opt)
                 });
-                return String(this.chosenAnswer) === String(opt);
+                return this.chosenAnswer !== null && 
+                       this.chosenAnswer !== undefined && 
+                       this.chosenAnswer !== '' && 
+                       String(this.chosenAnswer) === String(opt);
             },
 
             isCorrectOptionMulti(opt) {
@@ -1643,9 +1643,57 @@
                 return isCorrect;
             },
 
-            submitAnswer() {
+            // 检查是否已选择或输入答案
+            hasAnswer() {
+                const q = this.currentQuestion;
+                if (!q) return false;
+
+                switch (q.type) {
+                    case 'single-choice':
+                        return this.chosenAnswer !== null && 
+                               this.chosenAnswer !== undefined && 
+                               this.chosenAnswer !== '';
+                    case 'multiple-choice':
+                        return Array.isArray(this.chosenAnswers) && 
+                               this.chosenAnswers.length > 0;
+                    case 'fill-in-blank':
+                        return Array.isArray(this.fillInAnswers) && 
+                               this.fillInAnswers.some(ans => ans && ans.trim() !== '');
+                    case 'short-answer':
+                        return this.shortAnswerText && this.shortAnswerText.trim() !== '';
+                    default:
+                        return false;
+                }
+            },
+
+            async submitAnswer() {
                 const q = this.currentQuestion;
                 if (!q) return;
+
+                // 检查是否已选择或输入答案
+                if (!this.hasAnswer()) {
+                    // 根据题目类型显示不同的提示
+                    let message;
+                    switch (q.type) {
+                        case 'single-choice':
+                            message = '请选择一个选项';
+                            break;
+                        case 'multiple-choice':
+                            message = '请至少选择一个选项';
+                            break;
+                        case 'fill-in-blank':
+                            message = '请填写答案';
+                            break;
+                        case 'short-answer':
+                            message = '请输入答案';
+                            break;
+                        default:
+                            message = '请输入答案';
+                    }
+                    // 显示提示信息
+                    this.showBanner(message, 'warning');
+                    return;
+                }
 
                 let answer;
                 let isCorrect = false;
@@ -1665,7 +1713,6 @@
                         break;
                     case 'short-answer':
                         answer = this.shortAnswerText;
-                        // 简答题特殊处理
                         isCorrect = q.correct_answer.some(ans => 
                             answer.toLowerCase().includes(ans.toLowerCase())
                         );
@@ -1673,18 +1720,78 @@
                 }
 
                 // 记录完成状态
-                this.currentSessionCompleted.add(q.uniqueId);
+                const questionIndex = this.practiceManager.currentIndex + 1;
+                this.currentSessionCompleted.add(questionIndex);
                 
-                // 更新题目完成状态
-                const setId = this.chosenSet.isCrossPractice ? q.sourceBank : this.chosenSet.id;
-                this.storageManager.updateQuestionCompletion(setId, q.uniqueId, isCorrect);
+                // 只有在未显示答案时才更新题目完成状态
+                if (!this.showAnswer) {
+                    if (this.chosenSet.isCrossPractice) {
+                        // 对于跨题练习，找到原题库并更新记录
+                        const originalBank = this.findOriginalBank(q);
+                        if (originalBank) {
+                            console.log('[submitAnswer] Updating cross practice record:', {
+                                bank: originalBank.file,
+                                questionIndex,
+                                isCorrect
+                            });
+                            this.storageManager.updateQuestionCompletion(originalBank.file, questionIndex, isCorrect);
+                        }
+                    } else {
+                        // 确保有题库ID和题目序号
+                        const currentQuestion = this.practiceManager.getCurrentQuestion();
+                        if (this.chosenSet?.id && currentQuestion) {
+                            console.log('[submitAnswer] Updating completion:', {
+                                setId: this.chosenSet.id,
+                                questionIndex,
+                                isCorrect
+                            });
+                            this.storageManager.updateQuestionCompletion(
+                                this.chosenSet.id,
+                                questionIndex,
+                                isCorrect
+                            );
+                        } else {
+                            console.error('[submitAnswer] Missing setId or currentQuestion:', {
+                                setId: this.chosenSet?.id,
+                                currentQuestion
+                            });
+                        }
+                    }
+                }
+                
                 this.showAnswer = true;
 
                 // 更新URL以反映答案已提交
                 this.updateUrlParams('quiz', {
                     mode: this.getCurrentMode(),
-                    qid: this.currentQuestion.uniqueId
+                    qid: this.getCurrentQuestionId()
                 });
+            },
+
+            // 查找题目所属的原始题库
+            findOriginalBank(question) {
+                for (const bank of this.fileList) {
+                    try {
+                        const questions = this.jsonLoader.getQuestionsFromBank(bank.file);
+                        if (questions.some(q => 
+                            q.content === question.content && 
+                            q.type === question.type &&
+                            this.compareArrays(q.correct_answer, question.correct_answer)
+                        )) {
+                            return bank;
+                        }
+                    } catch (error) {
+                        console.error(`Error checking bank ${bank.file}:`, error);
+                    }
+                }
+                return null;
+            },
+
+            // 比较两个数组是否相等
+            compareArrays(arr1, arr2) {
+                if (!Array.isArray(arr1) || !Array.isArray(arr2)) return false;
+                if (arr1.length !== arr2.length) return false;
+                return arr1.every((item, index) => item === arr2[index]);
             },
 
             nextQuestion() {
@@ -1705,6 +1812,11 @@
                     } else {
                         this.practiceManager.currentIndex++;
                         this.showAnswer = false;
+                        // 重置答案状态
+                        this.chosenAnswer = null;
+                        this.chosenAnswers = [];
+                        this.fillInAnswers = [];
+                        this.shortAnswerText = '';
                     }
                     
                     // 立即更新URL参数
@@ -1739,6 +1851,11 @@
                     } else {
                         this.practiceManager.currentIndex--;
                         this.showAnswer = false;
+                        // 重置答案状态
+                        this.chosenAnswer = null;
+                        this.chosenAnswers = [];
+                        this.fillInAnswers = [];
+                        this.shortAnswerText = '';
                     }
                     
                     // 立即更新URL参数
@@ -1996,79 +2113,7 @@
                     newActiveElement: document.activeElement
                 });
             },
-            handleKeyNavigation(event) {
-                // 如果不是在题库详情页，不处理
-                if (this.pageState !== 'setDescription') {
-                    return;
-                }
 
-                // 获取所有模式按钮
-                const buttons = Array.from(document.querySelectorAll('.mode-btn'));
-                if (!buttons.length) return;
-
-                // 获取当前焦点按钮的索引
-                const currentIndex = buttons.findIndex(btn => btn === document.activeElement);
-                let nextIndex = currentIndex;
-
-                // 定义网格布局
-                const COLS = window.innerWidth <= 600 ? 1 : 2;
-                const ROWS = Math.ceil(buttons.length / COLS);
-
-                // 计算当前位置
-                const currentRow = Math.floor(currentIndex / COLS);
-                const currentCol = currentIndex % COLS;
-
-                switch (event.key) {
-                    case 'ArrowRight':
-                        nextIndex = currentIndex + 1;
-                        if (nextIndex >= buttons.length) {
-                            nextIndex = 0; // 循环到第一个
-                        }
-                        break;
-                    case 'ArrowLeft':
-                        nextIndex = currentIndex - 1;
-                        if (nextIndex < 0) {
-                            nextIndex = buttons.length - 1; // 循环到最后一个
-                        }
-                        break;
-                    case 'ArrowDown':
-                        // 向下移动，如果到底则循环到顶部同列
-                        nextIndex = currentIndex + COLS;
-                        if (nextIndex >= buttons.length) {
-                            // 如果超出范围，回到顶部同列
-                            nextIndex = currentCol;
-                        }
-                        break;
-                    case 'ArrowUp':
-                        // 向上移动，如果到顶则循环到底部同列
-                        nextIndex = currentIndex - COLS;
-                        if (nextIndex < 0) {
-                            // 如果超出范围，去到底部同列
-                            nextIndex = currentCol + (ROWS - 1) * COLS;
-                            // 确保不超出实际按钮数量
-                            if (nextIndex >= buttons.length) {
-                                nextIndex = buttons.length - 1;
-                            }
-                        }
-                        break;
-                    case 'Tab':
-                        // Tab 键循环
-                        nextIndex = event.shiftKey ? 
-                            (currentIndex - 1 + buttons.length) % buttons.length :
-                            (currentIndex + 1) % buttons.length;
-                        break;
-                    default:
-                        return; // 其他键不处理
-                }
-
-                // 阻止默认行为
-                event.preventDefault();
-
-                // 设置焦点
-                if (nextIndex >= 0 && nextIndex < buttons.length) {
-                    buttons[nextIndex].focus();
-                }
-            },
             getFocusableElements() {
                 // 获取当前页面中所有可聚焦的元素
                 if (this.pageState === 'setDescription') {
@@ -2144,7 +2189,11 @@
                         questionCount: data.questions?.length
                     });
                     
-                    this.chosenSet = data.sets[0];
+                    // Set chosenSet with proper id
+                    this.chosenSet = {
+                        ...data.sets[0],
+                        id: bankParam.replace('.json', '') // Ensure id matches the file name without extension
+                    };
                     
                     // 更新统计数据
                     console.log('[handleUrlParams] Updating bank stats');
@@ -2277,7 +2326,11 @@
                     if (bankParam !== currentFile) {
                         console.log('[handlePopState] Loading new bank data');
                         const data = await this.jsonLoader.loadFile(bankParam);
-                        this.chosenSet = data.sets[0];
+                        // Set chosenSet with proper id
+                        this.chosenSet = {
+                            ...data.sets[0],
+                            id: bankParam.replace('.json', '') // Ensure id matches the file name without extension
+                        };
                         // 更新统计数据
                         await this.loadBankStats(bankParam);
                     }
@@ -2327,29 +2380,42 @@
 
             // 更新URL参数
             updateUrlParams(state, params = {}) {
-                console.log('[updateUrlParams] Updating URL parameters:', params);
+                console.log('[updateUrlParams] Updating URL parameters:', {
+                    state,
+                    params,
+                    isCrossPractice: this.chosenSet?.isCrossPractice
+                });
+
                 const url = new URL(window.location.href);
                 const newParams = new URLSearchParams();
                 
                 // 设置页面状态
                 newParams.set('state', state);
                 
-                // 根据不同状态设置参数
                 if (state === 'quiz') {
-                    // 设置练习模式
-                    const mode = params.mode || this.getCurrentMode();
-                    newParams.set('mode', mode);
-                    
-                    // 设置题目ID
-                    if (params.qid) {
-                        console.log('[updateUrlParams] Setting qid:', params.qid);
-                        newParams.set('qid', params.qid);
-                    }
-                    
-                    // 保持 bank 参数
-                    if (params.bank) {
-                        console.log('[updateUrlParams] Setting bank:', params.bank);
-                        newParams.set('bank', params.bank);
+                    if (this.chosenSet?.isCrossPractice) {
+                        // 跨题练习模式
+                        newParams.set('mode', 'cross');
+                        newParams.set('practiceMode', this.crossPracticeMode);
+                        newParams.set('count', this.crossPracticeCount);
+                        
+                        // 如果有当前题目，添加原题库信息
+                        const currentQuestion = this.practiceManager?.getCurrentQuestion();
+                        if (currentQuestion) {
+                            const originalBank = this.findOriginalBank(currentQuestion);
+                            if (originalBank) {
+                                newParams.set('sourceBank', originalBank.file);
+                            }
+                        }
+                    } else {
+                        // 普通练习模式
+                        newParams.set('mode', params.mode || this.getCurrentMode());
+                        if (params.qid) {
+                            newParams.set('qid', params.qid);
+                        }
+                        if (params.bank) {
+                            newParams.set('bank', params.bank);
+                        }
                     }
                 } else if (state === 'setDescription' && params.bank) {
                     newParams.set('bank', params.bank);
@@ -2361,7 +2427,8 @@
                     state,
                     params: Object.fromEntries(newParams.entries())
                 }, '', url);
-                console.log('[updateUrlParams] URL updated with params:', Object.fromEntries(newParams.entries()));
+                
+                console.log('[updateUrlParams] URL updated:', url.toString());
             },
 
             // 重置所有状态
@@ -2407,8 +2474,7 @@
                             }
                             break;
                         case 'setDescription':
-                            console.log('[handleGlobalBackShortcut] Calling goHome() from setDescription');
-                            this.goHome();
+                                            this.updatePageState('home');
                             break;
                         case 'home':
                             // 在首页不做任何操作
@@ -2420,35 +2486,17 @@
 
             // 返回上一页
             goBack() {
-                console.log('[goBack] Called, pageState:', this.pageState, 'isEditing:', this.isEditing);
-                if (this.isEditing) {
-                    if (this.questionManager.checkUnsavedChanges()) {
-                        this.showUnsavedDialog('setDescription');
-                        return;
-                    } else {
-                        this.exitEntireEditMode();
+                if (this.pageState === 'quiz') {
+                    // 如果有完成的题目，显示确认对话框
+                    if (this.currentSessionCompleted.size > 0) {
+                        if (!confirm('确定要退出练习吗？当前进度将不会保存。')) {
+                            return;
+                        }
                     }
                 }
                 
-                // 获取当前题库文件名
-                const currentFile = this.fileList.find(f => f.name === this.chosenSet?.name)?.file;
-                console.log('[goBack] Current bank file:', currentFile);
-                
-                // 返回题库描述页面时保持bank参数
-                console.log('[goBack] updatePageState to setDescription');
-                this.updatePageState('setDescription', { bank: currentFile });
-            },
-
-            // 返回首页
-            goHome() {
-                console.log('[goHome] Called, pageState:', this.pageState);
-                if (this.isEditing) {
-                    this.exitEntireEditMode();
-                }
-                // 清除所有状态和URL参数
-                this.chosenSet = null;
-                this.questionManager.clearEditHistory();
-                this.showExportButton = false;
+                // 重置状态
+                this.resetAllState();
                 this.updatePageState('home');
             },
 
@@ -2554,25 +2602,42 @@
                 console.log('[handleQuestionInput] Input event:', {
                     type: event.type,
                     rawValue: rawValue,
-                    currentCount: this.crossPracticeCount
+                    maxQuestionCount: this.maxQuestionCount
                 });
 
                 let value = parseInt(rawValue);
                 
-                // 允许输入框暂时为空或大于最大值
-                if (rawValue === '' || !isNaN(value)) {
-                    this.crossPracticeCount = rawValue;
+                // 允许输入框暂时为空
+                if (rawValue === '') {
+                    this.crossPracticeCount = '';
+                    return;
+                }
+
+                // 确保输入的是数字
+                if (!isNaN(value)) {
+                    // 不在这里限制最大值，让用户可以输入任何数字
+                    this.crossPracticeCount = value;
+                    // 更新分布但不限制输入值
+                    this.updateBankDistribution();
                 }
             },
 
             // 在失去焦点时验证和更新值
             handleQuestionBlur() {
-                console.log('[handleQuestionBlur] Validating value:', this.crossPracticeCount);
+                console.log('[handleQuestionBlur] Validating value:', {
+                    currentCount: this.crossPracticeCount,
+                    maxCount: this.maxQuestionCount
+                });
                 
                 let value = parseInt(this.crossPracticeCount);
+                
+                // 处理无效输入
                 if (isNaN(value) || value < 1) {
                     value = 1;
-                } else if (value > this.maxQuestionCount) {
+                }
+                
+                // 在失去焦点时才限制最大值
+                if (value > this.maxQuestionCount) {
                     value = this.maxQuestionCount;
                 }
                 
@@ -2582,73 +2647,59 @@
 
             // 更新题库分布
             updateBankDistribution() {
-                console.log('[updateBankDistribution] Updating with count:', this.crossPracticeCount);
+                console.log('[updateBankDistribution] Updating with count:', {
+                    requestedCount: this.crossPracticeCount,
+                    maxAvailable: this.maxQuestionCount
+                });
                 
-                const totalRequestedQuestions = this.crossPracticeCount;
+                // 确保 crossPracticeCount 是有效的数字
+                let totalRequestedQuestions = Math.max(1, parseInt(this.crossPracticeCount) || 0);
+                
+                // 不在这里限制最大值，让分配逻辑处理超出的情况
                 let remainingQuestions = totalRequestedQuestions;
                 
-                // 首先计算每个题库实际可用的题目数量
-                this.filteredBankDistribution.forEach(bank => {
-                    const bankQuestions = this.jsonLoader.getQuestionsFromBank(bank.file)
-                        .filter(q => this.selectedQuestionTypes.includes(q.type));
-                    bank.availableQuestions = bankQuestions.length;
-                    console.log(`[updateBankDistribution] Bank ${bank.name} has ${bank.availableQuestions} available questions`);
-                });
-
-                // 根据策略计算每个题库的题目数
-                if (this.crossPracticeStrategy === 'error-rate') {
-                    // 根据错误率和可用题目数分配
-                    let totalWeight = 0;
-                    this.filteredBankDistribution.forEach(bank => {
-                        const errorRate = 1 - (bank.stats.accuracy || 0) / 100;
-                        bank.weight = errorRate * bank.availableQuestions;
-                        totalWeight += bank.weight;
-                    });
-
-                    this.filteredBankDistribution.forEach(bank => {
-                        const proportion = bank.weight / totalWeight;
-                        bank.questionCount = Math.min(
-                            Math.round(totalRequestedQuestions * proportion),
-                            bank.availableQuestions
-                        );
-                        remainingQuestions -= bank.questionCount;
-                    });
-                } else {
-                    // 平均分配题目，但考虑每个题库的可用题目数
-                    const banksWithQuestions = this.filteredBankDistribution.filter(bank => bank.availableQuestions > 0);
-                    let avgQuestions = Math.floor(remainingQuestions / banksWithQuestions.length);
-
-                    this.filteredBankDistribution.forEach(bank => {
-                        if (bank.availableQuestions > 0) {
-                            bank.questionCount = Math.min(avgQuestions, bank.availableQuestions);
-                            remainingQuestions -= bank.questionCount;
-                        } else {
-                            bank.questionCount = 0;
-                        }
-                    });
+                // 获取有可用题目的题库
+                const availableBanks = this.filteredBankDistribution.filter(bank => bank.availableQuestions > 0);
+                if (availableBanks.length === 0) {
+                    console.log('[updateBankDistribution] No available banks found');
+                    return;
                 }
 
-                // 处理剩余的题目（分配给还有可用题目的题库）
-                if (remainingQuestions > 0) {
-                    for (let bank of this.filteredBankDistribution) {
-                        const canAddMore = bank.availableQuestions - bank.questionCount;
-                        if (canAddMore > 0) {
-                            const toAdd = Math.min(remainingQuestions, canAddMore);
-                            bank.questionCount += toAdd;
-                            remainingQuestions -= toAdd;
+                // 计算总可用题目数
+                const totalAvailable = availableBanks.reduce((sum, bank) => sum + bank.availableQuestions, 0);
+                
+                // 按比例分配题目
+                availableBanks.forEach(bank => {
+                    const proportion = bank.availableQuestions / totalAvailable;
+                    bank.questionCount = Math.min(
+                        Math.floor(remainingQuestions * proportion),
+                        bank.availableQuestions
+                    );
+                    remainingQuestions -= bank.questionCount;
+                });
+
+                // 分配剩余的题目
+                while (remainingQuestions > 0) {
+                    let distributed = false;
+                    for (const bank of availableBanks) {
+                        if (bank.questionCount < bank.availableQuestions) {
+                            bank.questionCount++;
+                            remainingQuestions--;
+                            distributed = true;
                             if (remainingQuestions === 0) break;
                         }
                     }
+                    if (!distributed) break;
                 }
 
-                // 如果总的可用题目数小于请求的题目数，更新 crossPracticeCount
-                const totalAvailable = this.filteredBankDistribution.reduce((sum, bank) => sum + bank.questionCount, 0);
-                if (totalAvailable < totalRequestedQuestions) {
-                    console.log(`[updateBankDistribution] Adjusting requested count from ${totalRequestedQuestions} to ${totalAvailable} due to availability`);
-                    this.crossPracticeCount = totalAvailable;
-                }
-
-                console.log('[updateBankDistribution] Updated distribution:', this.filteredBankDistribution);
+                console.log('[updateBankDistribution] Final distribution:', 
+                    this.filteredBankDistribution.map(bank => ({
+                        name: bank.name,
+                        available: bank.availableQuestions,
+                        assigned: bank.questionCount,
+                        percentage: this.calculateBankPercentage(bank)
+                    }))
+                );
             },
             backToHome() {
                 if (this.showAnswer || confirm('确定要退出练习吗？当前进度将不会保存。')) {
@@ -2662,57 +2713,49 @@
                     const url = new URL(window.location.href);
                     const params = new URLSearchParams(url.search);
                     
-                    // 获取当前题目在原题库中的序号（从1开始）
+                    // 获取当前题目
                     const currentQuestion = this.practiceManager.getCurrentQuestion();
-                    let questionSequenceNumber = 1;
-                    
-                    // 在原题库中查找当前题目的序号，通过内容匹配
-                    if (currentQuestion) {
-                        const originalQuestions = this.jsonLoader.questions;
-                        // 使用题目内容和类型来匹配，确保找到正确的题目
-                        questionSequenceNumber = originalQuestions.findIndex(q => 
-                            q.content === currentQuestion.content && 
-                            q.type === currentQuestion.type
-                        ) + 1;
+                    if (!currentQuestion) return;
 
-                        // 如果没找到匹配的题目（这种情况不应该发生），使用默认值
-                        if (questionSequenceNumber <= 0) {
-                            console.error('Failed to find matching question in original bank:', currentQuestion);
-                            questionSequenceNumber = 1;
+                    let bankFile, questionSequenceNumber;
+                    
+                    if (this.chosenSet.isCrossPractice) {
+                        // 对于跨题练习，找到原题库
+                        const originalBank = this.findOriginalBank(currentQuestion);
+                        if (originalBank) {
+                            bankFile = originalBank.file;
+                            // 在原题库中查找题目序号
+                            const originalQuestions = this.jsonLoader.getQuestionsFromBank(bankFile);
+                            questionSequenceNumber = originalQuestions.findIndex(q => 
+                                q.uniqueId === currentQuestion.uniqueId
+                            ) + 1;
                         }
+                    } else {
+                        // 普通练习模式
+                        bankFile = this.fileList.find(f => f.name === this.chosenSet?.name)?.file;
+                        questionSequenceNumber = this.practiceManager.currentIndex + 1;
                     }
-                    
-                    // 确保当前状态已经同步到URL，但使用原题库中的序号
-                    const currentFile = this.fileList.find(f => f.name === this.chosenSet?.name)?.file;
-                    this.updateUrlParams('quiz', {
-                        mode: 'all', // 总是使用全部练习模式的链接
-                        qid: questionSequenceNumber,
-                        bank: currentFile
-                    });
-                    
-                    // 获取更新后的URL
-                    const finalUrl = window.location.href;
-                    await navigator.clipboard.writeText(finalUrl);
-                    
-                    // 显示成功提示
-                    const toast = document.createElement('div');
-                    toast.textContent = '链接已复制到剪贴板';
-                    toast.style.cssText = `
-                        position: fixed;
-                        bottom: 20px;
-                        left: 50%;
-                        transform: translateX(-50%);
-                        background: rgba(0, 0, 0, 0.8);
-                        color: white;
-                        padding: 8px 16px;
-                        border-radius: 4px;
-                        z-index: 1000;
-                    `;
-                    document.body.appendChild(toast);
-                    setTimeout(() => toast.remove(), 2000);
+
+                    if (bankFile && questionSequenceNumber > 0) {
+                        // 更新URL参数
+                        this.updateUrlParams('quiz', {
+                            mode: 'all', // 使用普通练习模式的链接
+                            qid: questionSequenceNumber,
+                            bank: bankFile
+                        });
+                        
+                        // 获取更新后的URL
+                        const finalUrl = window.location.href;
+                        await navigator.clipboard.writeText(finalUrl);
+                        
+                        // 显示成功提示
+                        this.showToast('链接已复制到剪贴板');
+                    } else {
+                        throw new Error('无法找到原题目位置');
+                    }
                 } catch (error) {
                     console.error('Failed to copy link:', error);
-                    alert('复制链接失败');
+                    this.showToast('复制链接失败', 'error');
                 }
             },
             saveCurrentEdit() {
@@ -2732,11 +2775,24 @@
             },
             // 获取当前题目ID
             getCurrentQuestionId() {
-                if (this.practiceManager && this.practiceManager.questions) {
-                    // 直接返回当前题目的序号（从1开始）
-                    return this.practiceManager.currentIndex + 1;
+                if (!this.practiceManager || !this.practiceManager.questions) return null;
+
+                const currentQuestion = this.practiceManager.getCurrentQuestion();
+                if (!currentQuestion) return null;
+
+                if (this.chosenSet.isCrossPractice) {
+                    // 对于跨题练习，返回原题库中的序号
+                    const originalBank = this.findOriginalBank(currentQuestion);
+                    if (originalBank) {
+                        const originalQuestions = this.jsonLoader.getQuestionsFromBank(originalBank.file);
+                        const index = originalQuestions.findIndex(q => q.uniqueId === currentQuestion.uniqueId);
+                        return index >= 0 ? index + 1 : null;
+                    }
+                    return null;
                 }
-                return null;
+
+                // 普通练习模式
+                return this.practiceManager.currentIndex + 1;
             },
             // 初始化键盘事件监听
             initKeyboardEvents() {
@@ -2765,6 +2821,45 @@
 
                 // 添加全局Alt+H返回快捷键
                 window.addEventListener('keydown', this.handleGlobalBackShortcut);
+            },
+            calculateBankPercentage(bank) {
+                if (!bank || typeof bank.questionCount !== 'number' || typeof bank.availableQuestions !== 'number' || bank.availableQuestions === 0) {
+                    return 0;
+                }
+                return Math.round((bank.questionCount / bank.availableQuestions) * 100) || 0;
+            },
+            showToast(message, type = 'success') {
+                const toast = document.createElement('div');
+                toast.textContent = message;
+                toast.style.cssText = `
+                    position: fixed;
+                    bottom: 20px;
+                    left: 50%;
+                    transform: translateX(-50%);
+                    background: ${type === 'success' ? 'rgba(0, 0, 0, 0.8)' : 'rgba(255, 0, 0, 0.8)'};
+                    color: white;
+                    padding: 8px 16px;
+                    border-radius: 4px;
+                    z-index: 1000;
+                `;
+                document.body.appendChild(toast);
+                setTimeout(() => toast.remove(), 2000);
+            },
+            // 添加 goHome 方法
+            goHome(event) {
+                event.preventDefault();
+                if (this.pageState === 'quiz') {
+                    // 如果有完成的题目，显示确认对话框
+                    if (this.currentSessionCompleted.size > 0) {
+                        if (!confirm('确定要退出练习吗？当前进度将不会保存。')) {
+                            return;
+                        }
+                    }
+                }
+                
+                // 重置状态
+                this.resetAllState();
+                this.updatePageState('home');
             },
         }
     });
