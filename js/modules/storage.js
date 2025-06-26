@@ -109,13 +109,31 @@ export default class StorageManager {
                 questionKey
             });
 
-            const storageKey = effectiveSetId.replace('.json', '');
+            const storageKey = effectiveSetId.replace('.json', '').replace(/\\/g, '/');
+            console.log('[getQuestionCompletion] 查找题目数据:', {
+                原始setId: effectiveSetId,
+                处理后storageKey: storageKey,
+                可用存储键: Object.keys(this.data),
+                找到数据: !!this.data[storageKey]
+            });
             const result = this.data[storageKey]?.[questionKey];
             
-            console.log('[getQuestionCompletion] Result:', {
-                storageKey,
-                hasData: !!this.data[storageKey],
-                hasQuestionData: !!result
+            // 详细的完成情况日志
+            console.log('[getQuestionCompletion] 题目完成情况:', {
+                题库: storageKey,
+                题目ID: questionKey,
+                总提交次数: result?.totalAttempts || 0,
+                正确次数: result?.correctCount || 0,
+                错误次数: result?.incorrectCount || 0,
+                连续正确: result?.consecutiveCorrect || 0,
+                最后提交日期: result?.lastAttemptDate || '未提交',
+                最后是否正确: result?.lastCorrect || false,
+                首次提交日期: result?.firstAttemptDate || '未提交',
+                是否完成: result?.completed || false,
+                今日提交次数: result?.todayAttempts || 0,
+                今日正确次数: result?.todayCorrect || 0,
+                今日错误次数: result?.todayIncorrect || 0,
+                最后提交时间: result?.lastSubmissionTime || '未提交'
             });
             
             return result || null;
@@ -142,8 +160,12 @@ export default class StorageManager {
             console.log('[updateQuestionCompletion] Updating stats:', { setId, questionKey, isCorrect });
             
             // Normalize the storage key
-            const storageKey = setId.replace('.json', '');
-            console.log('[updateQuestionCompletion] Using storage key:', storageKey);
+            const storageKey = setId.replace('.json', '').replace(/\\/g, '/');
+            console.log('[updateQuestionCompletion] Using storage key:', {
+                原始setId: setId,
+                处理后storageKey: storageKey,
+                当前存储键: Object.keys(this.data)
+            });
             
             // Initialize data structure if needed
             if (!this.data[storageKey]) {
@@ -151,7 +173,7 @@ export default class StorageManager {
             }
             
             // Initialize question stats if needed
-            if (!this.data[storageKey][questionKey]) {
+                            if (!this.data[storageKey][questionKey]) {
                 this.data[storageKey][questionKey] = {
                     totalAttempts: 0,
                     correctCount: 0,
@@ -164,7 +186,9 @@ export default class StorageManager {
                     todayAttempts: 0,
                     todayCorrect: 0,
                     todayIncorrect: 0,
-                    lastSubmissionTime: null
+                    lastSubmissionTime: null,
+                    uniquePracticed: 0,
+                    totalSubmissions: 0
                 };
             }
 
@@ -194,6 +218,7 @@ export default class StorageManager {
             stats.totalAttempts++;
             stats.todayAttempts++;
             stats.completed = true;
+            stats.totalSubmissions++;
 
             if (isCorrect) {
                 stats.correctCount++;
@@ -258,7 +283,16 @@ export default class StorageManager {
                 return null;
             }
 
-            const storageKey = setId.replace('.json', '');
+            // 移除.json后缀并规范化路径分隔符
+            const storageKey = setId.replace('.json', '').replace(/\\/g, '/');
+            
+            console.log('[getSetStats] 查找存储数据:', {
+                原始setId: setId,
+                处理后storageKey: storageKey,
+                可用存储键: Object.keys(this.data),
+                找到数据: !!this.data[storageKey]
+            });
+
             const setData = this.data[storageKey] || {};
             
             const stats = {
@@ -271,11 +305,16 @@ export default class StorageManager {
                 averageAccuracy: 0,
                 todayAttempts: 0,
                 todayCorrect: 0,
-                todayIncorrect: 0
+                todayIncorrect: 0,
+                uniquePracticed: 0,
+                totalSubmissions: 0
             };
 
             // 获取今天的日期
             const today = new Date().toISOString().split('T')[0];
+
+            // 用于统计已练习的唯一题目
+            const practicedQuestions = new Set();
 
             // 遍历题目数组
             for (const question of questions) {
@@ -287,9 +326,14 @@ export default class StorageManager {
 
                 const questionStats = setData[questionId];
                 if (questionStats) {
-                    stats.totalAttempts += questionStats.totalAttempts;
-                    stats.correctAttempts += questionStats.correctCount;
-                    stats.incorrectAttempts += questionStats.incorrectCount;
+                    stats.totalAttempts += questionStats.totalAttempts || 0;
+                    stats.correctAttempts += questionStats.correctCount || 0;
+                    stats.incorrectAttempts += questionStats.incorrectCount || 0;
+                    stats.totalSubmissions += questionStats.totalAttempts || 0;
+
+                    if (questionStats.totalAttempts > 0) {
+                        practicedQuestions.add(questionId);
+                    }
 
                     if (questionStats.completed) {
                         stats.completedQuestions++;
@@ -307,15 +351,30 @@ export default class StorageManager {
                 }
             }
 
+            // 设置已练习的唯一题目数
+            stats.uniquePracticed = practicedQuestions.size;
+
             // 计算正确率
             stats.averageAccuracy = stats.totalAttempts > 0
                 ? Math.round((stats.correctAttempts / stats.totalAttempts) * 100)
                 : 0;
 
-            console.log('[getSetStats] Calculated stats:', {
-                setId,
-                storageKey,
-                stats
+            // 详细的题库统计日志
+            console.log('[getSetStats] 题库统计信息:', {
+                题库ID: setId,
+                存储键值: storageKey,
+                总题目数: stats.totalQuestions,
+                已完成题目数: stats.completedQuestions,
+                已答对题目数: stats.correctQuestions,
+                总提交次数: stats.totalAttempts,
+                正确提交次数: stats.correctAttempts,
+                错误提交次数: stats.incorrectAttempts,
+                平均正确率: stats.averageAccuracy + '%',
+                今日提交次数: stats.todayAttempts,
+                今日正确次数: stats.todayCorrect,
+                今日错误次数: stats.todayIncorrect,
+                已练习不同题目数: stats.uniquePracticed,
+                总提交次数: stats.totalSubmissions
             });
 
             return stats;
@@ -363,7 +422,15 @@ export default class StorageManager {
                 ? Math.round((totalCorrect / stats.totalAttempts) * 100)
                 : 0;
 
-            console.log('[getAllBanksStats] Calculated stats:', stats);
+            // 详细的总体统计日志
+            console.log('[getAllBanksStats] 总体统计信息:', {
+                已完成题目总数: stats.completedQuestions,
+                总提交次数: stats.totalAttempts,
+                平均正确率: stats.averageAccuracy + '%',
+                今日已练习题目数: stats.todayPracticed,
+                总正确次数: totalCorrect,
+                题库数量: Object.keys(this.data).filter(key => key !== 'settings').length
+            });
             return stats;
         } catch (error) {
             console.error('[getAllBanksStats] Error:', error);
@@ -393,10 +460,50 @@ export default class StorageManager {
             }
 
             // 获取题库统计数据
-            return this.getSetStats(fileName, data.questions);
+            const stats = this.getSetStats(fileName, data.questions);
+            
+            // 确保返回所有必要的字段
+            const result = {
+                totalQuestions: data.questions.length,
+                uniquePracticed: 0,
+                totalSubmissions: 0,
+                ...stats
+            };
+
+            // 计算已练习的不同题目数和总提交次数
+            const storageKey = fileName.replace('.json', '').replace(/\\/g, '/');
+            const setData = this.data[storageKey] || {};
+            
+            // 遍历所有题目的统计数据
+            let totalSubmissions = 0;
+            const practicedQuestions = new Set();
+            
+            for (const [questionId, questionStats] of Object.entries(setData)) {
+                if (questionStats && questionStats.totalAttempts > 0) {
+                    practicedQuestions.add(questionId);
+                    totalSubmissions += questionStats.totalAttempts;
+                }
+            }
+
+            result.uniquePracticed = practicedQuestions.size;
+            result.totalSubmissions = totalSubmissions;
+
+            console.log('[getBankStats] 计算题库统计:', {
+                题库: fileName,
+                总题目数: result.totalQuestions,
+                已练习题目数: result.uniquePracticed,
+                总提交次数: result.totalSubmissions,
+                存储数据: setData
+            });
+
+            return result;
         } catch (error) {
             console.error('[getBankStats] Error:', error);
-            return null;
+            return {
+                totalQuestions: 0,
+                uniquePracticed: 0,
+                totalSubmissions: 0
+            };
         }
     }
 

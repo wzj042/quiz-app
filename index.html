@@ -259,7 +259,7 @@
                                 </div>
                                 <div class="quiz-item-stats" v-if="bankStats[fileObj.file]">
                                     <div class="quiz-stat">
-                                        共{{  bankStats[fileObj.file].totalQuestions }}题
+                                        共{{ bankStats[fileObj.file].totalQuestions }}题 (已练{{ bankStats[fileObj.file].uniquePracticed || 0 }}题/提交{{ bankStats[fileObj.file].totalSubmissions || 0 }}次)
                                     </div>
                                 </div>
                             </div>
@@ -1083,9 +1083,9 @@
                         } catch (error) {
                             console.error(`Error loading bank ${bank.file}:`, error);
                             this.bankStats[bank.file] = {
-                                completed: 0,
-                                total: 0,
-                                accuracy: 0
+                                totalQuestions: 0,
+                                uniquePracticed: 0,
+                                totalSubmissions: 0
                             };
                         }
                     }
