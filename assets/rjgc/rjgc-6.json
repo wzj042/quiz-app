@@ -9,7 +9,10 @@
                 "可修改性",
                 "可理解性"
             ],
-            "correct_answer": ["可扩展性"]
+            "correct_answer": [
+                "可扩展性"
+            ],
+            "analysis": "软件可维护性的主要决定因素包括可理解性、可测试性、可修改性、可移植性、可重用性、可靠性，但不包括可扩展性。"
         },
         {
             "type": "single-choice",
@@ -20,7 +23,10 @@
                 "进行质量保证审查可以提高软件产品的可维护性",
                 "软件维护要解决软件产品交付用户之后运行中发生的各种问题"
             ],
-            "correct_answer": ["提高可维护性是在软件维护阶段考虑的问题"]
+            "correct_answer": [
+                "提高可维护性是在软件维护阶段考虑的问题"
+            ],
+            "analysis": "提高可维护性应在开发阶段充分考虑，而不是等到维护阶段再处理。"
         },
         {
             "type": "single-choice",
@@ -31,18 +37,24 @@
                 "编写高质量文档可以提高软件开发的质量",
                 "文档是软件的不可或缺的部分"
             ],
-            "correct_answer": ["编写文档会降低软件开发的效率"]
+            "correct_answer": [
+                "编写文档会降低软件开发的效率"
+            ],
+            "analysis": "文档是软件的重要组成部分，能提高沟通与开发效率，认为其降低效率的说法是错误的。"
         },
         {
             "type": "single-choice",
             "content": "某银行为了使其网上银行系统能够支持持信用卡多币种付款功能而进行扩充升级，这需要对数据类型稍微进行一些改变，这一状况需要对网上银行系统进行( )维护",
             "options": [
                 "正确性",
-                "适应型",
+                "适应性",
                 "完善性",
                 "预防性"
             ],
-            "correct_answer": ["完善性"]
+            "correct_answer": [
+                "适应性"
+            ],
+            "analysis": "不知道原答案"
         },
         {
             "type": "single-choice",
@@ -53,7 +65,10 @@
                 "完善性",
                 "预防性"
             ],
-            "correct_answer": ["完善性"]
+            "correct_answer": [
+                "完善性"
+            ],
+            "analysis": "该修改属于优化已有功能，提升性能，故属于完善性维护。"
         },
         {
             "type": "single-choice",
@@ -64,7 +79,10 @@
                 "类、封装",
                 "过程调用"
             ],
-            "correct_answer": ["过程调用"]
+            "correct_answer": [
+                "过程调用"
+            ],
+            "analysis": "过程调用是面向过程的概念，而非面向对象的核心概念。"
         },
         {
             "type": "single-choice",
@@ -75,7 +93,24 @@
                 "状态图",
                 "顺序图"
             ],
-            "correct_answer": ["状态图"]
+            "correct_answer": [
+                "状态图"
+            ],
+            "analysis": "类的行为变化应通过状态图建模与测试。"
+        },
+        {
+            "type": "single-choice",
+            "content": "符合对象和类的关系的是( )",
+            "options": [
+                "人和老虎",
+                "书和汽车",
+                "楼和土地",
+                "松树与植物"
+            ],
+            "correct_answer": [
+                "松树与植物"
+            ],
+            "analysis": ""
         },
         {
             "type": "single-choice",
@@ -86,7 +121,9 @@
                 "对象",
                 "关联"
             ],
-            "correct_answer": ["对象"]
+            "correct_answer": [
+                "对象"
+            ]
         },
         {
             "type": "single-choice",
@@ -97,7 +134,10 @@
                 "信息流",
                 "数据的集合"
             ],
-            "correct_answer": ["属性和服务"]
+            "correct_answer": [
+                "属性和服务"
+            ],
+            "analysis": "封装指将数据（属性）和操作（服务）结合在一起。"
         },
         {
             "type": "single-choice",
@@ -106,7 +146,10 @@
                 "对",
                 "错"
             ],
-            "correct_answer": ["对"]
+            "correct_answer": [
+                "对"
+            ],
+            "analysis": "见PPT第8章第一部分内容，明确提到这是软件工程的主要目的之一。"
         },
         {
             "type": "single-choice",
@@ -115,7 +158,10 @@
                 "对",
                 "错"
             ],
-            "correct_answer": ["对"]
+            "correct_answer": [
+                "错"
+            ],
+            "analysis": "维护工作量一般超过70%，而非50%。"
         },
         {
             "type": "single-choice",
@@ -124,7 +170,10 @@
                 "对",
                 "错"
             ],
-            "correct_answer": ["错"]
+            "correct_answer": [
+                "错"
+            ],
+            "analysis": "非结构化维护缺少文档，主要针对代码进行直接维护。"
         },
         {
             "type": "single-choice",
@@ -133,7 +182,10 @@
                 "对",
                 "错"
             ],
-            "correct_answer": ["对"]
+            "correct_answer": [
+                "对"
+            ],
+            "analysis": "该说法与PPT中对软件再工程的定义一致。"
         },
         {
             "type": "single-choice",
@@ -142,7 +194,10 @@
                 "对",
                 "错"
             ],
-            "correct_answer": ["错"]
+            "correct_answer": [
+                "错"
+            ],
+            "analysis": "面向对象单元测试以类为单位，方法不同于传统函数模块测试。"
         },
         {
             "type": "single-choice",
@@ -151,7 +206,10 @@
                 "对",
                 "错"
             ],
-            "correct_answer": ["对"]
+            "correct_answer": [
+                "对"
+            ],
+            "analysis": "类的成员函数是对象行为的基本单元，测试重点。"
         },
         {
             "type": "single-choice",
@@ -160,7 +218,10 @@
                 "对",
                 "错"
             ],
-            "correct_answer": ["对"]
+            "correct_answer": [
+                "对"
+            ],
+            "analysis": "传统集成策略仍适用于面向对象的集成测试场景。"
         },
         {
             "type": "single-choice",
@@ -169,7 +230,10 @@
                 "对",
                 "错"
             ],
-            "correct_answer": ["对"]
+            "correct_answer": [
+                "错"
+            ],
+            "analysis": "UML中用例之间关系包括“包含”和“扩展”关系。"
         },
         {
             "type": "single-choice",
@@ -178,7 +242,10 @@
                 "对",
                 "错"
             ],
-            "correct_answer": ["错"]
+            "correct_answer": [
+                "错"
+            ],
+            "analysis": "多态的本质是相同消息产生不同行为，而非相同结果。"
         },
         {
             "type": "fill-in-blank",
@@ -194,7 +261,8 @@
                 "适应性维护",
                 "完善性维护",
                 "预防性维护"
-            ]
+            ],
+            "analysis": "来源于PPT 8.1.1，明确给出了4类维护类型。"
         },
         {
             "type": "fill-in-blank",
@@ -202,7 +270,10 @@
             "blanks": [
                 "空1"
             ],
-            "correct_answer": ["设计质量"]
+            "correct_answer": [
+                "文档"
+            ],
+            "analysis": "教材8.3.2"
         },
         {
             "type": "fill-in-blank",
@@ -216,19 +287,22 @@
                 "空6"
             ],
             "correct_answer": [
-                "系统规模的大小",
-                "采用的程序设计语言",
-                "系统年龄的大小",
-                "数据库技术的应用水平",
-                "所采用的软件开发技术及软件开发工程化的程度",
-                "其他因素"
-            ]
+                "可理解性",
+                "可测试性",
+                "可靠性",
+                "可修改性",
+                "可移植性",
+                "可重用性"
+            ],
+            "analysis": "参见教材8.3.1"
         },
         {
             "type": "short-answer",
             "content": "设计一个简单的考务处理系统，要求完成以下工作：\n1）对考生送来的报名单进行检查\n2）对合格的报名单编好准考证号后将准考证送给学生，并将汇总后的考生名单送给阅卷站\n3）对阅卷站送来的成绩单进行检查，并根据考试中心制定的合格标准审定合格者\n4）制作考生通知单（含成绩及合格/不合格标志）送给考生\n5）按地区进行成绩分类统计和试题难度分析，产生统计分析表\n画出此系统的顶层数据流图。",
-            "correct_answer": [""],
-            "analysis": "![](https://img20.360buyimg.com/openfeedback/jfs/t1/292768/40/17165/31031/685bf4d9F66d94016/814da9252eeecde5.png"
+            "correct_answer": [
+                ""
+            ],
+            "analysis": "详见图示数据流图。应包括：考生、阅卷站、考试中心、报名单、准考证、成绩单、通知单、统计表等要素的输入输出关系。"
         }
     ],
     "sets": [
@@ -236,10 +310,16 @@
             "id": "rjgc-6",
             "name": "06-软工-作业5",
             "category": "软件工程",
-            "tags": ["软件维护", "面向对象", "软件质量", "数据流图", "软件工程"],
+            "tags": [
+                "软件维护",
+                "面向对象",
+                "软件质量",
+                "数据流图",
+                "软件工程"
+            ],
             "createTime": "2024-06-20 16:10:00",
-            "updateTime": "2024-06-25 21:12:00",
-            "description": "[作业5](https://mooc1.chaoxing.com/mooc-ans/mooc2/work/view?courseId=227327462&classId=115629904&cpi=411759952&workId=44406384&answerId=53776183&enc=fe6f370441cdc7d40bc6a1b5f3b45d2b)，包含单选、判断、填空、简答题，涉及软件维护、面向对象、软件质量和数据流图等内容。"
+            "updateTime": "2024-06-27 11:19:12",
+            "description": "# **没提供正确答案，仅供参考，简答题已校对教材，选择题有一题标注了答案不确定**\n[作业5](https://mooc1.chaoxing.com/mooc-ans/mooc2/work/view?courseId=227327462&classId=115629904&cpi=411759952&workId=44406384&answerId=53776183&enc=fe6f370441cdc7d40bc6a1b5f3b45d2b)，包含单选、判断、填空、简答题，涉及软件维护、面向对象、软件质量和数据流图等内容。"
         }
     ]
 }
