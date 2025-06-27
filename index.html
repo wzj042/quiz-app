@@ -443,8 +443,10 @@
                 @click="isEditing && !isPreviewMode ? enterEditMode('content', currentQuestion.content) : null"
                 class="question-content"
                 :class="{ 'editable': !isPreviewMode && isEditing }"
-                v-html="renderedContent"
-            ></div>
+            >
+                <span v-html="renderedContent"></span>
+                <span v-if="currentQuestion.type === 'multiple-choice'" class="question-type-label">多选题</span>
+            </div>
             <textarea
                 v-else-if="editingField === 'content'"
                 v-model="editingContent"
