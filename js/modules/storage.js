@@ -461,12 +461,21 @@ export default class StorageManager {
 
             // 获取题库统计数据
             const stats = this.getSetStats(fileName, data.questions);
+            if (!stats) {
+                return {
+                    totalQuestions: data.questions.length,
+                    uniquePracticed: 0,
+                    totalSubmissions: 0,
+                    averageAccuracy: 0
+                };
+            }
             
             // 确保返回所有必要的字段
             const result = {
                 totalQuestions: data.questions.length,
                 uniquePracticed: 0,
                 totalSubmissions: 0,
+                averageAccuracy: stats.averageAccuracy,
                 ...stats
             };
 
@@ -476,23 +485,29 @@ export default class StorageManager {
             
             // 遍历所有题目的统计数据
             let totalSubmissions = 0;
+            let correctAttempts = 0;
             const practicedQuestions = new Set();
             
             for (const [questionId, questionStats] of Object.entries(setData)) {
                 if (questionStats && questionStats.totalAttempts > 0) {
                     practicedQuestions.add(questionId);
                     totalSubmissions += questionStats.totalAttempts;
+                    correctAttempts += questionStats.correctCount || 0;
                 }
             }
 
             result.uniquePracticed = practicedQuestions.size;
             result.totalSubmissions = totalSubmissions;
+            result.averageAccuracy = totalSubmissions > 0
+                ? Math.round((correctAttempts / totalSubmissions) * 100)
+                : 0;
 
             console.log('[getBankStats] 计算题库统计:', {
                 题库: fileName,
                 总题目数: result.totalQuestions,
                 已练习题目数: result.uniquePracticed,
                 总提交次数: result.totalSubmissions,
+                平均正确率: result.averageAccuracy + '%',
                 存储数据: setData
             });
 
@@ -502,7 +517,8 @@ export default class StorageManager {
             return {
                 totalQuestions: 0,
                 uniquePracticed: 0,
-                totalSubmissions: 0
+                totalSubmissions: 0,
+                averageAccuracy: 0
             };
         }
     }

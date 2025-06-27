@@ -1286,9 +1286,14 @@ textarea:focus-visible {
 }
 
 .quiz-stat {
-    display: flex;
-    align-items: center;
-    gap: 4px;
+    font-size: 12px;
+    color: #666;
+    margin-top: 4px;
+}
+
+.accuracy-stat {
+    color: #91a881;
+    font-weight: 500;
 }
 
 .stats-details {
