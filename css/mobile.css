@@ -462,6 +462,7 @@ body {
     border-radius: 4px;
 }
 
+.nav-icon-btn:hover,
 .github-link:hover {
     color: #91a881;
     transform: scale(1.1);
