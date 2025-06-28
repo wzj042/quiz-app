@@ -1,0 +1,670 @@
+{
+    "questions": [
+        {
+            "type": "single-choice",
+            "content": "在SQL查询中，WHERE子句和HAVING子句的区别是？",
+            "options": [
+                "WHERE用于分组前的行过滤，HAVING用于分组后的组过滤",
+                "HAVING用于分组前的行过滤，WHERE用于分组后的组过滤",
+                "两者没有区别，可以互换使用",
+                "WHERE只能用于单表查询，HAVING可以用于多表查询"
+            ],
+            "correct_answer": [
+                "WHERE用于分组前的行过滤，HAVING用于分组后的组过滤"
+            ]
+        },
+        {
+            "type": "single-choice",
+            "content": "要连接两个表，并返回左表中所有记录以及右表中匹配的记录，应该使用哪种JOIN？",
+            "options": [
+                "INNER JOIN",
+                "FULL OUTER JOIN",
+                "RIGHT JOIN",
+                "LEFT JOIN"
+            ],
+            "correct_answer": [
+                "LEFT JOIN"
+            ]
+        },
+        {
+            "type": "single-choice",
+            "content": "下列哪个SQL命令用于从数据库中永久删除一个表及其所有数据？",
+            "options": [
+                "DELETE TABLE table_name",
+                "REMOVE TABLE table_name",
+                "DROP TABLE table_name",
+                "TRUNCATE TABLE table_name"
+            ],
+            "correct_answer": [
+                "DROP TABLE table_name"
+            ]
+        },
+        {
+            "type": "single-choice",
+            "content": "关于主键（PRIMARY KEY）的描述，不正确的是？",
+            "options": [
+                "主键列的值必须唯一",
+                "主键列的值不能为空（NOT NULL）",
+                "一个表可以有多个主键",
+                "主键可以由多个列组合而成（复合主键）"
+            ],
+            "correct_answer": [
+                "一个表可以有多个主键"
+            ]
+        },
+        {
+            "type": "single-choice",
+            "content": "在Book表中，要查询书名（Title）以“数据”开头的图书，正确的WHERE子句是？",
+            "options": [
+                "WHERE Title = '数据%'",
+                "WHERE Title LIKE '数据%'",
+                "WHERE Title LIKE '%数据'",
+                "WHERE Title IN ('数据')"
+            ],
+            "correct_answer": [
+                "WHERE Title LIKE '数据%'"
+            ]
+        },
+        
+        {
+            "type": "single-choice",
+            "content": "在SQL中，DELETE语句和TRUNCATE TABLE语句都可以删除表中的数据，它们的主要区别在于？",
+            "options": [
+                "TRUNCATE TABLE 可以被回滚（ROLLBACK），而 DELETE 不能",
+                "DELETE 语句会触发与表相关的删除（DELETE）触发器，而 TRUNCATE TABLE 通常不会",
+                "DELETE 语句比 TRUNCATE TABLE 执行速度慢",
+                "TRUNCATE TABLE 允许使用 WHERE 子句删除特定行"
+            ],
+            "correct_answer": [
+                "DELETE 语句会触发与表相关的删除（DELETE）触发器，而 TRUNCATE TABLE 通常不会"
+            ]
+        },
+        {
+            "type": "single-choice",
+            "content": "要将Student表中的SName列的数据类型从VARCHAR(20)修改为VARCHAR(30)，应使用以下哪个命令？",
+            "options": [
+                "UPDATE TABLE Student SET SName VARCHAR(30);",
+                "CREATE TABLE Student (SName VARCHAR(30));",
+                "ALTER TABLE Student MODIFY COLUMN SName VARCHAR(30);",
+                "MODIFY TABLE Student SName VARCHAR(30);"
+            ],
+            "correct_answer": [
+                "ALTER TABLE Student MODIFY COLUMN SName VARCHAR(30);"
+            ]
+        },
+        {
+            "type": "single-choice",
+            "content": "在SQL查询中，UNION和UNION ALL的主要区别是什么？",
+            "options": [
+                "UNION ALL 的执行效率比 UNION 高，因为它不进行重复行的检查",
+                "UNION 用于合并列，UNION ALL 用于合并行",
+                "两者功能完全相同，只是写法不同",
+                "UNION ALL 允许合并的查询结果列数不同"
+            ],
+            "correct_answer": [
+                "UNION ALL 的执行效率比 UNION 高，因为它不进行重复行的检查"
+            ]
+        },
+        {
+            "type": "single-choice",
+            "content": "下列哪个关键字用于在SELECT语句中为列或表指定一个临时的别名？",
+            "options": [
+                "ALIAS",
+                "RENAME",
+                "AS",
+                "TEMP"
+            ],
+            "correct_answer": [
+                "AS"
+            ]
+        },
+        {
+            "type": "single-choice",
+            "content": "GROUP BY子句通常与哪类函数一起使用，以对每个分组进行计算？",
+            "options": [
+                "字符串函数（如 CONCAT）",
+                "聚合函数（如 COUNT, SUM, AVG）",
+                "日期函数（如 NOW, DATE_FORMAT）",
+                "条件函数（如 IF, CASE）"
+            ],
+            "correct_answer": [
+                "聚合函数（如 COUNT, SUM, AVG）"
+            ]
+        },
+        {
+            "type": "single-choice",
+            "content": "关于SQL中的NULL值，以下说法正确的是？",
+            "options": [
+                "NULL 等于 0",
+                "NULL 等于一个空字符串''",
+                "两个NULL值是相等的（NULL = NULL 的结果为真）",
+                "判断一个列的值是否为NULL，应使用IS NULL或IS NOT NULL"
+            ],
+            "correct_answer": [
+                "判断一个列的值是否为NULL，应使用IS NULL或IS NOT NULL"
+            ]
+        },
+        {
+            "type": "single-choice",
+            "content": "要查询Orders表中所有不重复的CustomerID，应使用哪个查询？",
+            "options": [
+                "SELECT CustomerID FROM Orders;",
+                "SELECT UNIQUE CustomerID FROM Orders;",
+                "SELECT DISTINCT CustomerID FROM Orders;",
+                "SELECT ALL CustomerID FROM Orders;"
+            ],
+            "correct_answer": [
+                "SELECT DISTINCT CustomerID FROM Orders;"
+            ]
+        },
+        {
+            "type": "single-choice",
+            "content": "在SQL事务处理中，哪个命令用于永久保存事务中所做的所有修改？",
+            "options": [
+                "ROLLBACK",
+                "SAVEPOINT",
+                "COMMIT",
+                "END TRANSACTION"
+            ],
+            "correct_answer": [
+                "COMMIT"
+            ]
+        },
+        {
+            "type": "single-choice",
+            "content": "要查找所有姓“张”的作者，WHERE子句的条件应该写成？",
+            "options": [
+                "WHERE Name = '张'",
+                "WHERE Name LIKE '张_'",
+                "WHERE Name LIKE '张%'",
+                "WHERE Name IN ('张')"
+            ],
+            "correct_answer": [
+                "WHERE Name LIKE '张%'"
+            ]
+        },
+        {
+            "type": "single-choice",
+            "content": "下列哪个JOIN类型会返回左表中的所有记录，以及右表中与连接条件匹配的记录？",
+            "options": [
+                "INNER JOIN",
+                "FULL OUTER JOIN",
+                "RIGHT JOIN",
+                "LEFT JOIN"
+            ],
+            "correct_answer": [
+                "LEFT JOIN"
+            ]
+        },
+        {
+            "type": "single-choice",
+            "content": "在SQL中，如果要根据`Price`列的值进行条件判断，当价格大于100时显示'昂贵'，小于等于100时显示'实惠'，应使用哪个表达式？",
+            "options": [
+                "IF Price > 100 THEN '昂贵' ELSE '实惠'",
+                "DECODE(Price, >100, '昂贵', '实惠')",
+                "SWITCH (Price) { CASE >100: '昂贵'; DEFAULT: '实惠'; }",
+                "CASE WHEN Price > 100 THEN '昂贵' ELSE '实惠' END"
+            ],
+            "correct_answer": [
+                "CASE WHEN Price > 100 THEN '昂贵' ELSE '实惠' END"
+            ]
+        },
+        {
+            "type": "single-choice",
+            "content": "关于SQL的UNIQUE约束，下列说法错误的是？",
+            "options": [
+                "UNIQUE约束确保列中的所有值都是唯一的。",
+                "一个表只能有一个UNIQUE约束。",
+                "大多数数据库系统允许UNIQUE约束的列中包含多个NULL值。",
+                "定义了UNIQUE约束的列可以被外键引用。"
+            ],
+            "correct_answer": [
+                "一个表只能有一个UNIQUE约束。"
+            ]
+        },
+        {
+            "type": "single-choice",
+            "content": "要收回用户'user_test'对`Book`表的更新（UPDATE）权限，应使用哪个命令？",
+            "options": [
+                "DELETE UPDATE ON Book FROM 'user_test';",
+                "REVOKE UPDATE ON Book FROM 'user_test';",
+                "REMOVE UPDATE ON Book FROM 'user_test';",
+                "DROP PERMISSION UPDATE ON Book FOR 'user_test';"
+            ],
+            "correct_answer": [
+                "REVOKE UPDATE ON Book FROM 'user_test';"
+            ]
+        },
+        {
+            "type": "single-choice",
+            "content": "在SELECT语句中，子查询（Subquery）不能直接出现在哪个子句中？",
+            "options": [
+                "FROM",
+                "WHERE",
+                "SELECT",
+                "GROUP BY"
+            ],
+            "correct_answer": [
+                "GROUP BY"
+            ]
+        },
+        {
+            "type": "single-choice",
+            "content": "当对一个包含NULL值的列使用聚合函数时，哪个说法是正确的？",
+            "options": [
+                "COUNT(列名) 和 COUNT(*) 的结果一定相同。",
+                "SUM(列名) 会将NULL值当作0来计算。",
+                "AVG(列名) 在计算平均值时会忽略NULL值所在的行。",
+                "所有聚合函数遇到NULL值都会返回错误。"
+            ],
+            "correct_answer": [
+                "AVG(列名) 在计算平均值时会忽略NULL值所在的行。"
+            ]
+        },
+        {
+            "type": "single-choice",
+            "content": "SQL语句 `WHERE Price BETWEEN 50 AND 100` 的查询范围是什么？",
+            "options": [
+                "价格大于50且小于100",
+                "价格大于等于50且小于等于100",
+                "价格大于50或小于100",
+                "仅包括价格为50和100的记录"
+            ],
+            "correct_answer": [
+                "价格大于等于50且小于等于100"
+            ]
+        },
+        {
+            "type": "single-choice",
+            "content": "在创建一个包含订单号（OrderID）和产品号（ProductID）的订单详情表时，如果希望这两列的组合是唯一的，并作为表的主键，应该如何定义？",
+            "options": [
+                "OrderID INT PRIMARY KEY, ProductID INT PRIMARY KEY",
+                "PRIMARY KEY (OrderID), PRIMARY KEY (ProductID)",
+                "UNIQUE (OrderID, ProductID)",
+                "PRIMARY KEY (OrderID, ProductID)"
+            ],
+            "correct_answer": [
+                "PRIMARY KEY (OrderID, ProductID)"
+            ]
+        },
+        {
+            "type": "single-choice",
+            "content": "在定义外键约束时，如果希望在删除主表中的记录时，自动删除子表中所有引用该记录的行，应该使用哪个子句？",
+            "options": [
+                "ON DELETE SET NULL",
+                "ON DELETE RESTRICT",
+                "ON DELETE CASCADE",
+                "ON DELETE NO ACTION"
+            ],
+            "correct_answer": [
+                "ON DELETE CASCADE"
+            ]
+        },
+        {
+            "type": "single-choice",
+            "content": "以下关于创建索引（INDEX）的说法，哪一个是错误的？",
+            "options": [
+                "索引可以显著提高SELECT查询的执行速度。",
+                "为表添加过多的索引可能会降低INSERT、UPDATE和DELETE操作的性能。",
+                "主键（PRIMARY KEY）会自动创建一个唯一的索引。",
+                "创建索引会减少数据库占用的物理存储空间。"
+            ],
+            "correct_answer": [
+                "创建索引会减少数据库占用的物理存储空间。"
+            ]
+        },
+        {
+            "type": "single-choice",
+            "content": "假设有一个员工表（Employees），其中包含员工ID（EmpID）和经理ID（ManagerID），ManagerID也是一个员工ID。要查询每个员工及其对应的经理姓名，最适合使用哪种连接方式？",
+            "options": [
+                "将Employees表与另一个不同的表进行LEFT JOIN。",
+                "使用UNION ALL合并两次查询。",
+                "将Employees表与它自身进行连接（自连接）。",
+                "使用CROSS JOIN产生所有可能的员工-经理组合。"
+            ],
+            "correct_answer": [
+                "将Employees表与它自身进行连接（自连接）。"
+            ]
+        },
+        {
+            "type": "single-choice",
+            "content": "在`CREATE TABLE`语句中，如何为一个名为`RegistrationDate`的列设置默认值，使其在插入新行但未提供该列值时自动填充为当前日期？",
+            "options": [
+                "RegistrationDate DATE IS CURRENT_DATE",
+                "RegistrationDate DATE VALUE CURRENT_DATE",
+                "RegistrationDate DATE DEFAULT CURRENT_DATE",
+                "SET RegistrationDate = CURRENT_DATE"
+            ],
+            "correct_answer": [
+                "RegistrationDate DATE DEFAULT CURRENT_DATE"
+            ]
+        },
+        {
+            "type": "single-choice",
+            "content": "要创建一个`UNIQUE`索引，确保`Email`列中的所有值（除了NULL）都是唯一的，应该使用哪个SQL语句？",
+            "options": [
+                "CREATE INDEX idx_email ON Users(Email) WHERE Email IS NOT NULL;",
+                "CREATE UNIQUE INDEX idx_email ON Users(Email);",
+                "ALTER TABLE Users ADD INDEX UNIQUE(Email);",
+                "CREATE CHECK (UNIQUE(Email)) ON Users;"
+            ],
+            "correct_answer": [
+                "CREATE UNIQUE INDEX idx_email ON Users(Email);"
+            ]
+        },
+        {
+            "type": "single-choice",
+            "content": "`INNER JOIN` 和 `LEFT JOIN` 的根本区别在于？",
+            "options": [
+                "INNER JOIN 比 LEFT JOIN 更快。",
+                "LEFT JOIN 只返回左表的数据，INNER JOIN 返回两个表的数据。",
+                "当连接条件不匹配时，INNER JOIN 会舍弃该行，而 LEFT JOIN 会保留左表的行并用NULL填充右表字段。",
+                "INNER JOIN 用于连接两个表，LEFT JOIN 用于连接三个或更多表。"
+            ],
+            "correct_answer": [
+                "当连接条件不匹配时，INNER JOIN 会舍弃该行，而 LEFT JOIN 会保留左表的行并用NULL填充右表字段。"
+            ]
+        },
+        {
+            "type": "single-choice",
+            "content": "下列哪个`CREATE TABLE`语句是不合法的？",
+            "options": [
+                "CREATE TABLE T1 (ID INT PRIMARY KEY, Name VARCHAR(20) NOT NULL);",
+                "CREATE TABLE T2 (ID INT, Name VARCHAR(20), PRIMARY KEY(ID, Name));",
+                "CREATE TABLE T3 (ID INT, Name VARCHAR(20) CHECK (Name IN ('A', 'B')));",
+                "CREATE TABLE T4 (ID INT PRIMARY KEY, Ref_ID INT, FOREIGN KEY (Ref_ID) REFERENCES T1(Name));"
+            ],
+            "correct_answer": [
+                "CREATE TABLE T4 (ID INT PRIMARY KEY, Ref_ID INT, FOREIGN KEY (Ref_ID) REFERENCES T1(Name));"
+            ]
+        },
+        {
+            "type": "single-choice",
+            "content": "在员工表（Employees）中，存在一个`ManagerID`列，它引用了同一个表中的`EmployeeID`列。这种外键关系被称为？",
+            "options": [
+                "复合外键",
+                "循环引用",
+                "自引用（或递归关系）",
+                "交叉引用"
+            ],
+            "correct_answer": [
+                "自引用（或递归关系）"
+            ]
+        },
+        {
+            "type": "single-choice",
+            "content": "以下哪种`JOIN`会返回两个连接表的笛卡尔积？",
+            "options": [
+                "INNER JOIN",
+                "LEFT JOIN",
+                "FULL OUTER JOIN",
+                "CROSS JOIN"
+            ],
+            "correct_answer": [
+                "CROSS JOIN"
+            ]
+        },
+        {
+            "type": "single-choice",
+            "content": "在`CREATE TABLE`时，要为一个名为`Status`的列设置约束，使其只能接受'active', 'inactive', 'pending'这三个值，最适合使用哪种约束？",
+            "options": [
+                "PRIMARY KEY",
+                "UNIQUE",
+                "FOREIGN KEY",
+                "CHECK"
+            ],
+            "correct_answer": [
+                "CHECK"
+            ]
+        },
+        {
+            "type": "single-choice",
+            "content": "以下关于`PRIMARY KEY`和`UNIQUE`约束的说法，正确的是？",
+            "options": [
+                "一个表可以有多个PRIMARY KEY，但只能有一个UNIQUE约束。",
+                "PRIMARY KEY和UNIQUE约束都允许存在NULL值。",
+                "一个表只能有一个PRIMARY KEY，但可以有多个UNIQUE约束。",
+                "PRIMARY KEY列不能作为外键，但UNIQUE列可以。"
+            ],
+            "correct_answer": [
+                "一个表只能有一个PRIMARY KEY，但可以有多个UNIQUE约束。"
+            ]
+        },
+        {
+            "type": "single-choice",
+            "content": "要为一个已经存在的表`Products`中的`ProductName`列添加一个非聚集索引，应使用哪个命令？",
+            "options": [
+                "ALTER TABLE Products ADD INDEX idx_pname (ProductName);",
+                "CREATE INDEX idx_pname ON Products(ProductName);",
+                "UPDATE TABLE Products ADD INDEX idx_pname (ProductName);",
+                "以上答案都正确"
+            ],
+            "correct_answer": [
+                "以上答案都正确"
+            ]
+        },
+        {
+            "type": "single-choice",
+            "content": "查询语句 `SELECT A.*, B.* FROM TableA A RIGHT JOIN TableB B ON A.id = B.id;` 等价于？",
+            "options": [
+                "SELECT A.*, B.* FROM TableB B LEFT JOIN TableA A ON A.id = B.id;",
+                "SELECT A.*, B.* FROM TableA A LEFT JOIN TableB B ON A.id = B.id;",
+                "SELECT A.*, B.* FROM TableA A INNER JOIN TableB B ON A.id = B.id;",
+                "SELECT A.*, B.* FROM TableA A, TableB B;"
+            ],
+            "correct_answer": [
+                "SELECT A.*, B.* FROM TableB B LEFT JOIN TableA A ON A.id = B.id;"
+            ]
+        },
+        {
+            "type": "single-choice",
+            "content": "在定义外键约束时，`ON UPDATE SET NULL`子句的作用是？",
+            "options": [
+                "当主表记录被更新时，子表中的对应外键列值被设置为NULL。",
+                "当主表记录被删除时，子表中的对应外键列值被设置为NULL。",
+                "当子表记录被更新时，自动检查主表是否存在对应记录。",
+                "禁止更新主表中的主键值。"
+            ],
+            "correct_answer": [
+                "当主表记录被更新时，子表中的对应外键列值被设置为NULL。"
+            ]
+        },
+        {
+            "type": "single-choice",
+            "content": "在什么情况下，为某个列创建索引可能不会带来查询性能的提升，甚至会降低性能？",
+            "options": [
+                "该列是外键。",
+                "该表的数据量非常大。",
+                "该列的值重复度非常高（基数非常低），例如“性别”列。",
+                "该列经常出现在SELECT查询的WHERE子句中。"
+            ],
+            "correct_answer": [
+                "该列的值重复度非常高（基数非常低），例如“性别”列。"
+            ]
+        },
+        {
+            "type": "single-choice",
+            "content": "要将`Employees`表中的`Department`列从表中移除，应该使用哪个DDL命令？",
+            "options": [
+                "DELETE COLUMN Department FROM Employees;",
+                "ALTER TABLE Employees DROP COLUMN Department;",
+                "REMOVE COLUMN Department FROM Employees;",
+                "ALTER TABLE Employees MODIFY Department NULL;"
+            ],
+            "correct_answer": [
+                "ALTER TABLE Employees DROP COLUMN Department;"
+            ]
+        },
+        {
+            "type": "single-choice",
+            "content": "如果一个视图（VIEW）是基于多个表的连接查询创建的，那么对这个视图执行`INSERT`操作通常会怎样？",
+            "options": [
+                "操作成功，数据被插入到第一个基表中。",
+                "操作成功，数据被插入到所有基表中。",
+                "操作会失败，因为基于多表连接的视图通常是不可更新的。",
+                "操作会成功，但只会更新视图，不会影响基表。"
+            ],
+            "correct_answer": [
+                "操作会失败，因为基于多表连接的视图通常是不可更新的。"
+            ]
+        },
+        {
+            "type": "single-choice",
+            "content": "假设有一个复合主键 `PRIMARY KEY (OrderID, ProductID)`。以下哪个外键定义是正确的，用于引用这个复合主键？",
+            "options": [
+                "FOREIGN KEY (OrderID) REFERENCES Orders(OrderID), FOREIGN KEY (ProductID) REFERENCES Orders(ProductID)",
+                "FOREIGN KEY (OrderID, ProductID) REFERENCES Orders(OrderID, ProductID)",
+                "FOREIGN KEY REFERENCES Orders(OrderID, ProductID)",
+                "FOREIGN KEY (OrderID) REFERENCES Orders(OrderID, ProductID)"
+            ],
+            "correct_answer": [
+                "FOREIGN KEY (OrderID, ProductID) REFERENCES Orders(OrderID, ProductID)"
+            ]
+        },
+        {
+            "type": "single-choice",
+            "content": "SQL的`FULL OUTER JOIN`关键字返回的结果集是？",
+            "options": [
+                "仅左表中存在且右表中不存在的行。",
+                "仅在两个表中都存在的匹配行。",
+                "仅右表中存在且左表中不存在的行。",
+                "两个表中的所有行，无论是否匹配，不匹配的字段用NULL填充。"
+            ],
+            "correct_answer": [
+                "两个表中的所有行，无论是否匹配，不匹配的字段用NULL填充。"
+            ]
+        },
+        {
+            "type": "single-choice",
+            "content": "以下哪项是关于“聚集索引”（Clustered Index）的正确描述？",
+            "options": [
+                "一个表可以有多个聚集索引。",
+                "聚集索引的逻辑顺序与表中数据的物理存储顺序无关。",
+                "聚集索引决定了表中数据的物理存储顺序。",
+                "创建聚集索引不会影响DML（INSERT, UPDATE, DELETE）操作的性能。"
+            ],
+            "correct_answer": [
+                "聚集索引决定了表中数据的物理存储顺序。"
+            ]
+        },
+        {
+            "type": "single-choice",
+            "content": "`JOIN`子句中的`USING(column_name)`是`ON`子句的一种简写，它的使用前提是？",
+            "options": [
+                "两个连接的表必须有相同数量的列。",
+                "用于连接的列在两个表中的名称必须相同。",
+                "只能用于INNER JOIN，不能用于OUTER JOIN。",
+                "用于连接的列必须是主键。"
+            ],
+            "correct_answer": [
+                "用于连接的列在两个表中的名称必须相同。"
+            ]
+        },
+        {
+            "type": "single-choice",
+            "content": "要为一个已经存在的表`Users`添加一个约束，确保`Age`列的值必须大于18，应使用？",
+            "options": [
+                "ALTER TABLE Users ADD CHECK (Age > 18);",
+                "ALTER TABLE Users CREATE CHECK (Age > 18);",
+                "UPDATE TABLE Users ADD CONSTRAINT CHECK (Age > 18);",
+                "ALTER TABLE Users WITH CHECK (Age > 18);"
+            ],
+            "correct_answer": [
+                "ALTER TABLE Users ADD CHECK (Age > 18);"
+            ]
+        },
+        {
+            "type": "single-choice",
+            "content": "当向一个带有`DEFAULT`约束的列插入一条新记录，并且在`INSERT`语句中为该列显式指定了`NULL`值时，该列的最终值是？",
+            "options": [
+                "该列的默认值。",
+                "NULL。",
+                "0或空字符串，取决于数据类型。",
+                "数据库会报错并拒绝插入。"
+            ],
+            "correct_answer": [
+                "NULL。"
+            ]
+        },
+        {
+            "type": "single-choice",
+            "content": "要将`ArchivedOrders`表中的所有数据复制到`Orders`表中（假设两表结构相同），最有效的SQL语句是？",
+            "options": [
+                "UPDATE Orders SET * = (SELECT * FROM ArchivedOrders);",
+                "INSERT INTO Orders SELECT * FROM ArchivedOrders;",
+                "SELECT * INTO Orders FROM ArchivedOrders;",
+                "COPY ArchivedOrders TO Orders;"
+            ],
+            "correct_answer": [
+                "INSERT INTO Orders SELECT * FROM ArchivedOrders;"
+            ]
+        },
+        {
+            "type": "single-choice",
+            "content": "什么是相关子查询（Correlated Subquery）？",
+            "options": [
+                "一个可以独立于外部查询执行的子查询。",
+                "一个在HAVING子句中使用的子查询。",
+                "一个其执行依赖于外部查询提供的值的子查询。",
+                "一个返回多行多列的子查询。"
+            ],
+            "correct_answer": [
+                "一个其执行依赖于外部查询提供的值的子查询。"
+            ]
+        },
+        {
+            "type": "single-choice",
+            "content": "在一个多列索引 `INDEX(LastName, FirstName)` 上，哪个 `WHERE` 条件最高效地利用了这个索引？",
+            "options": [
+                "WHERE FirstName = 'John'",
+                "WHERE LastName = 'Smith'",
+                "WHERE FirstName = 'John' OR LastName = 'Smith'",
+                "WHERE FirstName LIKE '%ohn'"
+            ],
+            "correct_answer": [
+                "WHERE LastName = 'Smith'"
+            ]
+        },
+        {
+            "type": "single-choice",
+            "content": "在事务中，`ROLLBACK TO SAVEPOINT my_savepoint` 命令会做什么？",
+            "options": [
+                "回滚整个事务。",
+                "提交从 `my_savepoint` 开始的所有操作。",
+                "将事务回滚到名为 `my_savepoint` 的保存点，但事务并未结束。",
+                "删除名为 `my_savepoint` 的保存点。"
+            ],
+            "correct_answer": [
+                "将事务回滚到名为 `my_savepoint` 的保存点，但事务并未结束。"
+            ]
+        },
+        {
+            "type": "single-choice",
+            "content": "在定义表结构时，`NOT NULL` 是一种什么类型的约束？",
+            "options": [
+                "表级约束 (Table-level constraint)",
+                "列级约束 (Column-level constraint)",
+                "域约束 (Domain constraint)",
+                "引用约束 (Referential constraint)"
+            ],
+            "correct_answer": [
+                "列级约束 (Column-level constraint)"
+            ]
+        }
+
+    ],
+    "sets": [
+        {
+            "id": "sjk-6",
+            "name": "06-数据库语法练习",
+            "category": "数据库原理",
+            "tags": [
+                "数据库原理",
+                "SQL 语法"
+            ],
+            "createTime": "2025-06-28 18:00:00",
+            "updateTime": "2025-06-28 18:00:00",
+            "description": "# AI 补充练习题，涵盖DML, DDL, 复杂查询及核心概念。"
+        }
+    ]
+}

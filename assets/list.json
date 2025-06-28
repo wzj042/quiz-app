@@ -1,5 +1,5 @@
 {
-  "updateTime": "2025-06-28 18:17:33",
+  "updateTime": "2025-06-28 18:40:10",
   "banks": [
     {
       "file": "demo.json",
@@ -69,6 +69,11 @@
     {
       "file": "sjk/sjk-5.json",
       "name": "05-数据库作业5",
+      "category": "数据库原理"
+    },
+    {
+      "file": "sjk/sjk-6.json",
+      "name": "06-数据库语法练习",
       "category": "数据库原理"
     },
     {
