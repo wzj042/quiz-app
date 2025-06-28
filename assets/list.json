@@ -1,5 +1,5 @@
 {
-  "updateTime": "2025-06-27 13:28:23",
+  "updateTime": "2025-06-28 08:32:26",
   "banks": [
     {
       "file": "demo.json",
@@ -39,6 +39,11 @@
     {
       "file": "rjgc/rjgc-6.json",
       "name": "06-软工-作业5",
+      "category": "软件工程"
+    },
+    {
+      "file": "rjgc/rjgc-x.json",
+      "name": "x-软工期末知识点",
       "category": "软件工程"
     }
   ]
