@@ -1474,7 +1474,7 @@
                                 </button>
                             </div>
                             <div v-if="isGeneratingAnalysis" class="generating-message">
-                                <div v-if="streamingContent" class="markdown-content" v-html="renderMarkdownWithLatex(streamingContent)"></div>
+                                <div v-if="aiAnalysisExplanation" class="markdown-content" v-html="renderMarkdownWithLatex(aiAnalysisExplanation)"></div>
                                 <div v-else>正在生成解析...</div>
                             </div>
                             <div v-else-if="aiAnalysis" class="markdown-content" v-html="renderMarkdownWithLatex(aiAnalysis)"></div>
@@ -1668,6 +1668,7 @@
                     isTestingStream: false,
                     testPrompt: '请解释TCP三次握手的过程。',
                     isGeneratingAnalysis: false,
+                    aiAnalysisExplanation: '', // 添加用于流式渲染的状态
                 }
             },
             mounted() {
@@ -3789,13 +3790,8 @@
 
                     try {
                         this.isGeneratingAnalysis = true;
+                        this.aiAnalysisExplanation = '正在生成解析...\n';
                         console.log('[generateAIAnalysis] Starting AI analysis');
-                        
-                        // 设置回调函数来更新解析内容
-                        this.currentQuestion.onAnalysisUpdate = (content) => {
-                            console.log('[generateAIAnalysis] Received update:', content);
-                            this.aiAnalysis = content;
-                        };
 
                         // 获取当前答案
                         let answer;
@@ -3815,21 +3811,75 @@
                         }
 
                         // 调用AI解析
-                        const analysis = await this.practiceManager.getAIAnalysis(answer, this.currentQuestion);
-                        console.log('[generateAIAnalysis] Received analysis', { analysis });
+                        const response = await this.practiceManager.getAIAnalysis(answer, this.currentQuestion);
                         
-                        if (analysis) {
-                            this.aiAnalysis = analysis;
+                        let fullContent = '';
+                        let partialContent = '';
+                        let result = null;
+                        let isReasoningPhase = false;
+
+                        for await (const chunk of response) {
+                            console.log('[generateAIAnalysis] Received chunk:', chunk);
+                            
+                            switch (chunk.type) {
+                                case 'reasoning': {
+                                    isReasoningPhase = true;
+                                    this.aiAnalysisExplanation = '正在生成解析...\n' + chunk.content;
+                                    break;
+                                }
+                                case 'answer': {
+                                    fullContent += chunk.content;
+                                    
+                                    try {
+                                        // 尝试解析完整的 JSON
+                                        const parsed = JSON.parse(fullContent);
+                                        if (parsed.analysis) {
+                                            result = parsed;
+                                            this.aiAnalysis = result.analysis;
+                                            this.aiAnalysisExplanation = result.analysis;
+                                        }
+                                    } catch (error) {
+                                        // JSON 还不完整，继续累积内容
+                                        if (!isReasoningPhase) {
+                                            partialContent += chunk.content;
+                                            
+                                            // 尝试从部分内容中提取有意义的文本
+                                            let cleanContent = partialContent
+                                                .replace(/^{?\s*"analysis":\s*"?/, '')
+                                                .replace(/\\"/, '"')
+                                                .replace(/"}$/, '')
+                                                .replace(/,$/, '')
+                                                .trim();
+                                            
+                                            if (cleanContent) {
+                                                this.aiAnalysisExplanation = '正在生成解析...\n' + cleanContent;
+                                            }
+                                        }
+                                    }
+                                    break;
+                                }
+                            }
                         }
+
+                        // 最后一次尝试解析
+                        if (!result && fullContent) {
+                            try {
+                                const parsed = JSON.parse(fullContent);
+                                if (parsed.analysis) {
+                                    this.aiAnalysis = parsed.analysis;
+                                    this.aiAnalysisExplanation = parsed.analysis;
+                                }
+                            } catch (error) {
+                                console.error('[generateAIAnalysis] Failed to parse final content:', error);
+                            }
+                        }
+
                     } catch (error) {
                         console.error('[generateAIAnalysis] Failed to generate AI analysis:', error);
                         this.showToast('生成AI解析失败，请稍后重试', 'error');
                     } finally {
                         this.isGeneratingAnalysis = false;
-                        // 清理回调
-                        if (this.currentQuestion) {
-                            this.currentQuestion.onAnalysisUpdate = null;
-                        }
+                        this.aiAnalysisExplanation = '';
                     }
                 },
 

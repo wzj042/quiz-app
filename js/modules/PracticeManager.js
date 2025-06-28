@@ -540,100 +540,17 @@ export default class PracticeManager {
                 userPrompt
             });
 
-            const response = await this.aiManager.streamChat([
+            // 直接返回流式响应
+            return this.aiManager.streamChat([
                 { role: 'system', content: systemPrompt },
                 { role: 'user', content: userPrompt }
             ], {
                 response_format: { type: 'json_object' }
             });
 
-            let fullContent = '';
-            let partialContent = '';
-            let result = null;
-            let isReasoningPhase = false;
-
-            for await (const chunk of response) {
-                console.log('[PracticeManager:getAIAnalysis] Received chunk:', chunk);
-                
-                switch (chunk.type) {
-                    case 'reasoning': {
-                        isReasoningPhase = true;
-                        if (question.onAnalysisUpdate) {
-                            question.onAnalysisUpdate('正在思考中...\n' + chunk.content);
-                        }
-                        break;
-                    }
-                    case 'answer': {
-                        fullContent += chunk.content;
-                        try {
-                            // 尝试解析完整的 JSON
-                            const parsed = JSON.parse(fullContent);
-                            if (parsed.analysis) {
-                                result = parsed;
-                                if (question.onAnalysisUpdate) {
-                                    question.onAnalysisUpdate(parsed.analysis);
-                                }
-                            }
-                        } catch (error) {
-                            // JSON 还不完整，尝试提取部分内容进行渲染
-                            if (!isReasoningPhase) {
-                                partialContent += chunk.content;
-                                
-                                // 尝试从部分内容中提取有意义的文本
-                                if (question.onAnalysisUpdate) {
-                                    // 移除可能的JSON标记和引号
-                                    let cleanContent = partialContent
-                                        .replace(/^{?\s*"analysis":\s*"?/, '')
-                                        .replace(/\\n/g, '\n')
-                                        .replace(/\\"/, '"');
-                                        
-                                    // 如果内容看起来是完整的JSON结尾，移除它
-                                    if (cleanContent.endsWith('"}')) {
-                                        cleanContent = cleanContent.slice(0, -2);
-                                    }
-                                    
-                                    question.onAnalysisUpdate(cleanContent);
-                                }
-                            }
-                        }
-                        break;
-                    }
-                    case 'finish': {
-                        console.log('[PracticeManager:getAIAnalysis] Stream finished:', chunk.reason);
-                        break;
-                    }
-                    case 'tool_calls': {
-                        console.log('[PracticeManager:getAIAnalysis] Tool calls received:', chunk.content);
-                        break;
-                    }
-                }
-            }
-
-            // 最后一次尝试解析
-            if (!result && fullContent) {
-                try {
-                    const parsed = JSON.parse(fullContent);
-                    if (parsed.analysis) {
-                        result = parsed;
-                        if (question.onAnalysisUpdate) {
-                            question.onAnalysisUpdate(parsed.analysis);
-                        }
-                    }
-                } catch (error) {
-                    console.error('[PracticeManager:getAIAnalysis] Failed to parse final response:', error);
-                    throw new Error('Invalid AI analysis response');
-                }
-            }
-
-            if (!result || !result.analysis) {
-                console.error('[PracticeManager:getAIAnalysis] Invalid AI analysis response');
-                throw new Error('Invalid AI analysis response');
-            }
-
-            return result.analysis;
         } catch (error) {
             console.error('[PracticeManager:getAIAnalysis] Error:', error);
-            return null;
+            throw error;
         }
     }
 } 
