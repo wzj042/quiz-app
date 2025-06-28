@@ -2571,11 +2571,35 @@
                     // 选择指定数量的题目
                     const selectedQuestions = allQuestions.slice(0, this.crossPracticeCount);
 
-                    // 为每个题目添加来源题库信息
-                    const questionsWithSource = selectedQuestions.map(q => ({
-                        ...q,
-                        sourceBank: this.getBankByQuestion(q).name || '未知题库'
-                    }));
+                    // 为每个题目添加来源题库信息并打乱选项
+                    const questionsWithSource = selectedQuestions.map(q => {
+                        const questionCopy = {...q};
+                        // 如果是单选或多选题，打乱选项
+                        if ((questionCopy.type === 'single-choice' || questionCopy.type === 'multiple-choice') && Array.isArray(questionCopy.options)) {
+                            const originalOptions = [...questionCopy.options];
+                            const originalCorrectAnswer = [...questionCopy.correct_answer];
+                            const shuffledOptions = this.shuffleArray([...originalOptions]);
+                            
+                            // 更新正确答案
+                            if (questionCopy.type === 'single-choice') {
+                                const oldCorrectAnswer = originalCorrectAnswer[0];
+                                const newIndex = shuffledOptions.indexOf(oldCorrectAnswer);
+                                if (newIndex !== -1) {
+                                    questionCopy.correct_answer = [shuffledOptions[newIndex]];
+                                }
+                            } else {
+                                questionCopy.correct_answer = originalCorrectAnswer.map(ans => {
+                                    const newAns = shuffledOptions[originalOptions.indexOf(ans)];
+                                    return newAns;
+                                });
+                            }
+                            questionCopy.options = shuffledOptions;
+                        }
+                        return {
+                            ...questionCopy,
+                            sourceBank: this.getBankByQuestion(q).name || '未知题库'
+                        };
+                    });
 
                     // 创建虚拟题库集合
                     const virtualSet = {
