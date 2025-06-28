@@ -1,0 +1,398 @@
+{
+    
+        "questions": [
+            {
+                "type": "single-choice",
+                "content": "下列不属于数据模型的是(          )。",
+                "options": [
+                    "关系型",
+                    "层次型",
+                    "网状型",
+                    "集中型"
+                ],
+                "correct_answer": [
+                    "集中型"
+                ],
+                "analysis": ""
+            },
+            {
+                "type": "single-choice",
+                "content": "数据库系统(DBS)包括(          )。",
+                "options": [
+                    "DB和DBMS",
+                    "DBMS和操作系统",
+                    "DB和应用系统",
+                    "DB、DBMS、应用系统和用户"
+                ],
+                "correct_answer": [
+                    "DB、DBMS、应用系统和用户"
+                ],
+                "analysis": ""
+            },
+            {
+                "type": "single-choice",
+                "content": "不能在视图上进行的操作是(          )。",
+                "options": [
+                    "查询",
+                    "更新",
+                    "创建新表",
+                    "创建新视图"
+                ],
+                "correct_answer": [
+                    "创建新表"
+                ],
+                "analysis": ""
+            },
+            {
+                "type": "single-choice",
+                "content": "数据库管理系统能实现对数据库中数据的插入、修改和删除等操作，这种功能称为(           )。",
+                "options": [
+                    "数据定义功能",
+                    "数据操纵功能",
+                    "数据查询功能",
+                    "数据控制功能"
+                ],
+                "correct_answer": [
+                    "数据操纵功能"
+                ],
+                "analysis": ""
+            },
+            {
+                "type": "single-choice",
+                "content": "查询产品名称包含\"手机\"的产品应使用(          )。",
+                "options": [
+                    "LIKE '%手机%'",
+                    "LIKE '手机'",
+                    "= '手机'",
+                    "CONTAINS '手机'"
+                ],
+                "correct_answer": [
+                    "LIKE '%手机%'"
+                ],
+                "analysis": ""
+            },
+            {
+                "type": "single-choice",
+                "content": "下列聚合函数会计算NULL值的是(          )。",
+                "options": [
+                    "SUM()",
+                    "COUNT(列名)",
+                    "COUNT(*)",
+                    "AVG()"
+                ],
+                "correct_answer": [
+                    "COUNT(*)"
+                ],
+                "analysis": ""
+            },
+            {
+                "type": "single-choice",
+                "content": "BETWEEN 20 AND 30的含义是筛选字段值在闭区间 [20, 30] 内的所有记录，其中，边界值(          )。",
+                "options": [
+                    "包含20和30",
+                    "不包括20和30",
+                    "包括20不包括30",
+                    "包括30不包括20"
+                ],
+                "correct_answer": [
+                    "包含20和30"
+                ],
+                "analysis": ""
+            },
+            {
+                "type": "single-choice",
+                "content": "SQL语言属于哪种类型的数据库语言？(        )。",
+                "options": [
+                    "关系数据库语言",
+                    "面向对象数据库语言",
+                    "网络数据库语言",
+                    "层次数据库语言"
+                ],
+                "correct_answer": [
+                    "关系数据库语言"
+                ],
+                "analysis": ""
+            },
+            {
+                "type": "single-choice",
+                "content": "欲将“商品”表中的信息先按“商品编码”升序排序，再按“单价”降序排列，SQL 语句能正确完成的是：(          )。",
+                "options": [
+                    "SELECT * FROM 商品 ORDER BY 商品编码 , 单价",
+                    "SELECT * FROM 商品 ORDER BY 商品编码 DESC, 单价 ASC",
+                    "SELECT * FROM 商品 ORDER BY 商品编码 ASC, 单价 DESC",
+                    "SELECT * FROM 商品 ORDER BY 商品编码 DESC, 单价 DESC"
+                ],
+                "correct_answer": [
+                    "SELECT * FROM 商品 ORDER BY 商品编码 ASC, 单价 DESC"
+                ],
+                "analysis": ""
+            },
+            {
+                "type": "single-choice",
+                "content": "在商品表tbProducts中，字段price代表单价 ，以下(          )语句返回商品的最低单价。",
+                "options": [
+                    "select sum(price) from tbProducts;",
+                    "select count(price) from tbProducts;",
+                    "select max(price) from tbProducts;",
+                    "select min(price) from tbProducts;"
+                ],
+                "correct_answer": [
+                    "select min(price) from tbProducts;"
+                ],
+                "analysis": ""
+            },
+            {
+                "type": "single-choice",
+                "content": "下列哪种约束可以确保表中主键字段不为空且唯一?（          ）",
+                "options": [
+                    "主键约束",
+                    "外键约束",
+                    "唯一约束",
+                    "非空约束"
+                ],
+                "correct_answer": [
+                    "主键约束"
+                ],
+                "analysis": ""
+            },
+            {
+                "type": "single-choice",
+                "content": "在SQL语言中的视图VIEW是数据库的(          )。",
+                "options": [
+                    "外模式",
+                    "模式",
+                    "内模式",
+                    "存储模式"
+                ],
+                "correct_answer": [
+                    "外模式"
+                ],
+                "analysis": ""
+            },
+            {
+                "type": "single-choice",
+                "content": "E-R图适用于(          )设计阶段。",
+                "options": [
+                    "概念结构",
+                    "逻辑结构",
+                    "物理结构",
+                    "实现"
+                ],
+                "correct_answer": [
+                    "概念结构"
+                ],
+                "analysis": ""
+            },
+            {
+                "type": "single-choice",
+                "content": "考虑一个列车运营管理系统的数据库设计，其中包含以下关系模式：\n\n列车运营(车次, 日期, 发车时间, 到达时间)\n\n该系统需要记录每天各趟列车的运行时刻信息。已知业务规则如下：\n\n1、同一车次在不同日期可以重复运行（如K123次列车每天都有）；\n\n2、同一车次在同一天只能运行一次（不存在同一车次同天多次发车的情况）；\n\n3、不同车次的列车可以在同一天同一时间发车（如不同线路的列车）。\n\n基于上述业务规则，该关系模式的主键应该是(         )？",
+                "options": [
+                    "车次",
+                    "日期",
+                    "(车次,日期)",
+                    "(发车时间,到达时间)"
+                ],
+                "correct_answer": [
+                    "(车次,日期)"
+                ],
+                "analysis": ""
+            },
+            {
+                "type": "single-choice",
+                "content": "关于数据库索引的作用，以下描述错误的是:(          )",
+                "options": [
+                    "加快数据查询速度",
+                    "减少表的存储空间大小",
+                    "加速表间的连接操作",
+                    "提高表的某些字段的排序效率"
+                ],
+                "correct_answer": [
+                    "减少表的存储空间大小"
+                ],
+                "analysis": ""
+            },
+            {
+                "type": "single-choice",
+                "content": "数据库管理员（DBA）是数据库系统（DBS）的组成部分之一。(          )",
+                "options": [
+                    "对",
+                    "错"
+                ],
+                "correct_answer": [
+                    "对"
+                ],
+                "analysis": ""
+            },
+            {
+                "type": "single-choice",
+                "content": "外键可以唯一标识一行记录。(          )",
+                "options": [
+                    "对",
+                    "错"
+                ],
+                "correct_answer": [
+                    "错"
+                ],
+                "analysis": ""
+            },
+            {
+                "type": "single-choice",
+                "content": "HAVING用于分组后筛选。(          )",
+                "options": [
+                    "对",
+                    "错"
+                ],
+                "correct_answer": [
+                    "对"
+                ],
+                "analysis": ""
+            },
+            {
+                "type": "single-choice",
+                "content": "WHERE子句不能使用聚合函数。(          )",
+                "options": [
+                    "对",
+                    "错"
+                ],
+                "correct_answer": [
+                    "对"
+                ],
+                "analysis": ""
+            },
+            {
+                "type": "single-choice",
+                "content": "左连接（LEFT JOIN）和右连接（RIGHT JOIN）在SQL查询中的作用不同。(          )",
+                "options": [
+                    "对",
+                    "错"
+                ],
+                "correct_answer": [
+                    "对"
+                ],
+                "analysis": ""
+            },
+            {
+                "type": "single-choice",
+                "content": "外连接（OUTER JOIN）会保留表中不满足连接条件的行。(          )",
+                "options": [
+                    "对",
+                    "错"
+                ],
+                "correct_answer": [
+                    "对"
+                ],
+                "analysis": ""
+            },
+            {
+                "type": "single-choice",
+                "content": "UPDATE语句可以一次更新多行。(          )",
+                "options": [
+                    "对",
+                    "错"
+                ],
+                "correct_answer": [
+                    "对"
+                ],
+                "analysis": ""
+            },
+            {
+                "type": "single-choice",
+                "content": "所有索引都不会改变数据的物理存储顺序。(          )",
+                "options": [
+                    "对",
+                    "错"
+                ],
+                "correct_answer": [
+                    "错"
+                ],
+                "analysis": ""
+            },
+            {
+                "type": "single-choice",
+                "content": "在SQL SERVER 中，SELECT子句中的非聚合列必须出现在GROUP BY子句中，否则会报错。(          )",
+                "options": [
+                    "对",
+                    "错"
+                ],
+                "correct_answer": [
+                    "对"
+                ],
+                "analysis": ""
+            },
+            {
+                "type": "single-choice",
+                "content": "SELECT语句中的ORDER BY子句中，如果有多个排序标准，它们之间用分号分隔，查询结果与排序标准的先后顺序有关。(        )",
+                "options": [
+                    "对",
+                    "错"
+                ],
+                "correct_answer": [
+                    "错"
+                ],
+                "analysis": ""
+            },
+            {
+                "type": "fill-in-blank",
+                "content": "将E-R图转换为关系模型时，若实体A与实体B存在1:n联系，则A实体的__________应作为外键添加到B实体对应的关系中。",
+                "blanks": [
+                    "空1"
+                ],
+                "correct_answer": [
+                    "主键"
+                ]
+            },
+            {
+                "type": "fill-in-blank",
+                "content": "当WHERE子句需要基于聚合函数（如AVG、SUM）进行过滤时，必须使用_____________子句而非WHERE子句。",
+                "blanks": [
+                    "空1"
+                ],
+                "correct_answer": [
+                    "HAVING"
+                ]
+            },
+            {
+                "type": "fill-in-blank",
+                "content": "创建视图的关键字是CREATE__________。",
+                "blanks": [
+                    "空1"
+                ],
+                "correct_answer": [
+                    "VIEW"
+                ]
+            },
+            {
+                "type": "fill-in-blank",
+                "content": "在E-R图（实体-关系图）中，菱形符号用于表示__________，而实体则用__________图形表示。",
+                "blanks": [
+                    "空1",
+                    "空2"
+                ],
+                "correct_answer": [
+                    "关系",
+                    "矩形"
+                ]
+            },
+            {
+                "type": "short-answer",
+                "content": "要开发一个图书管理系统，数据库有如下三个表:\n\n### 1. 图书表（Book）\n\n| 列名 | 说明 | 数据类型 | 约束 |\n| --- | --- | --- | --- |\n| BID | 图书编号 | VARCHAR(10) | 主键 |\n| Title | 书名 | VARCHAR(50) | 非空 |\n| Category | 分类 | VARCHAR(20) | 非空，取值范围在\"文学\",\"科技\",\"教育\",\"生活\" |\n| Price | 价格 | DECIMAL(6,2) | >0 |\n| Stock | 库存量 | INT | >=0 |\n| AID | 作者编号 | VARCHAR(10) | 非空，外键引用Author表 |\n\n### 2. 作者表（Author）\n\n| 列名 | 说明 | 数据类型 | 约束 |\n| --- | --- | --- | --- |\n| AID | 作者编号 | VARCHAR(10) | 主键 |\n| Name | 姓名 | VARCHAR(20) | 非空 |\n| Gender | 性别 | CHAR(1) | '男'或'女' |\n| BirthYear | 出生年份 | INT | 1900-2020 |\n| Nationality | 国籍 | VARCHAR(20) |   |\n\n### 3. 借阅记录表（Borrow）\n\n| 列名 | 说明 | 数据类型 | 约束 |\n| --- | --- | --- | --- |\n| RID | 记录编号 | VARCHAR(10) | 主键 |\n| ReaderID | 读者证号 | VARCHAR(10) | 非空 |\n| BID | 图书编号 | VARCHAR(10) | 外键引用Book表 |\n| BorrowDate | 借阅日期 | DATE |   |\n| ReturnDate | 归还日期 | DATE | 必须>=借阅日期 |\n\n### 题目：\n\n（1）请编写SQL语句创建上述3个表，包含所有约束（主键、外键、非空、检查等）。（9分）  \n\n（2）查询\"科技\"类图书的详细信息，按价格升序排列。（5分）  \n\n（3）将所有库存量低于5本的图书价格上调10%。（5分）  \n\n（4）统计每位作者的著作数量及平均价格，按著作数量降序排列。（5分）  \n\n（5）查询所有借阅记录，显示读者证号、图书名称、借阅日期和作者姓名。（5分）  \n\n（6）查询从未被借阅过的图书信息。（5分）  \n\n（7）创建视图v_popular_books，显示被借阅次数超过5次的图书ID、书名和总借阅次数。（6分）",
+                "correct_answer": [
+                    "```sql \n -- (1) 创建表\n--\n 创建作者表(Author) \nCREATE TABLE Author (\n   AID VARCHAR(10) PRIMARY KEY,\n   Name VARCHAR(20) NOT NULL,\n   Gender CHAR(1) CHECK (Gender IN ('男', '女')),\n   BirthYear INT CHECK (BirthYear BETWEEN 1900 AND 2020),\n   Nationality VARCHAR(20)\n ); \n-- 创建图书表(Book)\nCREATE TABLE Book (\n   BID VARCHAR(10) PRIMARY KEY,\n   Title VARCHAR(50) NOT NULL,\n   Category VARCHAR(20) NOT NULL CHECK (Category IN ('文学', '科技', '教育', '生活')),\n   Price DECIMAL(6,2) CHECK (Price > 0),\n   Stock INT CHECK (Stock >= 0),\n   AID VARCHAR(10) NOT NULL,\n   FOREIGN KEY (AID) REFERENCES Author(AID) \n); \n-- 创建借阅记录表(Borrow) \nCREATE TABLE Borrow (\n   RID VARCHAR(10) PRIMARY KEY,\n   ReaderID VARCHAR(10) NOT NULL,\n   BID VARCHAR(10) NOT NULL,\n   BorrowDate DATE,\n   ReturnDate DATE,\n   FOREIGN KEY (BID) REFERENCES Book(BID),\n   CHECK (ReturnDate >= BorrowDate)\n );\n\n-- (2) 查询科技类图书\nSELECT * FROM Book WHERE Category = '科技' ORDER BY Price ASC;\n\n-- (3) 更新图书价格\nUPDATE Book SET Price = Price * 1.1 WHERE Stock < 5;\n\n-- (4) 统计作者著作信息\nSELECT a.AID, a.Name, COUNT(b.BID) AS BookCount, AVG(b.Price) AS AvgPrice \n FROM Author a  \n  LEFT JOIN \n Book b ON a.AID = b.AID GROUP BY   a.AID, a.Name  ORDER BY   BookCount DESC;\n\n-- (5) 查询借阅记录详情\nSELECT br.ReaderID, b.Title AS BookTitle,  br.BorrowDate, a.Name AS AuthorName \n FROM   Borrow br \n INNER JOIN \n Book b ON br.BID = b.BID \n INNER JOIN\n  Author a ON b.AID = a.AID;\n\n-- (6) 查询从未被借阅的图书\nSELECT * FROM Book\n  WHERE BID NOT IN (SELECT DISTINCT BID FROM Borrow);\n\n-- (7) 创建视图\nCREATE VIEW v_popular_books AS SELECT  b.BID, b.Title, COUNT(br.RID) AS BorrowCount  \n FROM  Book b \n INNER JOIN\n  Borrow br ON b.BID = br.BID GROUP BY  b.BID, b.Title HAVING  COUNT(br.RID) > 5;\n```"
+                ]
+            }
+        ]
+    ,
+    "sets": [
+        {
+            "id": "sjk-3",
+            "name": "03-数据库期中",
+            "category": "数据库原理",
+            "tags": [
+                "数据库原理"
+            ],
+            "createTime": "2025-06-28 15:27:00",
+            "updateTime": "2025-06-28 15:27:00",
+            "description": "[期中](https://mooc1.chaoxing.com/exam-ans/exam/test/reVersionPaperMarkContentNew?courseId=240495320&classId=114464188&p=1&id=155464091&ut=s&newMooc=true&qbanksystem=1&qbankbackurl=%2Fexam-ans%2Fexam%2Ftest%2Flook%3FcourseId%3D240495320%26classId%3D114464188%26examId%3D6889420%26examAnswerId%3D155464091%26cpi%3D411759952&cpi=411759952&openc=751321b443ce6cd939626fe7a48634a2)"
+        }
+    ]
+}

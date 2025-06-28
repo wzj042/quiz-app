@@ -1,0 +1,366 @@
+{
+    
+        "questions": [
+            {
+                "type": "fill-in-blank",
+                "content": "在SQL中，使用__________命令可以对数据进行分组，使用__________函数可以计算某个字段的总和，使用__________函数可以计算某个字段的平均数。",
+                "blanks": [
+                    "空1",
+                    "空2",
+                    "空3"
+                ],
+                "correct_answer": [
+                    "GROUP BY",
+                    "SUM",
+                    "AVG"
+                ]
+            },
+            {
+                "type": "single-choice",
+                "content": "在SQL中，要删除名为`students`的数据表，应使用的命令是？",
+                "options": [
+                    "DROP TABLE students;",
+                    "DELETE TABLE students;",
+                    "REMOVE TABLE students;",
+                    "ALTER TABLE students;"
+                ],
+                "correct_answer": [
+                    "DROP TABLE students;"
+                ],
+                "analysis": "正确答案是A。在SQL中，删除一个数据表应使用DROP TABLE命令。"
+            },
+            {
+                "type": "single-choice",
+                "content": "在SQL中，要删除名为`users`的数据表中的`email`列，应使用的命令是？",
+                "options": [
+                    "ALTER TABLE users DROP COLUMN email;",
+                    "DELETE COLUMN users.email;",
+                    "REMOVE COLUMN users.email;",
+                    "DROP COLUMN users.email;"
+                ],
+                "correct_answer": [
+                    "ALTER TABLE users DROP COLUMN email;"
+                ],
+                "analysis": "正确答案是A。在SQL中，删除数据表中的某一列应使用ALTER TABLE命令，并使用DROP COLUMN关键字来指定要删除的列。"
+            },
+            {
+                "type": "single-choice",
+                "content": "在SQL语句中，要创建一个名为`orders`的数据表，其中包含`order_id`（整数）和`customer_name`（字符串），正确的SQL语句是？",
+                "options": [
+                    "CREATE TABLE orders (order_id INT, customer_name VARCHAR(100));",
+                    "NEW TABLE orders (order_id INT, customer_name VARCHAR(100));",
+                    "MAKE TABLE orders (order_id INT, customer_name VARCHAR(100));",
+                    "INSERT TABLE orders (order_id INT, customer_name VARCHAR(100));"
+                ],
+                "correct_answer": [
+                    "CREATE TABLE orders (order_id INT, customer_name VARCHAR(100));"
+                ],
+                "analysis": "正确答案是A。在SQL中，创建一个新数据表应使用CREATE TABLE命令，并定义每个列的名称和类型。"
+            },
+            {
+                "type": "single-choice",
+                "content": "在SQL中，要修改名为`books`的数据表，将`title`列的数据类型从VARCHAR(50)改为VARCHAR(100)，应使用的命令是？",
+                "options": [
+                    "ALTER TABLE books MODIFY title VARCHAR(100);",
+                    "ALTER TABLE books CHANGE title VARCHAR(100);",
+                    "ALTER TABLE books UPDATE title VARCHAR(100);",
+                    "ALTER TABLE books ALTER title VARCHAR(100);"
+                ],
+                "correct_answer": [
+                    "ALTER TABLE books MODIFY title VARCHAR(100);"
+                ],
+                "analysis": "正确答案是A。在SQL中，修改数据表中某一列的数据类型应使用ALTER TABLE命令，并使用MODIFY关键字来指定新的数据类型。"
+            },
+            {
+                "type": "single-choice",
+                "content": "在创建表的时候，为了保证列中的所有值都不重复，应该使用关键字(  )。",
+                "options": [
+                    "PRIMARY KEY",
+                    "DISTINCT",
+                    "UNIQUE",
+                    "DEFAULT"
+                ],
+                "correct_answer": [
+                    "UNIQUE"
+                ]
+            },
+            {
+                "type": "single-choice",
+                "content": "假设有一个Students表，包含StudentID（主键，整数类型）、StudentName（字符串类型）、Age（整数类型）列。要在该表中插入一个名为 “张三”，年龄为 20 岁的学生记录，正确的 SQL 语句是（  ）。",
+                "options": [
+                    "INSERT INTO Students (StudentName, Age) VALUES (' 张三 ', 20);",
+                    "INSERT INTO Students VALUES (' 张三 ', 20);",
+                    "INSERT INTO Students (StudentID, StudentName, Age) VALUES (1, ' 张三 ', 20);",
+                    "INSERT INTO Students (StudentName, Age) VALUES (20, ' 张三 ');"
+                ],
+                "correct_answer": [
+                    "INSERT INTO Students (StudentID, StudentName, Age) VALUES (1, ' 张三 ', 20);"
+                ]
+            },
+            {
+                "type": "single-choice",
+                "content": "若要将Students表中所有学生的年龄增加 1 岁，正确的 SQL 语句是（  ）。",
+                "options": [
+                    "UPDATE Students SET Age = Age + 1;",
+                    "UPDATE Students WHERE Age = Age + 1;",
+                    "SET Age = Age + 1 FROM Students;",
+                    "UPDATE Students Age = Age + 1;"
+                ],
+                "correct_answer": [
+                    "UPDATE Students SET Age = Age + 1;"
+                ]
+            },
+            {
+                "type": "single-choice",
+                "content": "在SQL语言中，条件“年龄 BETWEEN 20 AND 30”表示年龄在20至30之间，且(  )。",
+                "options": [
+                    "包括20岁和30岁",
+                    "不包括20岁和30岁",
+                    "包括20岁但不包括30岁",
+                    "包括30岁但不包括20岁"
+                ],
+                "correct_answer": [
+                    "包括20岁和30岁"
+                ]
+            },
+            {
+                "type": "single-choice",
+                "content": "欲将表“学生”中的信息先按“班级”升序排序，再按“成绩”降序排列，SQL 语句能正确完成的是(  )。",
+                "options": [
+                    "SELECT * FROM 学生 ORDER BY 班级, 成绩",
+                    "SELECT * FROM 学生 ORDER BY 班级, 成绩 DESC",
+                    "SELECT * FROM 学生 ORDER BY 班级 ASC, AND 成绩 DESC",
+                    "SELECT * FROM 学生 ORDER BY 成绩 DESC，班级ASC"
+                ],
+                "correct_answer": [
+                    "SELECT * FROM 学生 ORDER BY 班级, 成绩 DESC"
+                ]
+            },
+            {
+                "type": "single-choice",
+                "content": "在SQL中，哪个关键字用于连接两个或多个表，基于这些表之间的相关列之间的关系?(    )。",
+                "options": [
+                    "JOIN",
+                    "UNION",
+                    "CONNECT",
+                    "LINK"
+                ],
+                "correct_answer": [
+                    "JOIN"
+                ]
+            },
+            {
+                "type": "single-choice",
+                "content": "SQL中，和 AGE IN（20，22）语义相同的是（ ）。",
+                "options": [
+                    "AGE<=22 AND AGE >=20",
+                    "AGE <22 AND AGE >20",
+                    "AGE =20 AND AGE =22",
+                    "AGE =20 OR AGE =22"
+                ],
+                "correct_answer": [
+                    "AGE =20 OR AGE =22"
+                ]
+            },
+            {
+                "type": "single-choice",
+                "content": "欲将表“学生”中的信息先按“学号”升序排序，再按“成绩”降序排列，SQL 语句能正确完成的是：（ ）。",
+                "options": [
+                    "SELECT * FROM 学生 ORDER BY 学号 , 成绩",
+                    "SELECT * FROM 学生 ORDER BY 学号 , 成绩 DESC",
+                    "SELECT * FROM 学生 ORDER BY 学号 ASC, AND 成绩 DESC",
+                    "SELECT * FROM 学生 ORDER BY 成绩 DESC，学号 ASC"
+                ],
+                "correct_answer": [
+                    "SELECT * FROM 学生 ORDER BY 学号 , 成绩 DESC"
+                ]
+            },
+            {
+                "type": "single-choice",
+                "content": "下列聚合函数中不忽略空值 (null) 的是：（ ）。",
+                "options": [
+                    "SUM (列名)",
+                    "MAX (列名)",
+                    "COUNT (*)",
+                    "AVG (列名)"
+                ],
+                "correct_answer": [
+                    "COUNT (*)"
+                ]
+            },
+            {
+                "type": "single-choice",
+                "content": "数据库管理系统能实现对数据库中数据的查询、插入、修改和删除等操作，这种功能称为（ ）。",
+                "options": [
+                    "数据定义功能",
+                    "数据管理功能",
+                    "数据操纵功能",
+                    "数据控制功能"
+                ],
+                "correct_answer": [
+                    "数据操纵功能"
+                ]
+            },
+            {
+                "type": "single-choice",
+                "content": "Select语句中，和Having语句同时使用的是（ ）。",
+                "options": [
+                    "Order by",
+                    "Group by",
+                    "Where",
+                    "Or"
+                ],
+                "correct_answer": [
+                    "Group by"
+                ]
+            },
+            {
+                "type": "single-choice",
+                "content": "在SQL查询中使用WHERE子句指出的是（ ）。",
+                "options": [
+                    "查询目标",
+                    "查询结果",
+                    "查询视图",
+                    "查询条件"
+                ],
+                "correct_answer": [
+                    "查询条件"
+                ]
+            },
+            {
+                "type": "single-choice",
+                "content": "ORDER BY子句仅对检索数据的显示有影响，并不改变表中行的内容顺序。",
+                "options": [
+                    "对",
+                    "错"
+                ],
+                "correct_answer": [
+                    "对"
+                ]
+            },
+            {
+                "type": "single-choice",
+                "content": "在SQL命令的短语中，WHERE子句中不允许使用聚集函数。",
+                "options": [
+                    "对",
+                    "错"
+                ],
+                "correct_answer": [
+                    "对"
+                ]
+            },
+            {
+                "type": "single-choice",
+                "content": "子查询的SELECT 语句中不能使用ORDER BY子句。",
+                "options": [
+                    "对",
+                    "错"
+                ],
+                "correct_answer": [
+                    "对"
+                ]
+            },
+            {
+                "type": "single-choice",
+                "content": "左连接“表1 LEFT JOIN 表2”的作用与“表2 RIGHT JOIN 表1”等价。",
+                "options": [
+                    "对",
+                    "错"
+                ],
+                "correct_answer": [
+                    "对"
+                ]
+            },
+            {
+                "type": "single-choice",
+                "content": "SQL Server中为所有字段插入记录时,若省略字段名称,则必须严格按照数据表结构插入对应的值。",
+                "options": [
+                    "对",
+                    "错"
+                ],
+                "correct_answer": [
+                    "对"
+                ]
+            },
+            {
+                "type": "single-choice",
+                "content": "SELECT 语句中的条件可以用WHERE或HAVING引出，但HAVING必须在GROUP BY之后使用。",
+                "options": [
+                    "对",
+                    "错"
+                ],
+                "correct_answer": [
+                    "对"
+                ]
+            },
+            {
+                "type": "single-choice",
+                "content": "如果想要查询结果中不显示重复的数据，可以使用DISTINCT 关键字。",
+                "options": [
+                    "对",
+                    "错"
+                ],
+                "correct_answer": [
+                    "对"
+                ]
+            },
+            {
+                "type": "single-choice",
+                "content": "自连接查询指相互连接的表在物理上为同一个表，但逻辑上分为两个表。。",
+                "options": [
+                    "对",
+                    "错"
+                ],
+                "correct_answer": [
+                    "对"
+                ]
+            },
+            {
+                "type": "single-choice",
+                "content": "外连接可以保留主表中与从表不匹配的记录。",
+                "options": [
+                    "对",
+                    "错"
+                ],
+                "correct_answer": [
+                    "对"
+                ]
+            },
+            {
+                "type": "single-choice",
+                "content": "如果子查询的返回值多个，那么可以使用比较运算符。",
+                "options": [
+                    "对",
+                    "错"
+                ],
+                "correct_answer": [
+                    "错"
+                ]
+            },
+            {
+                "type": "single-choice",
+                "content": "数据库嵌套查询指的是一个select查询内再嵌套入一个select查询。其执行的次序一般是先执行外层的父查询，然后再执行里面的子查询。",
+                "options": [
+                    "对",
+                    "错"
+                ],
+                "correct_answer": [
+                    "错"
+                ]
+            }
+        ],
+    
+    "sets": [
+        {
+            "id": "sjk-2",
+            "name": "02-数据库作业2",
+            "category": "数据库原理",
+            "tags": [
+                "数据库原理"
+            ],
+            "createTime": "2025-06-28 15:27:00",
+            "updateTime": "2025-06-28 15:27:00",
+            "description": "[hw2](https://mooc1.chaoxing.com/mooc-ans/mooc2/work/view?courseId=240495320&classId=114464188&cpi=411759952&workId=42876544&answerId=54434016&enc=f07649c4f83238c247641b3390cf86cb)"
+        }
+    ]
+}

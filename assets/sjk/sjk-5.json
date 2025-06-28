@@ -1,0 +1,141 @@
+{
+    
+        "questions": [
+            {
+                "type": "single-choice",
+                "content": "在数据库中删除触发器使用（ ）。",
+                "options": [
+                    "ROLLBACK",
+                    "DROP",
+                    "DELALLOCATE",
+                    "DELETE"
+                ],
+                "correct_answer": [
+                    "DROP"
+                ]
+            },
+            {
+                "type": "single-choice",
+                "content": "数据库中建立索引的目的是为了（   ）。",
+                "options": [
+                    "加快建表速度",
+                    "加快查询速度",
+                    "提高安全性",
+                    "节省存储空间"
+                ],
+                "correct_answer": [
+                    "加快查询速度"
+                ]
+            },
+            {
+                "type": "single-choice",
+                "content": "视图是数据库系统三级模式中的（ ）。",
+                "options": [
+                    "外模式",
+                    "模式",
+                    "内模式",
+                    "模式映像"
+                ],
+                "correct_answer": [
+                    "外模式"
+                ]
+            },
+            {
+                "type": "single-choice",
+                "content": "下列说法不正确的是（ ）。",
+                "options": [
+                    "基本表和视图一样，都是关系",
+                    "可以使用SQL对基本表和视图进行操作",
+                    "可以从基本表或视图上定义视图",
+                    "基本表和视图中都存储数据"
+                ],
+                "correct_answer": [
+                    "基本表和视图中都存储数据"
+                ]
+            },
+            {
+                "type": "single-choice",
+                "content": "在SQL中，以下关于视图的描述，正确的是（   ）。",
+                "options": [
+                    "视图是一个虚拟表，其数据并不真实存放数据库中。",
+                    "视图中包含的列，只能来源同一个基本表。",
+                    "视图的运用会增加数据库的安全风险。",
+                    "使用视图对数据进行更改时候，只改变视图数据，对基本表数据没有影响。"
+                ],
+                "correct_answer": [
+                    "视图是一个虚拟表，其数据并不真实存放数据库中。"
+                ]
+            },
+            {
+                "type": "single-choice",
+                "content": "在SQL中，建立视图用（ ）。",
+                "options": [
+                    "CREATE SCHEMA 命令",
+                    "CREATE TABLE 命令",
+                    "CREATE VIEW 命令",
+                    "CREATE INDEX 命令"
+                ],
+                "correct_answer": [
+                    "CREATE VIEW 命令"
+                ]
+            },
+            {
+                "type": "single-choice",
+                "content": "循环语句和判断语句可以互相嵌套。",
+                "options": [
+                    "对",
+                    "错"
+                ],
+                "correct_answer": [
+                    "对"
+                ]
+            },
+            {
+                "type": "single-choice",
+                "content": "触发器主要是通过事件进行触发而被执行的，而存储过程可以通过存储过程名字而被直接调用。",
+                "options": [
+                    "对",
+                    "错"
+                ],
+                "correct_answer": [
+                    "对"
+                ]
+            },
+            {
+                "type": "single-choice",
+                "content": "数据库存储过程不能调用函数，但是函数可以调用存储过程。",
+                "options": [
+                    "对",
+                    "错"
+                ],
+                "correct_answer": [
+                    "错"
+                ]
+            },
+            {
+                "type": "single-choice",
+                "content": "视图是一个虚拟表，并不表示任何物理数据，而只是用来查看数据的窗口而已。",
+                "options": [
+                    "对",
+                    "错"
+                ],
+                "correct_answer": [
+                    "对"
+                ]
+            }
+        ]
+    ,
+    "sets": [
+        {
+            "id": "sjk-5",
+            "name": "05-数据库作业5",
+            "category": "数据库原理",
+            "tags": [
+                "数据库原理"
+            ],
+            "createTime": "2025-06-28 15:27:00",
+            "updateTime": "2025-06-28 15:27:00",
+            "description": "[hw5](https://mooc1.chaoxing.com/mooc-ans/mooc2/work/view?courseId=240495320&classId=114464188&cpi=411759952&workId=44317999&answerId=54633902&enc=c2dc1a590e0dfa5860366f30c92cf563)"
+        }
+    ]
+}
