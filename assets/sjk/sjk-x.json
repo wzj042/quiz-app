@@ -1,0 +1,1417 @@
+{
+    "questions": [
+        {
+            "type": "single-choice",
+            "content": "在数据库理论中，作为决策重要依据，并且是对客观事物状态和特征在人脑中反映的描述被称为？",
+            "options": [
+                "数据（Data）",
+                "信息（Information）",
+                "数据库（DataBase）",
+                "数据管理（Data Management）"
+            ],
+            "correct_answer": [
+                "信息（Information）"
+            ],
+            "analysis": "信息（Information）是客观事物状态和特征在人脑中的反映，是对事物的状态和特征的描述,是进行决策的重要依据。"
+        },
+        {
+            "type": "single-choice",
+            "content": "下列哪一项不属于数据库（DataBase）的基本特性？",
+            "options": [
+                "共享性",
+                "持久性",
+                "临时性",
+                "有组织（结构）"
+            ],
+            "correct_answer": [
+                "临时性"
+            ],
+            "analysis": "基本特性：在计算机内的、有组织（结构）的、可共享、长期存储、集成性、共享性、海量性和持久性"
+        },
+        {
+            "type": "single-choice",
+            "content": "在数据库系统中，被视为整个系统核心，并负责对数据进行统一管理和控制的系统软件是？",
+            "options": [
+                "数据库系统（DBS）",
+                "数据库（DB）",
+                "数据库管理系统（DBMS）",
+                "应用系统"
+            ],
+            "correct_answer": [
+                "数据库管理系统（DBMS）"
+            ],
+            "analysis": "数据库管理系统（DataBase Management System，DBMS）是指建立、运用、管理和维护数据库，并对数据进行统一管理和控制的系统软件。\nDBMS是整个数据库系统的核心，对数据库中的各种数据进行统一管理、控制和共享。"
+        },
+        {
+            "type": "single-choice",
+            "content": "根据常见的四部分定义，数据库系统（DBS）的组成不包括以下哪个部分？",
+            "options": [
+                "数据库管理系统（DBMS）",
+                "应用系统",
+                "操作系统",
+                "用户"
+            ],
+            "correct_answer": [
+                "操作系统"
+            ],
+            "analysis": "数据库系统组成包括数据库、数据库管理系统（DBMS）、应用系统和用户四个部分。也有少数人定义为五部分：数据库、DBMS、软件、硬件和用户。"
+        },
+        {
+            "type": "single-choice",
+            "content": "数据模型由三要素组成，以下哪一项不属于这三要素？",
+            "options": [
+                "数据结构",
+                "数据操作",
+                "完整性约束",
+                "数据流"
+            ],
+            "correct_answer": [
+                "数据流"
+            ],
+            "analysis": "数据模型由三要素组成：数据结构、数据操作和完整性约束。"
+        },
+        {
+            "type": "single-choice",
+            "content": "面向数据库用户的现实世界模型，通常用于描述事物的概念化结构，最常用的方法是实体联系模型（E-R图）。这种模型被称为？",
+            "options": [
+                "概念模型",
+                "逻辑模型",
+                "物理模型",
+                "关系模型"
+            ],
+            "correct_answer": [
+                "概念模型"
+            ],
+            "analysis": "概念模型（Conceptual Data Model）。也称信息模型，是面向数据库用户的现实世界的模型。\n主要用于描述事物的概念化结构，以图形化方式分析表示事物（实体）数据特征（属性）及其之间的联系等，最常用的是实体联系模型（E-R图）"
+        },
+        {
+            "type": "single-choice",
+            "content": "在实体联系模型（E-R图）中，像'一个学生'、'一门课程'或'一本书'这样的可以相互区别的现实世界事物或活动，被称为？",
+            "options": [
+                "联系 (Relationship)",
+                "属性 (Attribute)",
+                "实体 (Entity)",
+                "模式 (Schema)"
+            ],
+            "correct_answer": [
+                "实体 (Entity)"
+            ],
+            "analysis": "实体（Entity）是现实世界中可以相互区别的事物或活动。如一个学生、一门课程、一本书、一个订单等。"
+        },
+        {
+            "type": "single-choice",
+            "content": "关系模型、层次模型和网状模型属于哪一类数据模型？",
+            "options": [
+                "概念模型",
+                "物理模型",
+                "逻辑模型",
+                "现实模型"
+            ],
+            "correct_answer": [
+                "逻辑模型"
+            ],
+            "analysis": "逻辑模型（Logical Data Model）。是逻辑数据模型的简称，是以计算机系统的观点对数据建模，是直接面向数据库的逻辑结构\n是具体的DBMS所支持的数据模型，如网状模型、层次模型和关系模型等"
+        },
+        {
+            "type": "single-choice",
+            "content": "在数据库系统的三级模式结构中，对数据库中所有数据的逻辑结构和特征进行描述，且一个数据库只有一个的是？",
+            "options": [
+                "外模式",
+                "内模式",
+                "模式（概念模式）",
+                "子模式"
+            ],
+            "correct_answer": [
+                "模式（概念模式）"
+            ],
+            "analysis": "模式(概念模式)（Schema）：模式也称逻辑模式、概念模式或概念视图，是数据库中所有数据的逻辑结构和特征的描述。一个数据库只有一个模式。"
+        },
+        {
+            "type": "single-choice",
+            "content": "描述数据物理结构和存储方式，即数据在数据库内部表达方式的是数据库三级模式中的哪一级？",
+            "options": [
+                "外模式",
+                "概念模式",
+                "逻辑模式",
+                "内模式"
+            ],
+            "correct_answer": [
+                "内模式"
+            ],
+            "analysis": "内模式（Internal Schema）：内模式也称存储模式，是数据物理结构和存储方式的描述，是数据在数据库内部的表达方式，对应于实际存储在外存储介质上的数据库。一个数据库只有一个内模式。"
+        },
+        {
+            "type": "single-choice",
+            "content": "数据库系统中，保证数据的物理独立性（即数据的物理存储结构改变不影响其逻辑结构）是通过定义哪一级映像关系实现的？",
+            "options": [
+                "外模式／模式映像",
+                "模式／内模式映像",
+                "外模式／内模式映像",
+                "概念模式／逻辑模式映像"
+            ],
+            "correct_answer": [
+                "模式／内模式映像"
+            ],
+            "analysis": "模式／内模式映像：定义了数据的全局逻辑结构与存储结构之间的对应关系。\n保证了数据的物理独立性"
+        },
+        {
+            "type": "single-choice",
+            "content": "当数据库的模式（概念模式）发生改变时，通过修改外模式/模式映像，可以使外模式保持不变，从而应用程序不必修改。这体现了数据的什么特性？",
+            "options": [
+                "物理独立性",
+                "逻辑独立性",
+                "数据共享性",
+                "数据完整性"
+            ],
+            "correct_answer": [
+                "逻辑独立性"
+            ],
+            "analysis": "外模式／模式映像：定义了外模式和模式之间的对应关系。\n保证了数据的逻辑独立性"
+        },
+        {
+            "type": "single-choice",
+            "content": "在数据库管理系统（DBMS）提供的语言中，用于定义数据库、表、索引等对象的语言是？",
+            "options": [
+                "数据操作语言 (DML)",
+                "数据控制语言 (DCL)",
+                "事务管理语言 (TML)",
+                "数据定义语言 (DDL)"
+            ],
+            "correct_answer": [
+                "数据定义语言 (DDL)"
+            ],
+            "analysis": "语言编译处理程序。含数据定义语言（Data Definition Language，DDL）、数据操作语言（Data Manipulation Language，DML）、数据控制语言（Data Control Language，DCL）和事务管理语言（Transact Management Language，TML）功能及其编译程序。"
+        },
+        {
+            "type": "single-choice",
+            "content": "在关系模型中，一个规范化的二维表通常被称为一个什么？",
+            "options": [
+                "属性",
+                "元组",
+                "关系",
+                "候选码"
+            ],
+            "correct_answer": [
+                "关系"
+            ],
+            "analysis": "关系模型（Relational model）是一张规范化的的二维表，每个实体及其之间的联系都可直接转换为对应的二维表形式。每个二维表称为一个关系，其中关系的型由二维表表头确定，此外表中的每一行为关系的值(元组或记录)，二维表的每列称为属性(域、字段或数据项)，给每列起一个名称即属性名。"
+        },
+        {
+            "type": "single-choice",
+            "content": "在关系数据模型中，能够唯一标识一个元组（记录）的属性组被称为？",
+            "options": [
+                "主属性",
+                "非主属性",
+                "关系模式",
+                "候选码"
+            ],
+            "correct_answer": [
+                "候选码"
+            ],
+            "analysis": "候选码（Candidate key）：若关系中的某一属性组的值能唯一地标识一个元组，则称该属性组为候选码，简单的情况，候选码只包含一个属性。"
+        },
+        {
+            "type": "single-choice",
+            "content": "如果一个关系有多个候选码，被选定用于唯一标识元组的那个候选码被称为？",
+            "options": [
+                "超键",
+                "主码",
+                "主属性",
+                "外键"
+            ],
+            "correct_answer": [
+                "主码"
+            ],
+            "analysis": "主码：若一个关系有多个候选码，则选定其中一个为主码（Primary key）"
+        },
+        {
+            "type": "single-choice",
+            "content": "在将E-R图转换为关系模型时，对于一个“一对多”（1:N）的联系，正确的转换规则是？",
+            "options": [
+                "在“一”的一端实体关系中，加入“多”的一端实体的主键",
+                "在“多”的一端实体关系中，加入“一”的一端实体的主键",
+                "为该联系创建一个新的关系表",
+                "将两个实体合并为一个关系表"
+            ],
+            "correct_answer": [
+                "在“多”的一端实体关系中，加入“一”的一端实体的主键"
+            ],
+            "analysis": "②若实体间的联系是一对多（1：n)，则在多的一端实体的关系模式中，加上一的一端实体类型的键和联系类型的属性。"
+        },
+        {
+            "type": "single-choice",
+            "content": "在将E-R图转换为关系模型时，对于一个“多对多”（M:N）的联系，应该如何处理？",
+            "options": [
+                "在任意一端实体关系中加入另一端的主键",
+                "将两个实体的主键合并，并加入到其中一个实体关系中",
+                "为该联系本身创建一个新的关系，其主键为两端实体主键的组合",
+                "忽略该联系，只转换实体"
+            ],
+            "correct_answer": [
+                "为该联系本身创建一个新的关系，其主键为两端实体主键的组合"
+            ],
+            "analysis": "③若实体间联系是多对多(m:n),则将联系类型也转换为关系模式,其属性为两端实体类型的键加上联系型的属性,而键为两端实体键的组合"
+        },
+        {
+            "type": "single-choice",
+            "content": "下列哪一项不属于关系数据库中的查询操作？",
+            "options": [
+                "选择",
+                "投影",
+                "连接",
+                "修改"
+            ],
+            "correct_answer": [
+                "修改"
+            ],
+            "analysis": "查询操作：选择、投影、连接、除、并、差、交、笛卡尔积\n数据更新：插入、删除、修改"
+        },
+        {
+            "type": "single-choice",
+            "content": "关系数据库中，要求主键值必须唯一、不为空且不可重复，这属于哪一类完整性约束？",
+            "options": [
+                "实体完整性",
+                "参照完整性",
+                "用户定义的完整性",
+                "域完整性"
+            ],
+            "correct_answer": [
+                "实体完整性"
+            ],
+            "analysis": "实体完整性：实体完整性是指关系的主属性（即主键所包含的属性）不能取空值，并且主键值在关系中必须是唯一的。保证表中所有的行唯一。\n是对关系（表）中行的完整性要求：主键值必须唯一、不为空且不可重复。\n要求每个关系（表）有且仅有一个主键，每一个主键的值必须唯一，不能有空值或重复。\n主键不允许重复或为空。"
+        },
+        {
+            "type": "single-choice",
+            "content": "在关系数据库中，外键的取值必须匹配被参照表中主键的有效值或为空值，这是为了保证数据的哪种完整性？",
+            "options": [
+                "实体完整性",
+                "参照完整性",
+                "用户定义的完整性",
+                "域完整性"
+            ],
+            "correct_answer": [
+                "参照完整性"
+            ],
+            "analysis": "参照完整性：是关系数据库中确保数据一致性的关键约束机制，要求外键的取值必须匹配被参照表中主键的有效值或为空值，从而防止无效引用和孤立数据。\n如果属性（或属性组）F是关系模式R的外键,且与基本关系S的主键K对应,则对关系R中每个记录在F上的值必须为：\n①或者取空值(没有建完)；\n②或者为关系S主键集合中的元素；\n外键必须引用其他表的主键或为空。"
+        },
+        {
+            "type": "single-choice",
+            "content": "针对某一具体应用，由用户根据实际业务需求对数据库数据设置特定的约束规则，这属于哪种完整性？",
+            "options": [
+                "实体完整性",
+                "参照完整性",
+                "用户定义的完整性",
+                "域完整性"
+            ],
+            "correct_answer": [
+                "用户定义的完整性"
+            ],
+            "analysis": "用户定义的完整性：指针对某一具体关系数据库的约束条件，它反映了某一具体应用所涉及的数据必须满足的语义要求。即由用户根据实际业务需求，对数据库中的数据设置特定的约束规则，以保证数据符合特定的业务逻辑。\n对于用户对实际应用定义的完整性，SQL提供了非空约束、对属性的CHECK约束、对记录的CHECK约束、触发器等实现用户的各种完整性要求"
+        },
+        {
+            "type": "single-choice",
+            "content": "关系代数中，像并、差、交这类运算主要是从哪个角度对关系进行操作？",
+            "options": [
+                "水平方向（行）",
+                "垂直方向（列）",
+                "单个单元格",
+                "整个关系模式"
+            ],
+            "correct_answer": [
+                "水平方向（行）"
+            ],
+            "analysis": "传统的集合运算是从关系的“水平”方向即行的角度进行，如并、差、交和笛卡尔积"
+        },
+        {
+            "type": "single-choice",
+            "content": "在SQL语言中，用于对一行语句进行说明的单行注释是以什么符号开头的？",
+            "options": [
+                "//",
+                "#",
+                "/*",
+                "--"
+            ],
+            "correct_answer": [
+                "--"
+            ],
+            "analysis": "单行注释语句。也称为行注释语句，通常放在一行语句后面用于对本行语句的说明，以--开头的若干字符。"
+        },
+        {
+            "type": "single-choice",
+            "content": "根据SQL标识符的命名规范，下列哪个标识符是无效的？",
+            "options": [
+                "order_details",
+                "2nd_Table",
+                "user@profile",
+                "_customer_id"
+            ],
+            "correct_answer": [
+                "2nd_Table"
+            ],
+            "analysis": "标识符由字母、数字、下划线、@符号、#和$符号组成，通常以字母开头，可以包含字母、数字和下划线（_）。\n标识符的首字符不能是数字或“$”符号。\n不能使用SQL关键字（如SELECT、FROM等）作为标识符。"
+        },
+        {
+            "type": "single-choice",
+            "content": "如果一个数据库需要存储多种语言的字符（如中文、日文），应该为字符串列选择哪种数据类型以确保字符能被准确存储和呈现？",
+            "options": [
+                "char",
+                "varchar",
+                "nvarchar",
+                "text"
+            ],
+            "correct_answer": [
+                "nvarchar"
+            ],
+            "analysis": "nvarchar：使用Unicode编码（通常是UTF-16），每个字符占用两个字节的存储空间。nvarchar可以容纳包括中文、日文、韩文等在内的广泛字符集。每个字符占用更多空间，适用于多语言环境，可以确保各种语言的字符都能被准确存储和呈现"
+        },
+        {
+            "type": "single-choice",
+            "content": "在SQL中，字符串常量的正确表示方式是？",
+            "options": [
+                "\"Hello\"",
+                "'Hello'",
+                "`Hello`",
+                "Hello"
+            ],
+            "correct_answer": [
+                "'Hello'"
+            ],
+            "analysis": "常量是固定的值，直接在SQL语句中使用。SQL中的字符串常量定界符是单引号，如：'Hello'"
+        },
+        {
+            "type": "single-choice",
+            "content": "在SQL Server中，定义一个作用域局限在特定范围内的局部变量，其名称应以什么符号开头？",
+            "options": [
+                "&",
+                "$",
+                "@@",
+                "@"
+            ],
+            "correct_answer": [
+                "@"
+            ],
+            "analysis": "局部变量：由用户定义，是作用域局限在一定范围内的SQL对象，需要使用@变量名定义，语法：DECLARE @变量名1 [AS] 数据类型"
+        },
+        {
+            "type": "single-choice",
+            "content": "在SQL中，下列哪个聚合函数在计算时不会忽略NULL值？",
+            "options": [
+                "SUM()",
+                "AVG()",
+                "COUNT(*)",
+                "MAX()"
+            ],
+            "correct_answer": [
+                "COUNT(*)"
+            ],
+            "analysis": "常用聚合函数，只有count(*)不忽略空值，COUNT(column_name)、SUM、AVG、MAX、MIN等会忽略null值"
+        },
+        {
+            "type": "single-choice",
+            "content": "要查询所有名字以 'J' 开头的客户，应该使用哪个SQL运算符？",
+            "options": [
+                "IN",
+                "BETWEEN",
+                "LIKE",
+                "IS NULL"
+            ],
+            "correct_answer": [
+                "LIKE"
+            ],
+            "analysis": "LIKE：用于模糊匹配字符串，通常与通配符（% 表示任意字符序列，_表示单个字符）一起使用"
+        },
+        {
+            "type": "single-choice",
+            "content": "在SQL查询中，如果要筛选出价格在50到100之间（包含50和100）的产品，最适合使用哪个运算符？",
+            "options": [
+                "IN",
+                "BETWEEN",
+                "LIKE",
+                "ANY"
+            ],
+            "correct_answer": [
+                "BETWEEN"
+            ],
+            "analysis": "BETWEEN：用于判断一个值是否在指定的范围内，和AND一起使用"
+        },
+        {
+            "type": "single-choice",
+            "content": "哪个逻辑运算符要求所有条件都为真时，整个表达式才为真？",
+            "options": [
+                "OR",
+                "ANY",
+                "AND",
+                "NOT"
+            ],
+            "correct_answer": [
+                "AND"
+            ],
+            "analysis": "AND：逻辑与运算符，当所有条件都为真时，整个表达式才为真"
+        },
+        {
+            "type": "single-choice",
+            "content": "SQL语句 `WHERE salary > ANY (SELECT salary FROM employees)` 的作用是查询薪资大于哪个值的员工？",
+            "options": [
+                "所有员工的平均工资",
+                "所有员工的最高工资",
+                "任意一个员工的工资",
+                "所有员工的最低工资"
+            ],
+            "correct_answer": [
+                "所有员工的最低工资"
+            ],
+            "analysis": "ANY：如果一组的比较中任何一个为TRUE，则返回TRUE。ANY运算符确保salary大于子查询返回的任意一个工资值。这个查询会返回所有工资大于最低工资的员工。"
+        },
+        {
+            "type": "single-choice",
+            "content": "要完全删除一个名为 'students' 的数据表及其所有数据和结构，应该使用哪个SQL命令？",
+            "options": [
+                "DELETE TABLE students",
+                "DROP TABLE students",
+                "ALTER TABLE students",
+                "REMOVE TABLE students"
+            ],
+            "correct_answer": [
+                "DROP TABLE students"
+            ],
+            "analysis": "操作对象：数据表，操作方式：删除，对应命令：DROP TABLE"
+        },
+        {
+            "type": "single-choice",
+            "content": "要向一个已存在的数据表 'products' 添加一个新的列 'description'，应该使用哪个SQL命令？",
+            "options": [
+                "CREATE TABLE products",
+                "MODIFY TABLE products",
+                "UPDATE TABLE products",
+                "ALTER TABLE products"
+            ],
+            "correct_answer": [
+                "ALTER TABLE products"
+            ],
+            "analysis": "操作对象：数据表，操作方式：修改，对应命令：ALTER TABLE"
+        },
+        {
+            "type": "single-choice",
+            "content": "根据数据库系统的三级模式结构图，视图（View）是定义在哪个模式之上的，并构成了哪个模式的一部分？",
+            "options": [
+                "定义在内模式之上，构成模式",
+                "定义在模式之上，构成外模式",
+                "定义在外模式之上，构成用户模式",
+                "定义在存储文件之上，构成内模式"
+            ],
+            "correct_answer": [
+                "定义在模式之上，构成外模式"
+            ],
+            "analysis": "从图中可以看出，视图（如视图1、视图2）是基于模式层的基本表（如基本表1、2、3、4）建立的，而视图本身组成了面向用户的外模式层。"
+        },
+        {
+            "type": "single-choice",
+            "content": "在图示的数据库三级模式中，直接与存储文件（物理存储）交互的是哪个层次？",
+            "options": [
+                "外模式",
+                "模式",
+                "内模式",
+                "用户层"
+            ],
+            "correct_answer": [
+                "内模式"
+            ],
+            "analysis": "图中清晰地显示，存储文件1和存储文件2直接与最底层的内模式相关联，内模式描述了数据在物理存储介质上的组织方式。"
+        },
+        {
+            "type": "single-choice",
+            "content": "在SQL中，哪种约束用于确保一个列（或列组合）中的值是唯一的，但与主键不同，它可能允许存在NULL值？",
+            "options": [
+                "PRIMARY KEY",
+                "FOREIGN KEY",
+                "UNIQUE",
+                "CHECK"
+            ],
+            "correct_answer": [
+                "UNIQUE"
+            ],
+            "analysis": "UNIQUE (唯一约束)的作用是保证列（或列组合）的值唯一，但允许 NULL 值（取决于数据库实现）。"
+        },
+        {
+            "type": "single-choice",
+            "content": "用户执行了一系列UPDATE操作后，希望将这些更改永久保存到数据库中，应使用哪个事务管理语言（TCL）命令？",
+            "options": [
+                "START TRANSACTION",
+                "COMMIT",
+                "ROLLBACK",
+                "GRANT"
+            ],
+            "correct_answer": [
+                "COMMIT"
+            ],
+            "analysis": "事务管理语言TCL中，COMMIT命令用于提交事务，即将事务所做的所有修改永久保存到数据库。"
+        },
+        {
+            "type": "single-choice",
+            "content": "要授予用户对某个表的SELECT权限，应使用哪种类型的SQL语言命令？",
+            "options": [
+                "数据操纵语言 (DML)",
+                "数据定义语言 (DDL)",
+                "数据控制语言 (DCL)",
+                "事务管理语言 (TCL)"
+            ],
+            "correct_answer": [
+                "数据控制语言 (DCL)"
+            ],
+            "analysis": "数据控制语言DCL用于管理数据库的访问权限，其中GRANT命令用于授予权限。"
+        },
+        {
+            "type": "single-choice",
+            "content": "在CREATE TABLE语句中，要为一个列设置默认值，以便在插入数据时若未指定该列的值则自动填充，应使用哪个约束关键字？",
+            "options": [
+                "NOT NULL",
+                "UNIQUE",
+                "CHECK",
+                "DEFAULT"
+            ],
+            "correct_answer": [
+                "DEFAULT"
+            ],
+            "analysis": "DEFAULT约束用于为列提供默认值，当插入数据未指定该列值时自动填充。语法为：DEFAULT 常量。"
+        },
+        {
+            "type": "single-choice",
+            "content": "要从一个表中查询出不重复的记录，应该在SELECT语句中使用哪个关键字？",
+            "options": [
+                "UNIQUE",
+                "DISTINCT",
+                "ALL",
+                "ORDER BY"
+            ],
+            "correct_answer": [
+                "DISTINCT"
+            ],
+            "analysis": "消除取值重复的行（DISTINCT）"
+        },
+        {
+            "type": "single-choice",
+            "content": "在SQL中，要查询所有不以 '李' 字开头的姓名，应使用哪个条件表达式？",
+            "options": [
+                "WHERE CName NOT LIKE '李%'",
+                "WHERE CName LIKE '[^李]%'",
+                "WHERE CName <> '李'",
+                "WHERE CName NOT IN ('李')"
+            ],
+            "correct_answer": [
+                "WHERE CName NOT LIKE '李%'"
+            ],
+            "analysis": "LIKE用于查找指定列名与匹配串常量匹配的元组。通配符用于表示任意的字符或字符串。LIKE运算符的一般形式为：\n 列名 [NOT ] LIKE <匹配串>"
+        },
+        {
+            "type": "single-choice",
+            "content": "要查询一个列中所有非空值的平均值，应使用哪个聚合函数？",
+            "options": [
+                "COUNT()",
+                "SUM()",
+                "AVG()",
+                "MAX()"
+            ],
+            "correct_answer": [
+                "AVG()"
+            ],
+            "analysis": "AVG([ALL|DISTINCT]<列名>)计算一列值的平均值(此列必须是数值型)"
+        },
+        {
+            "type": "single-choice",
+            "content": "在使用GROUP BY子句对数据进行分组后，如果需要对分组结果进行条件筛选，应该使用哪个子句？",
+            "options": [
+                "WHERE",
+                "HAVING",
+                "ORDER BY",
+                "FILTER"
+            ],
+            "correct_answer": [
+                "HAVING"
+            ],
+            "analysis": "HAVING子句对分组后的结果再进行过滤"
+        },
+        {
+            "type": "single-choice",
+            "content": "查询两个表TBCustomer和TBSale中，CId字段相等的记录，这种查询属于什么类型？",
+            "options": [
+                "外连接查询",
+                "笛卡尔积查询",
+                "等值连接查询",
+                "自身连接查询"
+            ],
+            "correct_answer": [
+                "等值连接查询"
+            ],
+            "analysis": "当使用的连接运算符为＝时，称为等值连接；\n【例】查询每个会员及其购买情况：\nSELECT TBCustomer.*,TBSale.*\nFROM TBCustomer,TBSale\nWHERE TBCustomer.CId=TBSale.CId"
+        },
+        {
+            "type": "single-choice",
+            "content": "在SQL的外连接查询中，哪个操作会保留左表的所有记录，即使在右表中没有匹配的行，并在右表对应列显示NULL？",
+            "options": [
+                "RIGHT OUTER JOIN",
+                "FULL OUTER JOIN",
+                "INNER JOIN",
+                "LEFT OUTER JOIN"
+            ],
+            "correct_answer": [
+                "LEFT OUTER JOIN"
+            ],
+            "analysis": "左外连接：保留左表的所有数据。即使左表中的某些行在右表中没有匹配的行，这些行也会出现在结果集中，并且右表中对应的列会显示 NULL值。"
+        },
+        {
+            "type": "single-choice",
+            "content": "在多表查询中，如果省略了WHERE子句，将产生什么结果？",
+            "options": [
+                "自然连接",
+                "交叉连接（笛卡尔积）",
+                "自身连接",
+                "外连接"
+            ],
+            "correct_answer": [
+                "交叉连接（笛卡尔积）"
+            ],
+            "analysis": "当不指定WHERE子句时，称之为交叉连接。交叉连接实质上就是两张表之间的广义笛卡儿乘积。"
+        },
+        {
+            "type": "single-choice",
+            "content": "在SQL的子查询（内层查询）中，通常不允许使用哪个子句？",
+            "options": [
+                "WHERE",
+                "GROUP BY",
+                "ORDER BY",
+                "HAVING"
+            ],
+            "correct_answer": [
+                "ORDER BY"
+            ],
+            "analysis": "注意：子查询中不能有ORDER BY子句。"
+        },
+        {
+            "type": "single-choice",
+            "content": "在等值连接的基础上，把目标列中重复的列去掉，这种连接查询被称为？",
+            "options": [
+                "自身连接",
+                "自然连接",
+                "交叉连接",
+                "全外连接"
+            ],
+            "correct_answer": [
+                "自然连接"
+            ],
+            "analysis": "若在等值连接中把目标列中重复的列去掉则为自然连接。"
+        },
+        {
+            "type": "single-choice",
+            "content": "根据SQL查询语句的语法结构，下列子句的正确书写顺序是？",
+            "options": [
+                "SELECT, FROM, ORDER BY, WHERE, GROUP BY",
+                "SELECT, FROM, WHERE, GROUP BY, HAVING, ORDER BY",
+                "SELECT, WHERE, FROM, HAVING, GROUP BY, ORDER BY",
+                "SELECT, FROM, HAVING, WHERE, GROUP BY, ORDER BY"
+            ],
+            "correct_answer": [
+                "SELECT, FROM, WHERE, GROUP BY, HAVING, ORDER BY"
+            ],
+            "analysis": "查询数据的语法结构为：\n```sql\nSELECT <目标列名序列> -- 需要哪些列\nFROM <数据源> -- 来自于哪些表\n[WHERE <检索条件表达式>] -- 根据什么条件\n[GROUP BY <分组依据列>] \n[HAVING <分组提取条件>]\n[ORDER BY <排序依据列>]\n```"
+        },
+        {
+            "type": "single-choice",
+            "content": "在SQL中，哪种数据库对象本身不存储实际数据，而是作为查询定义的虚拟表，用于简化复杂查询和提供数据安全保护？",
+            "options": [
+                "基本表",
+                "索引",
+                "视图",
+                "存储过程"
+            ],
+            "correct_answer": [
+                "视图"
+            ],
+            "analysis": "视图：视图是从一个或多个表（或其他视图）导出的虚拟表。它本身不存储实际数据（物化视图除外，但默认情况下 SQL Server 普通视图不存储实际数据），而是保存了查询定义。通过视图，用户可以像操作普通表一样对其进行查询等操作，并且可以对底层表的数据起到一定的封装和简化复杂查询的作用。"
+        },
+        {
+            "type": "single-choice",
+            "content": "下列关于数据库索引的描述，哪一项是错误的？",
+            "options": [
+                "可以显著提高数据查询的速度",
+                "会增加数据表的物理存储空间",
+                "一个表只能建立一个聚簇索引",
+                "索引的存在会加快数据的插入和删除操作"
+            ],
+            "correct_answer": [
+                "索引的存在会加快数据的插入和删除操作"
+            ],
+            "analysis": "索引的缺点：\n物理存储空间中除了存放数据表之外，还需要一定的额外空间来存放索引。\n对数据表进行插入、修改和删除操作时，相应的索引也需要动态维护更新，消耗系统资源。"
+        },
+        {
+            "type": "single-choice",
+            "content": "哪种类型的索引决定了表中数据的物理存储顺序？",
+            "options": [
+                "唯一索引",
+                "非聚簇索引",
+                "复合索引",
+                "聚簇索引"
+            ],
+            "correct_answer": [
+                "聚簇索引"
+            ],
+            "analysis": "（1）聚簇索引：把聚簇码上具有相同值的元组集合存放在连续的物理块中。聚簇索引能够确定表中数据的物理存储顺序，即表中数据是按照索引列的顺序进行物理排序的。"
+        },
+        {
+            "type": "single-choice",
+            "content": "下列哪项是触发器（Trigger）区别于存储过程（Stored Procedure）的主要特点？",
+            "options": [
+                "可以接收和返回参数",
+                "经过编译后存储在数据库中",
+                "由事件（如INSERT, UPDATE, DELETE）自动触发执行",
+                "可以包含一组T-SQL语句"
+            ],
+            "correct_answer": [
+                "由事件（如INSERT, UPDATE, DELETE）自动触发执行"
+            ],
+            "analysis": "触发器（Trigger）是一种特殊的存储过程，它的执行不是由程序调用，也不是手工启动，而是由事件来出发，例如当对一个表进行操作（insert、delete、update）时就会激活触发器的执行。无法由用户主动执行。"
+        },
+        {
+            "type": "single-choice",
+            "content": "一个银行转账操作，包括从账户A扣款和向账户B加款两个步骤，这两个步骤必须要么都成功，要么都失败。这体现了事务的哪个特性？",
+            "options": [
+                "一致性 (Consistent)",
+                "隔离性 (Isolated)",
+                "持久性 (Durable)",
+                "原子性 (Atomic)"
+            ],
+            "correct_answer": [
+                "原子性 (Atomic)"
+            ],
+            "analysis": "原子性（Atomic）：事务是一个不可分割的工作单位，事务中的所有操作要么全部执行成功，要么全部失败回滚，就像原子一样不可再分。示例：在银行转账事务中，从账户 A 向账户 B 转账 100 元，这个事务包含从账户 A 扣款 100 元和向账户 B 加款 100 元两个操作，这两个操作必须作为一个整体执行..."
+        },
+        {
+            "type": "single-choice",
+            "content": "一个事务读取了另一个尚未提交的事务修改的数据，这种并发问题被称为？",
+            "options": [
+                "丢失更新",
+                "不可重复读",
+                "幻读",
+                "读“脏”数据（脏读）"
+            ],
+            "correct_answer": [
+                "读“脏”数据（脏读）"
+            ],
+            "analysis": "读“脏”数据（脏读）。指一个事务正在访问数据，而其它事务正在更新该数据，但尚未提交，此时就会发生脏读问题，即第一个事务所读取的数据是“脏”（不正确）数据，它可能会引起错误。"
+        },
+        {
+            "type": "single-choice",
+            "content": "在并发控制中，当锁定粒度较大时（例如对整个表加锁），会产生什么影响？",
+            "options": [
+                "系统开销增大，并发度提高",
+                "系统开销减小，并发度降低",
+                "系统开销和并发度都提高",
+                "系统开销和并发度都降低"
+            ],
+            "correct_answer": [
+                "系统开销减小，并发度降低"
+            ],
+            "analysis": "锁定粒度不同，资源的开销将不同，并且锁定粒度与数据库访问并发度是一对矛盾，锁定粒度大，系统开销小，但并发度会降低；锁定粒度小，系统开销大，但并发度可提高。"
+        },
+        {
+            "type": "single-choice",
+            "content": "使用哪条SQL命令可以授予用户对特定数据库对象的权限？",
+            "options": [
+                "REVOKE",
+                "GRANT",
+                "COMMIT",
+                "ROLE"
+            ],
+            "correct_answer": [
+                "GRANT"
+            ],
+            "analysis": "权限授予：使用GRANT语句来授予用户权限，语法格式为：GRANT <权限列表> ON <对象> TO <用户或角色>"
+        },
+        {
+            "type": "single-choice",
+            "content": "在关系数据库设计中，若关系模式R的每个属性值都是不可分的原子值，则该模式满足哪个范式？",
+            "options": [
+                "第一范式 (1NF)",
+                "第二范式 (2NF)",
+                "第三范式 (3NF)",
+                "BCNF范式"
+            ],
+            "correct_answer": [
+                "第一范式 (1NF)"
+            ],
+            "analysis": "第一范式（1NF）：若关系模式R的每个关系r的属性值都是不可分的原子值，则称R是第一范式1NF的模式。"
+        },
+        {
+            "type": "single-choice",
+            "content": "在数据库设计过程中，将一个复杂的关系模式拆分为多个更小、更简单的关系模式，其主要目的是什么？",
+            "options": [
+                "增加数据冗余",
+                "降低查询性能",
+                "消除操作异常并减少数据冗余",
+                "简化数据插入操作"
+            ],
+            "correct_answer": [
+                "消除操作异常并减少数据冗余"
+            ],
+            "analysis": "模式分解：指将复杂的关系模式拆分为多个更小更简单的关系模式的过程。其本质是通过减少数据冗余消除操作异常（如插入删除更新异常），提升数据一致性、存储效率及查询性能，最终达到规范化设计的目标。"
+        },
+        {
+            "type": "single-choice",
+            "content": "为了将一个满足第一范式（1NF）的关系模式规范化为第二范式（2NF），需要消除哪种依赖关系？",
+            "options": [
+                "完全函数依赖",
+                "传递函数依赖",
+                "多值依赖",
+                "部分函数依赖"
+            ],
+            "correct_answer": [
+                "部分函数依赖"
+            ],
+            "analysis": "第二范式（2NF）：在满足第一范式（1NF）的基础上，消除非主属性对候选键的“部分函数依赖”。"
+        },
+        {
+            "type": "single-choice",
+            "content": "数据库设计的第一个阶段是什么，其主要任务是了解和分析用户的需求？",
+            "options": [
+                "逻辑结构设计",
+                "物理结构设计",
+                "概念结构设计",
+                "需求分析"
+            ],
+            "correct_answer": [
+                "需求分析"
+            ],
+            "analysis": "需求分析：数据库设计的第一步，主要是了解和分析用户的需求，包括数据的类型、数据的存储方式、数据的访问方式等。"
+        },
+        {
+            "type": "single-choice",
+            "content": "在数据库设计中，将用户的需求抽象为信息世界的结构（即概念模型），通常使用哪种工具来描述？",
+            "options": [
+                "数据流图",
+                "实体-关系图（E-R图）",
+                "状态转换图",
+                "UML类图"
+            ],
+            "correct_answer": [
+                "实体-关系图（E-R图）"
+            ],
+            "analysis": "概念结构设计：在需求分析的基础上，进行概念结构设计，主要是将用户的需求抽象为信息世界的结构，即概念模型。通常使用实体-关系图（E-R图）来描述"
+        },
+        {
+            "type": "single-choice",
+            "content": "在数据库设计的逻辑结构设计阶段，将E-R图中的“多对多”（m:n）联系转换为关系模型时，正确的做法是？",
+            "options": [
+                "在任意一端实体中加入另一端实体的主键",
+                "将两个实体合并为一个表",
+                "为该联系创建一个新的关系，其主键为两端实体主键的组合",
+                "忽略该联系"
+            ],
+            "correct_answer": [
+                "为该联系创建一个新的关系，其主键为两端实体主键的组合"
+            ],
+            "analysis": "③若实体间联系是多对多(m:n),则将联系类型也转换为关系模式,其属性为两端实体类型的键加上联系型的属性,而键为两端实体键的组合"
+        },
+        {
+            "type": "single-choice",
+            "content": "在数据库系统中，对数据进行加工的过程被称为？",
+            "options": [
+                "数据管理 (Data Management)",
+                "数据处理 (Data Processing)",
+                "数据库 (DataBase)",
+                "数据模型 (Data Model)"
+            ],
+            "correct_answer": [
+                "数据处理 (Data Processing)"
+            ],
+            "analysis": "数据处理（Data Processing）是对数据进行加工的过程。"
+        },
+        {
+            "type": "single-choice",
+            "content": "将现实世界的数据转换为机器可处理的数据库数据，需要经过三个阶段，正确的顺序是？",
+            "options": [
+                "现实世界 -> 机器世界 -> 信息世界",
+                "信息世界 -> 现实世界 -> 机器世界",
+                "现实世界 -> 信息世界 -> 机器世界",
+                "机器世界 -> 信息世界 -> 现实世界"
+            ],
+            "correct_answer": [
+                "现实世界 -> 信息世界 -> 机器世界"
+            ],
+            "analysis": "现实世界中的数据要转换成为抽象的数据库数据，转换需要经过3个阶段：现实世界、信息世界和机器世界阶段。"
+        },
+        {
+            "type": "single-choice",
+            "content": "在E-R图中，用来描述实体或联系的某种特征或性质的元素是？",
+            "options": [
+                "实体 (Entity)",
+                "联系 (Relationship)",
+                "属性 (Attribute)",
+                "主键 (Primary Key)"
+            ],
+            "correct_answer": [
+                "属性 (Attribute)"
+            ],
+            "analysis": "属性（Attribute）是描述实体或联系中的一种特征（性）,一个实体或联系通常具有多个（项）特征，需要多个相应属性来描述。"
+        },
+        {
+            "type": "single-choice",
+            "content": "描述数据在存储介质上的组织结构，如存取路径、索引等，并且与具体DBMS及操作系统和硬件都相关的模型是？",
+            "options": [
+                "概念模型",
+                "逻辑模型",
+                "物理模型",
+                "对象模型"
+            ],
+            "correct_answer": [
+                "物理模型"
+            ],
+            "analysis": "物理模型（Physical Data Model）。是面向计算机物理表示的模型，描述数据在储存介质的组织结构。既与具体DBMS有关，也与操作系统和硬件有关。如存取路径、方式、索引等。"
+        },
+        {
+            "type": "single-choice",
+            "content": "在数据库三级模式结构中，描述局部数据的逻辑结构和特征，并且一个数据库可以有多个的是？",
+            "options": [
+                "模式 (Schema)",
+                "内模式 (Internal Schema)",
+                "外模式 (External Schema)",
+                "物理模式"
+            ],
+            "correct_answer": [
+                "外模式 (External Schema)"
+            ],
+            "analysis": "外模式（External Schema）：也称子模式或用户模式，是局部数据的逻辑结构和特征的描述。外模式是模式的子集，一个数据库可以有多个外模式。"
+        },
+        {
+            "type": "single-choice",
+            "content": "DBMS的组成部分中，哪一部分负责存储和管理关于数据库中数据的定义的描述信息（即元数据）？",
+            "options": [
+                "语言编译处理程序",
+                "系统运行控制程序",
+                "系统建立与维护程序",
+                "数据字典"
+            ],
+            "correct_answer": [
+                "数据字典"
+            ],
+            "analysis": "数据字典是DBMS的重要组成部分，用于存储和管理数据库的元数据。"
+        },
+        {
+            "type": "single-choice",
+            "content": "关于超键（Super Key）和候选码（Candidate Key），下列说法正确的是？",
+            "options": [
+                "候选码不一定是超键",
+                "超键一定是候选码",
+                "候选码是最小的超键（即不含多余属性的超键）",
+                "超键是最小的候选码"
+            ],
+            "correct_answer": [
+                "候选码是最小的超键（即不含多余属性的超键）"
+            ],
+            "analysis": "超键、码：能唯一的标识一个元组，但是属性组可能有多余的属性。候选码一定是超键，但是超键不一定是候选码。"
+        },
+        {
+            "type": "single-choice",
+            "content": "限制数据库表中某一列只能接受特定数据类型、格式或取值范围的约束，属于哪一种完整性？",
+            "options": [
+                "实体完整性",
+                "参照完整性",
+                "用户定义完整性",
+                "域完整性"
+            ],
+            "correct_answer": [
+                "域完整性"
+            ],
+            "analysis": "域完整性（Domain Integrity)指列的值域的完整性，包括：数据类型、格式、值域范围、是否允许空值等。"
+        },
+        {
+            "type": "single-choice",
+            "content": "在SQL中，要添加一段跨越多行的注释，应该使用哪种格式？",
+            "options": [
+                "// ...",
+                "-- ...",
+                "/* ... */",
+                "<!-- ... -->"
+            ],
+            "correct_answer": [
+                "/* ... */"
+            ],
+            "analysis": "多行注释语句。常放在程序（块）前，用于对程序功能、特性和注意事项等方面的说明，以/*开头并以*/结束。"
+        },
+        {
+            "type": "single-choice",
+            "content": "在SQL Server中，由系统定义和赋值，并以'@@'开头的变量被称为？",
+            "options": [
+                "局部变量",
+                "用户变量",
+                "全局变量",
+                "系统参数"
+            ],
+            "correct_answer": [
+                "全局变量"
+            ],
+            "analysis": "全局变量：是SQL Sever系统定义并提供赋值的变量。定义全局变量的格式如下：@@变量名"
+        },
+        {
+            "type": "single-choice",
+            "content": "要查询一个字段值是否为空，应该使用哪个SQL运算符？",
+            "options": [
+                "= NULL",
+                "<> NULL",
+                "IS NULL",
+                "LIKE NULL"
+            ],
+            "correct_answer": [
+                "IS NULL"
+            ],
+            "analysis": "IS NULL：用于判断一个值是否为 NULL。"
+        },
+        {
+            "type": "single-choice",
+            "content": "要修改一个已存在的视图的定义，应该使用哪个SQL命令？",
+            "options": [
+                "UPDATE VIEW",
+                "MODIFY VIEW",
+                "ALTER VIEW",
+                "REPLACE VIEW"
+            ],
+            "correct_answer": [
+                "ALTER VIEW"
+            ],
+            "analysis": "根据图示，对视图的操作方式包括：创建(CREATE VIEW)、修改(ALTER VIEW)和删除(DROP VIEW)。"
+        },
+        {
+            "type": "single-choice",
+            "content": "一个事务一旦提交，其对数据库的修改就是永久性的，即使系统故障也不会丢失。这描述了事务的哪个特性？",
+            "options": [
+                "原子性",
+                "一致性",
+                "隔离性",
+                "持久性"
+            ],
+            "correct_answer": [
+                "持久性"
+            ],
+            "analysis": "持久性（Durable）：事务一旦提交，它对数据库所做的修改就会永久保存到数据库中，即使系统发生故障（如断电、系统崩溃等），这些修改也不会丢失。"
+        },
+        {
+            "type": "single-choice",
+            "content": "一个事务在执行过程中两次读取同一数据，但得到的结果不同，这可能是因为另一个并发事务修改了该数据。这种现象被称为？",
+            "options": [
+                "丢失更新",
+                "脏读",
+                "不可重复读",
+                "幻读"
+            ],
+            "correct_answer": [
+                "不可重复读"
+            ],
+            "analysis": "不可重复读。当一个事务多次访问同一行且每次读取不同的数据时，会发生此问题。"
+        },
+        {
+            "type": "single-choice",
+            "content": "在满足第二范式（2NF）的基础上，为消除非主属性对候选键的传递函数依赖，需要将关系模式规范化到哪个范式？",
+            "options": [
+                "1NF",
+                "2NF",
+                "3NF",
+                "BCNF"
+            ],
+            "correct_answer": [
+                "3NF"
+            ],
+            "analysis": "第三范式（3NF）：在满足第二范式（2NF）的基础上，消除非主属性对候选键的传递函数依赖。"
+        },
+        {
+            "type": "single-choice",
+            "content": "BCNF范式在3NF的基础上，主要解决了什么问题？",
+            "options": [
+                "非主属性对键的部分依赖",
+                "主属性对候选键的部分或传递依赖",
+                "非主属性对键的传递依赖",
+                "数据值的原子性问题"
+            ],
+            "correct_answer": [
+                "主属性对候选键的部分或传递依赖"
+            ],
+            "analysis": "BCNF范式：在第三范式（3NF）的基础上进一步消除主属性对候选键的依赖问题，以解决3NF可能存在的操作异常。其核心思想是所有函数依赖的决定因素（左侧）必须是超键。"
+        },
+        {
+            "type": "single-choice",
+            "content": "在一个“学生选课”关系表中，需要用“学号”和“课程号”两个字段共同唯一确定一条记录。在创建该表时，定义联合主键的正确SQL语法是？",
+            "options": [
+                "PRIMARY KEY 学号, 课程号",
+                "PRIMARY KEY (学号), PRIMARY KEY (课程号)",
+                "PRIMARY KEY (学号, 课程号)",
+                "COMPOSITE KEY (学号, 课程号)"
+            ],
+            "correct_answer": [
+                "PRIMARY KEY (学号, 课程号)"
+            ],
+            "analysis": "当主键由多个属性组成时，应使用表级完整性约束条件来定义，即将PRIMARY KEY关键字写在所有列定义的后面，并将组成主键的列名用括号括起来。"
+        },
+        {
+            "type": "single-choice",
+            "content": "在创建`TBProducts`表时，`ShopId`列需要引用`TBShops`表的`ShopId`主键，以确保数据的参照完整性。正确的`FOREIGN KEY`约束定义是？",
+            "options": [
+                "FOREIGN KEY REFERENCES TBShops(ShopId)",
+                "FOREIGN KEY (ShopId) REFERENCES TBShops(ShopId)",
+                "REFERENCES TBShops(ShopId) FOREIGN KEY",
+                "FOREIGN KEY (ShopId) IS TBShops(ShopId)"
+            ],
+            "correct_answer": [
+                "FOREIGN KEY (ShopId) REFERENCES TBShops(ShopId)"
+            ],
+            "analysis": "FOREIGN KEY：定义本列为引用其他表的外码。使用形式为：[FOREIGN KEY] [<列名>] REFERENCES <外表名> (<外表列名>)"
+        },
+        {
+            "type": "single-choice",
+            "content": "向`TBProducts`表中插入一条新商品记录，只提供`PId`和`PName`的值，其他列希望使用默认值或允许为空。正确的SQL语句是？",
+            "options": [
+                "INSERT INTO TBProducts VALUES ('P001', '新商品');",
+                "INSERT INTO TBProducts (PId, PName) VALUES ('P001', '新商品');",
+                "INSERT TBProducts ('P001', '新商品') INTO (PId, PName);",
+                "INSERT ('P001', '新商品') INTO TBProducts;"
+            ],
+            "correct_answer": [
+                "INSERT INTO TBProducts (PId, PName) VALUES ('P001', '新商品');"
+            ],
+            "analysis": "添加数据语法：INSERT INTO 表名 (列名1，---，列名n) VALUES (值1，---，值n)。未指定的列，系统自动将其置为NULL或默认值。"
+        },
+        {
+            "type": "single-choice",
+            "content": "要将`TBProducts`表中所有进货价（`PBuyPrice`）大于100的商品的库存（`PInventory`）增加50，应使用哪个SQL语句？",
+            "options": [
+                "UPDATE TBProducts ADD PInventory = 50 WHERE PBuyPrice > 100;",
+                "UPDATE TBProducts SET PInventory = PInventory + 50 WHERE PBuyPrice > 100;",
+                "SET PInventory = PInventory + 50 FROM TBProducts WHERE PBuyPrice > 100;",
+                "MODIFY TBProducts SET PInventory = PInventory + 50 WHERE PBuyPrice > 100;"
+            ],
+            "correct_answer": [
+                "UPDATE TBProducts SET PInventory = PInventory + 50 WHERE PBuyPrice > 100;"
+            ],
+            "analysis": "修改数据语法：UPDATE 表名 SET 列名1=值1，---，列名n=值n WHERE 更新条件表达式；"
+        },
+        {
+            "type": "single-choice",
+            "content": "为了加快根据商品名称（`PName`）查询`TBProducts`表的速度，需要为该列创建一个名为`idx_pname`的非聚集索引。正确的SQL语句是？",
+            "options": [
+                "CREATE INDEX idx_pname ON TBProducts (PName);",
+                "CREATE NONCLUSTERED INDEX idx_pname ON TBProducts (PName);",
+                "CREATE UNIQUE INDEX idx_pname ON TBProducts (PName);",
+                "ALTER TABLE TBProducts ADD INDEX idx_pname (PName);"
+            ],
+            "correct_answer": [
+                "CREATE NONCLUSTERED INDEX idx_pname ON TBProducts (PName);"
+            ],
+            "analysis": "索引创建语法：CREATE [UNIQUE][CLUSTERED|NONCLUSTERED] INDEX <索引名> ON<表名> ( <列名> ...)。若无显示声明，默认创建的是非聚簇索引，但显式声明`NONCLUSTERED`是更规范的写法。"
+        },
+        {
+            "type": "single-choice",
+            "content": "在一个名为 `Employee` 的表中，包含 `EmployeeID` 和 `ManagerID` (上级ID) 列，其中 `ManagerID` 引用了同一个表的 `EmployeeID`。要查询每个员工及其直属上级的姓名，需要使用哪种查询技术？",
+            "options": [
+                "自身连接（Self Join）",
+                "外连接（Outer Join）",
+                "交叉连接（Cross Join）",
+                "仅使用子查询"
+            ],
+            "correct_answer": [
+                "自身连接（Self Join）"
+            ],
+            "analysis": "表的自身连接：当连接操作在一个表与其自身进行连接时称为表的自身连接。通常用于表中的某个列是同一表的另外一列的外键的情况。"
+        },
+        {
+            "type": "single-choice",
+            "content": "要查询所有作者（`Author`表）及其所著图书的数量，即使某些作者没有任何图书（此时图书数量应显示为0），也需要将他们列出。应使用哪种连接查询？",
+            "options": [
+                "INNER JOIN",
+                "CROSS JOIN",
+                "Author LEFT JOIN Book",
+                "Author RIGHT JOIN Book"
+            ],
+            "correct_answer": [
+                "Author LEFT JOIN Book"
+            ],
+            "analysis": "左外连接：保留左表的所有数据。即使左表中的某些行在右表中没有匹配的行，这些行也会出现在结果集中，并且右表中对应的列会显示 NULL 值。此场景需要保留所有作者信息，因此`Author`表应为左表。"
+        },
+        {
+            "type": "single-choice",
+            "content": "要撤销用户'user1'对'TBCustomer'表的DELETE权限，应该使用哪个SQL命令？",
+            "options": [
+                "GRANT DELETE ON TBCustomer FROM 'user1'",
+                "REVOKE DELETE ON TBCustomer FROM 'user1'",
+                "REMOVE DELETE ON TBCustomer FOR 'user1'",
+                "DENY DELETE ON TBCustomer TO 'user1'"
+            ],
+            "correct_answer": [
+                "REVOKE DELETE ON TBCustomer FROM 'user1'"
+            ],
+            "analysis": "权限撤销：使用REVOKE语句来撤销用户或角色的权限，基本语法格式为：REVOKE <权限列表> ON <对象> FROM <用户或角色>"
+        },
+        {
+            "type": "single-choice",
+            "content": "在数据库设计中，将包含局部E-R图整合为全局概念模型，需要解决的三种冲突不包括哪一项？",
+            "options": [
+                "属性冲突",
+                "命名冲突",
+                "结构冲突",
+                "范式冲突"
+            ],
+            "correct_answer": [
+                "范式冲突"
+            ],
+            "analysis": "汇总E-R图，是将局部E-R图整合为全局概念模型的核心过程，整合过程中需要解决E-R图中的三种冲突：属性冲突、命名冲突、结构冲突"
+        },
+        {
+            "type": "single-choice",
+            "content": "在一个事务中，执行了一系列插入和更新操作后，如果发生了错误，希望撤销所有已完成的更新操作，使数据库回滚到事务开始时的状态，应该使用哪个TCL命令？",
+            "options": [
+                "COMMIT",
+                "SAVEPOINT",
+                "BEGIN TRANSACTION",
+                "ROLLBACK"
+            ],
+            "correct_answer": [
+                "ROLLBACK"
+            ],
+            "analysis": "ROLLBACK表示事务的回滚，用于事务执行过程中发生了某种故障，事务不能继续执行，系统将该事务中对数据库的所有已完成更新操作全部撤销，回滚到事务开始时的状态。"
+        },
+        {
+            "type": "single-choice",
+            "content": "要删除 `TBSale` 表中所有 `SNum` (销售数量) 小于等于1的销售记录，正确的SQL语句是？",
+            "options": [
+                "DELETE FROM TBSale WHERE SNum < 1;",
+                "DROP FROM TBSale WHERE SNum <= 1;",
+                "DELETE TBSale WHERE SNum <= 1;",
+                "DELETE FROM TBSale WHERE SNum <= 1;"
+            ],
+            "correct_answer": [
+                "DELETE FROM TBSale WHERE SNum <= 1;"
+            ],
+            "analysis": "删除数据语法：DELETE FROM 表名 WHERE 删除条件表达式；"
+        },
+        {
+            "type": "single-choice",
+            "content": "在 `TBCustomer` 表中，要查找所有邮箱（`CEMail`）地址未知的会员，应该使用哪个WHERE子句条件？",
+            "options": [
+                "WHERE CEMail = ''",
+                "WHERE CEMail = NULL",
+                "WHERE CEMail IS NULL",
+                "WHERE CEMail IS EMPTY"
+            ],
+            "correct_answer": [
+                "WHERE CEMail IS NULL"
+            ],
+            "analysis": "涉及空值的查询：判断取值为空的语句格式为：列名 IS NULL。空值比较不能够用'='进行比较。"
+        },
+        {
+            "type": "single-choice",
+            "content": "要查询 `TBProducts` 表中所有商品信息，并按销售价（`PSalePrice`）从高到低排序，如果价格相同，则按库存量（`PInventory`）从高到低排序。正确的 `ORDER BY` 子句是？",
+            "options": [
+                "ORDER BY PSalePrice, PInventory DESC",
+                "ORDER BY PSalePrice DESC, PInventory",
+                "ORDER BY PSalePrice DESC, PInventory DESC",
+                "ORDER BY PSalePrice, PInventory ASC"
+            ],
+            "correct_answer": [
+                "ORDER BY PSalePrice DESC, PInventory DESC"
+            ],
+            "analysis": "使用“ORDER BY”对查询结果排序，语法格式：ORDER BY <列名1> [ASC|DESC], <列名2>[ASC|DESC],…。可以对多个列进行排序，并为每个列独立指定升序(ASC)或降序(DESC)。"
+        },
+        {
+            "type": "single-choice",
+            "content": "要统计 `TBProducts` 表中每个店铺（`ShopId`）的商品种类总数，应该使用哪个SQL语句？",
+            "options": [
+                "SELECT ShopId, SUM(PId) FROM TBProducts GROUP BY ShopId;",
+                "SELECT ShopId, COUNT(PId) FROM TBProducts;",
+                "SELECT ShopId, COUNT(PId) FROM TBProducts GROUP BY ShopId;",
+                "SELECT ShopId, TOTAL(PId) FROM TBProducts GROUP BY ShopId;"
+            ],
+            "correct_answer": [
+                "SELECT ShopId, COUNT(PId) FROM TBProducts GROUP BY ShopId;"
+            ],
+            "analysis": "分组计算group by：需要对数据进行分组（按ShopId），然后再对每个组进行计算（用COUNT统计商品数量），这时就需要用到分组子句：GROUP BY 。"
+        },
+        {
+            "type": "single-choice",
+            "content": "在创建`TBCustomer`表时，要求`CPhone`（手机号码）列的值必须唯一，但可以为空。应使用哪种列级完整性约束？",
+            "options": [
+                "PRIMARY KEY",
+                "UNIQUE",
+                "NOT NULL",
+                "CHECK"
+            ],
+            "correct_answer": [
+                "UNIQUE"
+            ],
+            "analysis": "UNIQUE约束限制列取值不重复，即唯一。与主键不同，它通常允许空值（但具体实现可能因DBMS而异）。"
+        },
+        {
+            "type": "single-choice",
+            "content": "要查询出 `TBProducts` 表中所有产品名称（`PName`），并为该列在结果集中指定一个别名“产品名”，正确的写法是？",
+            "options": [
+                "SELECT PName AS '产品名' FROM TBProducts;",
+                "SELECT '产品名' = PName FROM TBProducts;",
+                "SELECT PName TO '产品名' FROM TBProducts;",
+                "SELECT PName (产品名) FROM TBProducts;"
+            ],
+            "correct_answer": [
+                "SELECT PName AS '产品名' FROM TBProducts;"
+            ],
+            "analysis": "SQL允许在SELECT子句中为列或表达式指定别名，通常使用`AS`关键字，或者直接在列名后跟别名（某些DBMS支持）。例如：`SELECT PName AS 产品名` 或 `SELECT 产品名称=PName`。"
+        },
+        {
+            "type": "single-choice",
+            "content": "要删除一个名为 `v_Sale` 的视图，应该使用哪个SQL命令？",
+            "options": [
+                "DELETE VIEW v_Sale",
+                "DROP VIEW v_Sale",
+                "REMOVE VIEW v_Sale",
+                "ALTER VIEW v_Sale DROP"
+            ],
+            "correct_answer": [
+                "DROP VIEW v_Sale"
+            ],
+            "analysis": "根据图示，对视图的操作方式包括：创建(CREATE VIEW)、修改(ALTER VIEW)和删除(DROP VIEW)。"
+        },
+        {
+            "type": "single-choice",
+            "content": "创建一个存储过程 `Proc_Cus`，它接受一个会员号 `@Proc_CId`作为输入参数，并返回该会员的所有信息。正确的创建语法开头部分是？",
+            "options": [
+                "CREATE PROCEDURE Proc_Cus (@Proc_CId CHAR(10)) AS",
+                "PROCEDURE Proc_Cus (@Proc_CId CHAR(10)) BEGIN",
+                "CREATE TRIGGER Proc_Cus ON TBCustomer FOR SELECT",
+                "FUNCTION Proc_Cus (@Proc_CId CHAR(10)) RETURNS TABLE AS"
+            ],
+            "correct_answer": [
+                "CREATE PROCEDURE Proc_Cus (@Proc_CId CHAR(10)) AS"
+            ],
+            "analysis": "创建存储过程语法：CREATE PROCEDURE <存储过程名> [<参数列表>] AS BEGIN <SQL语句组> END。示例中展示了`CREATE PROCEDURE Proc_Cus @Proc_CId CHAR(10) AS`的格式。"
+        },
+        {
+            "type": "single-choice",
+            "content": "要查询所有姓“王”并且名字为两个字的会员信息，`WHERE`子句中的`LIKE`表达式应该怎么写？",
+            "options": [
+                "WHERE CName LIKE '王%'",
+                "WHERE CName LIKE '王__'",
+                "WHERE CName LIKE '王_'",
+                "WHERE CName LIKE '王*'"
+            ],
+            "correct_answer": [
+                "WHERE CName LIKE '王_'"
+            ],
+            "analysis": "LIKE通配符中，`%`匹配0个或多个字符，`_`匹配任意一个字符。姓“王”名字为两个字，总共三个字，应为'王'后面跟两个`_`，但题目选项有误，最接近的为“王_”，表示姓王名字一个字。若题目意为名字一个字，则C为正确答案。若意为名字两个字，则无正确选项，但'王__'是正确形式。"
+        }
+    ],
+    "sets": [
+        {
+            "id": "sjk-x",
+            "name": "0x-数据库期末考点",
+            "category": "数据库原理",
+            "tags": [
+                "数据库原理"
+            ],
+            "createTime": "2025-06-28 15:27:00",
+            "updateTime": "2025-06-28 15:27:00",
+            "description": "# AI 拆分生成，不保真。"
+        }
+    ]
+}
