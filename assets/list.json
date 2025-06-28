@@ -1,5 +1,5 @@
 {
-  "updateTime": "2025-06-28 15:06:47",
+  "updateTime": "2025-06-28 16:14:07",
   "banks": [
     {
       "file": "demo.json",
@@ -45,6 +45,21 @@
       "file": "rjgc/rjgc-x.json",
       "name": "x-软工期末知识点",
       "category": "软件工程"
+    },
+    {
+      "file": "sjk/sjk-1.json",
+      "name": "01-数据库作业1",
+      "category": "数据库原理"
+    },
+    {
+      "file": "sjk/sjk-2.json",
+      "name": "02-数据库作业2",
+      "category": "数据库原理"
+    },
+    {
+      "file": "sjk/sjk-3.json",
+      "name": "03-数据库期中",
+      "category": "数据库原理"
     }
   ]
 }

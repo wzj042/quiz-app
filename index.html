@@ -10,6 +10,35 @@
     <script src="https://lf3-cdn-tos.bytecdntp.com/cdn/expire-1-M/vue/3.2.23/vue.global.prod.min.js"></script>
     <script src="https://lf26-cdn-tos.bytecdntp.com/cdn/expire-1-M/marked/4.0.2/marked.min.js"></script>
     <link rel="stylesheet" href="https://lf9-cdn-tos.bytecdntp.com/cdn/expire-1-M/font-awesome/6.0.0/css/all.min.css">
+    <!-- 添加 highlight.js -->
+    <link href="https://lf6-cdn-tos.bytecdntp.com/cdn/expire-1-M/highlight.js/11.4.0/styles/qtcreator-light.min.css" type="text/css" rel="stylesheet" />
+    <script src="https://lf3-cdn-tos.bytecdntp.com/cdn/expire-1-M/highlight.js/11.4.0/highlight.min.js" type="application/javascript"></script>
+    <!-- 添加 SQL 语言支持 -->
+    <script src="https://lf6-cdn-tos.bytecdntp.com/cdn/expire-1-M/highlight.js/11.4.0/languages/sql.min.js" type="application/javascript"></script>
+
+    <!-- 配置 marked 和 highlight.js -->
+    <script>
+        // 配置 marked 的代码高亮
+        marked.setOptions({
+            highlight: function(code, lang) {
+                if (lang) {
+                    try {
+                        const highlighted = hljs.highlight(code, {
+                            language: lang.toLowerCase(),
+                            ignoreIllegals: true
+                        }).value;
+                        return `<pre data-language="${lang}"><code class="hljs language-${lang}">${highlighted}</code></pre>`;
+                    } catch (e) {
+                        console.warn('Language highlight failed:', e);
+                        return `<pre data-language="${lang}"><code class="hljs">${hljs.highlightAuto(code).value}</code></pre>`;
+                    }
+                }
+                return `<pre><code class="hljs">${hljs.highlightAuto(code).value}</code></pre>`;
+            },
+            breaks: true,
+            gfm: true
+        });
+    </script>
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="css/mobile.css?v=_timestamp_">

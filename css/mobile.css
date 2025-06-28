@@ -1808,3 +1808,128 @@ textarea:focus-visible {
     margin-left: 8px;
     vertical-align: middle;
 }
+
+/* 表格样式 */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 16px 0;
+    background-color: white;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+th, td {
+    padding: 12px;
+    text-align: left;
+    border: 1px solid #eee;
+}
+
+th {
+    background-color: var(--theme-color-light);
+    color: var(--theme-color);
+    font-weight: bold;
+    white-space: nowrap;
+}
+
+tr:nth-child(even) {
+    background-color: #f8f8f8;
+}
+
+tr:hover {
+    background-color: #f0f0f0;
+}
+
+/* 移动端适配 */
+@media (max-width: 600px) {
+    table {
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    th, td {
+        padding: 8px;
+        font-size: 14px;
+    }
+}
+
+/* 表格标题 */
+table caption {
+    padding: 12px;
+    font-weight: bold;
+    color: #666;
+    text-align: left;
+    caption-side: top;
+}
+
+/* 表格内的代码块 */
+table code {
+    background-color: #f5f5f5;
+    padding: 2px 4px;
+    border-radius: 3px;
+    font-family: monospace;
+    font-size: 0.9em;
+}
+
+/* 表格内的链接 */
+table a {
+    color: var(--theme-color);
+    text-decoration: none;
+}
+
+table a:hover {
+    text-decoration: underline;
+}
+
+/* 代码高亮样式 */
+pre {
+    margin: 16px 0;
+    padding: 16px;
+    overflow-x: auto;
+    position: relative;
+}
+
+pre code {
+    font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+    font-size: 14px;
+    line-height: 1.5;
+    display: block;
+    padding: 0;
+    background: none;
+    color: #adbac7;
+}
+
+
+/* 行内代码 */
+code:not(pre code) {
+    background-color: rgba(99, 110, 123, 0.1);
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+    font-size: 0.9em;
+    color: #539a6f;
+    border: 1px solid rgba(99, 110, 123, 0.2);
+}
+
+/* 移动端适配 */
+@media (max-width: 600px) {
+    pre {
+        padding: 12px;
+        font-size: 13px;
+        margin: 12px -8px;
+        border-radius: 4px;
+    }
+    
+    pre::before {
+        font-size: 11px;
+        padding: 3px 6px;
+    }
+
+    code:not(pre code) {
+        font-size: 0.85em;
+        padding: 1px 4px;
+    }
+}
