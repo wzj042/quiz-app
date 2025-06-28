@@ -1,4 +1,6 @@
 // 练习状态管理模块
+import AIManager from './AIManager.js';
+
 export default class PracticeManager {
     constructor(storageManager) {
         this.storageManager = storageManager;
@@ -9,6 +11,17 @@ export default class PracticeManager {
         this.isPreviewMode = false;
         this.maxShuffleAttempts = 100; // 防止无限循环
         this.initialized = false;
+        this.aiManager = null; // AI管理器实例
+    }
+
+    // 设置AI管理器
+    setAIManager(aiManager) {
+        if (!AIManager.isAIManager(aiManager)) {
+            console.error('[PracticeManager:setAIManager] Invalid AIManager instance');
+            return;
+        }
+        this.aiManager = aiManager;
+        console.log('[PracticeManager:setAIManager] AIManager instance set successfully');
     }
 
     // Initialize practice session
@@ -210,7 +223,7 @@ export default class PracticeManager {
     }
 
     // 检查答案
-    checkAnswer(answer) {
+    async checkAnswer(answer) {
         const question = this.getCurrentQuestion();
         if (!question) {
             console.warn('[PracticeManager:checkAnswer] No current question');
@@ -235,13 +248,17 @@ export default class PracticeManager {
                     );
                     break;
                 case 'fill-in-blank':
-                    isCorrect = this.compareArrays(answer, question.correct_answer);
-                    break;
                 case 'short-answer':
-                    // 简答题需要特殊处理，这里简单实现
-                    isCorrect = question.correct_answer.some(ans => 
-                        answer.toLowerCase().includes(ans.toLowerCase())
-                    );
+                    // 对填空题和简答题使用 AI 评分
+                    if (this.aiManager) {
+                        isCorrect = await this.checkAnswerWithAI(answer, question);
+                    } else {
+                        // 如果 AI 不可用，回退到基本比较
+                        isCorrect = this.compareArrays(
+                            Array.isArray(answer) ? answer : [answer],
+                            question.correct_answer
+                        );
+                    }
                     break;
                 default:
                     console.error('[PracticeManager:checkAnswer] Unknown question type:', question.type);
@@ -357,6 +374,266 @@ export default class PracticeManager {
                 return '随机练习';
             default:
                 return '';
+        }
+    }
+
+    // 使用AI检查答案
+    async checkAnswerWithAI(answer, question) {
+        try {
+            console.log('[PracticeManager:checkAnswerWithAI] Starting AI scoring', {
+                questionType: question.type,
+                answer: answer,
+                aiManager: this.aiManager
+            });
+
+            if (!this.aiManager) {
+                console.error('[PracticeManager:checkAnswerWithAI] AI Manager not initialized');
+                throw new Error('AI Manager not initialized');
+            }
+
+            const systemPrompt = `你是一个专业的教育评分系统。你需要根据提供的题目、参考答案和学生答案进行评分。
+你必须以JSON格式返回结果，包含以下字段：
+{
+    "score": 0到1之间的分数,
+    "explanation": "评分理由（100字以内）。你可以使用LaTeX公式，用 $...$ 包裹行内公式，用 $$...$$ 包裹独立公式。"
+}`;
+
+            const userPrompt = `题目：${question.content}
+参考答案：${question.correct_answer.join('\n')}
+学生答案：${answer}`;
+
+            console.log('[PracticeManager:checkAnswerWithAI] Sending prompt to AI', {
+                systemPrompt,
+                userPrompt
+            });
+
+            const response = await this.aiManager.streamChat([
+                { role: 'system', content: systemPrompt },
+                { role: 'user', content: userPrompt }
+            ], {
+                response_format: { type: 'json_object' }
+            });
+
+            let fullContent = '';
+            let partialContent = '';
+            let result = null;
+            let isReasoningPhase = false;
+            const threshold = 0.9;
+
+            // 初始化评分解释字段
+            if (!question.aiScoreExplanation) {
+                question.aiScoreExplanation = '';
+            }
+
+            for await (const chunk of response) {
+                console.log('[PracticeManager:checkAnswerWithAI] Received chunk:', chunk);
+                
+                switch (chunk.type) {
+                    case 'reasoning': {
+                        isReasoningPhase = true;
+                        question.aiScoreExplanation = '正在评分中...\n' + chunk.content;
+                        break;
+                    }
+                    case 'answer': {
+                        fullContent += chunk.content;
+                        
+                        try {
+                            // 尝试解析完整的 JSON
+                            const parsed = JSON.parse(fullContent);
+                            if (parsed.score !== undefined && parsed.explanation) {
+                                result = parsed;
+                                question.aiScore = result.score;
+                                question.aiScoreThreshold = threshold;
+                                question.aiScoreExplanation = `得分：${Math.round(result.score * 100)}分（及格线：${Math.round(threshold * 100)}分）\n${result.explanation}`;
+                            }
+                        } catch (error) {
+                            // JSON 还不完整，继续累积内容
+                            if (!isReasoningPhase) {
+                                partialContent += chunk.content;
+                                
+                                // 尝试从部分内容中提取有意义的文本
+                                let cleanContent = partialContent
+                                    .replace(/^{?\s*"(score|explanation)":\s*"?/, '')
+                                    .replace(/\\n/g, '\n')
+                                    .replace(/\\"/, '"')
+                                    .replace(/"}$/, '')
+                                    .replace(/,$/, '')
+                                    .trim();
+                                
+                                if (cleanContent) {
+                                    question.aiScoreExplanation = '正在评分中...\n' + cleanContent;
+                                }
+                            }
+                        }
+                        break;
+                    }
+                    case 'finish': {
+                        console.log('[PracticeManager:checkAnswerWithAI] Stream finished:', chunk.reason);
+                        break;
+                    }
+                    case 'tool_calls': {
+                        console.log('[PracticeManager:checkAnswerWithAI] Tool calls received:', chunk.content);
+                        break;
+                    }
+                }
+            }
+
+            // 最后一次尝试解析
+            if (!result && fullContent) {
+                try {
+                    const parsed = JSON.parse(fullContent);
+                    if (parsed.score !== undefined && parsed.explanation) {
+                        result = parsed;
+                        question.aiScore = result.score;
+                        question.aiScoreThreshold = threshold;
+                        question.aiScoreExplanation = `得分：${Math.round(result.score * 100)}分（及格线：${Math.round(threshold * 100)}分）\n${result.explanation}`;
+                    }
+                } catch (error) {
+                    console.error('[PracticeManager:checkAnswerWithAI] Failed to parse final response:', error);
+                    throw new Error('Invalid AI score response');
+                }
+            }
+
+            if (!result || result.score === undefined || typeof result.score !== 'number' || result.score < 0 || result.score > 1) {
+                console.error('[PracticeManager:checkAnswerWithAI] Invalid AI score response', { result });
+                throw new Error('Invalid AI score response');
+            }
+
+            console.log('[PracticeManager:checkAnswerWithAI] AI scoring completed', {
+                score: result.score,
+                threshold: threshold,
+                explanation: result.explanation
+            });
+
+            return result.score >= threshold;
+        } catch (error) {
+            console.error('[PracticeManager:checkAnswerWithAI] Error:', error);
+            return false;
+        }
+    }
+
+    // 获取AI解析
+    async getAIAnalysis(answer, question) {
+        try {
+            console.log('[PracticeManager:getAIAnalysis] Starting AI analysis', {
+                questionType: question.type,
+                answer: answer,
+                aiManager: this.aiManager
+            });
+
+            if (!AIManager.isAIManager(this.aiManager)) {
+                console.error('[PracticeManager:getAIAnalysis] Invalid AIManager instance');
+                throw new Error('Invalid AIManager instance');
+            }
+
+            const systemPrompt = `你是一个专业的题目解析系统。你需要解释为什么给定的答案是正确的。
+你必须以JSON格式返回结果，包含以下字段：
+{
+    "analysis": "直接给出解析内容，不要包含任何提示词或格式说明。解析应该：聚焦答案路径，解释关键概念，使用简短有力的语句，语言朴实易懂。你可以使用LaTeX公式，用 $...$ 包裹行内公式，用 $$...$$ 包裹独立公式。"
+}`;
+
+            const userPrompt = `题目：${question.content}
+参考答案：${question.correct_answer.join('\n')}`;
+
+            console.log('[PracticeManager:getAIAnalysis] Sending prompt to AI', {
+                systemPrompt,
+                userPrompt
+            });
+
+            const response = await this.aiManager.streamChat([
+                { role: 'system', content: systemPrompt },
+                { role: 'user', content: userPrompt }
+            ], {
+                response_format: { type: 'json_object' }
+            });
+
+            let fullContent = '';
+            let partialContent = '';
+            let result = null;
+            let isReasoningPhase = false;
+
+            for await (const chunk of response) {
+                console.log('[PracticeManager:getAIAnalysis] Received chunk:', chunk);
+                
+                switch (chunk.type) {
+                    case 'reasoning': {
+                        isReasoningPhase = true;
+                        if (question.onAnalysisUpdate) {
+                            question.onAnalysisUpdate('正在思考中...\n' + chunk.content);
+                        }
+                        break;
+                    }
+                    case 'answer': {
+                        fullContent += chunk.content;
+                        try {
+                            // 尝试解析完整的 JSON
+                            const parsed = JSON.parse(fullContent);
+                            if (parsed.analysis) {
+                                result = parsed;
+                                if (question.onAnalysisUpdate) {
+                                    question.onAnalysisUpdate(parsed.analysis);
+                                }
+                            }
+                        } catch (error) {
+                            // JSON 还不完整，尝试提取部分内容进行渲染
+                            if (!isReasoningPhase) {
+                                partialContent += chunk.content;
+                                
+                                // 尝试从部分内容中提取有意义的文本
+                                if (question.onAnalysisUpdate) {
+                                    // 移除可能的JSON标记和引号
+                                    let cleanContent = partialContent
+                                        .replace(/^{?\s*"analysis":\s*"?/, '')
+                                        .replace(/\\n/g, '\n')
+                                        .replace(/\\"/, '"');
+                                        
+                                    // 如果内容看起来是完整的JSON结尾，移除它
+                                    if (cleanContent.endsWith('"}')) {
+                                        cleanContent = cleanContent.slice(0, -2);
+                                    }
+                                    
+                                    question.onAnalysisUpdate(cleanContent);
+                                }
+                            }
+                        }
+                        break;
+                    }
+                    case 'finish': {
+                        console.log('[PracticeManager:getAIAnalysis] Stream finished:', chunk.reason);
+                        break;
+                    }
+                    case 'tool_calls': {
+                        console.log('[PracticeManager:getAIAnalysis] Tool calls received:', chunk.content);
+                        break;
+                    }
+                }
+            }
+
+            // 最后一次尝试解析
+            if (!result && fullContent) {
+                try {
+                    const parsed = JSON.parse(fullContent);
+                    if (parsed.analysis) {
+                        result = parsed;
+                        if (question.onAnalysisUpdate) {
+                            question.onAnalysisUpdate(parsed.analysis);
+                        }
+                    }
+                } catch (error) {
+                    console.error('[PracticeManager:getAIAnalysis] Failed to parse final response:', error);
+                    throw new Error('Invalid AI analysis response');
+                }
+            }
+
+            if (!result || !result.analysis) {
+                console.error('[PracticeManager:getAIAnalysis] Invalid AI analysis response');
+                throw new Error('Invalid AI analysis response');
+            }
+
+            return result.analysis;
+        } catch (error) {
+            console.error('[PracticeManager:getAIAnalysis] Error:', error);
+            return null;
         }
     }
 } 

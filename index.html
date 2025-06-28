@@ -266,7 +266,7 @@
         }
 
         .ai-input-group input {
-            width: 100%;
+            
             padding: 10px;
             border: 1px solid #ddd;
             border-radius: 4px;
@@ -318,6 +318,65 @@
         .ai-input-area button:disabled {
             background: #ccc;
             cursor: not-allowed;
+        }
+
+        /* 测试区域样式 */
+        .ai-test-area {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            margin: 10px 0;
+            border: 1px solid #eee;
+        }
+
+        .test-prompt {
+            width: 70%;
+            min-height: 80px;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            resize: vertical;
+            font-family: inherit;
+            font-size: 14px;
+        }
+
+        .test-btn {
+            padding: 8px 16px;
+            background: #A5B596;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background 0.2s;
+            align-self: flex-end;
+            min-width: 120px;
+        }
+
+        .test-btn:hover:not(:disabled) {
+            background: #2d3748;
+        }
+
+        .test-btn:disabled {
+            background: #718096;
+            cursor: not-allowed;
+        }
+
+        .test-result {
+            margin-top: 10px;
+            padding: 15px;
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 4px;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.5;
+            min-height: 100px;
+            max-height: 300px;
+            overflow-y: auto;
         }
 
         .custom-preset-form {
@@ -932,6 +991,38 @@
             align-items: center;
             gap: 8px;
         }
+
+        .ai-score-section {
+            margin-top: 15px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-left: 4px solid #B8C7AB;
+            border-radius: 4px;
+        }
+
+        .ai-score-section .empty-message {
+            color: #999;
+            font-style: italic;
+            margin-top: 8px;
+        }
+
+        .ai-score-section .markdown-content:not(:empty) {
+            margin-top: 8px;
+        }
+
+        .ai-analysis-section {
+            margin-top: 15px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-left: 4px solid #B8C7AB;
+            border-radius: 4px;
+        }
+
+        .ai-analysis-section .markdown-content:empty::before {
+            content: '等待 AI 解析...';
+            color: #999;
+            font-style: italic;
+        }
     </style>
 </head>
 
@@ -951,48 +1042,32 @@
                     <label for="modelSelect">选择模型：</label>
                     <select id="modelSelect" v-model="selectedPresetId" @change="handlePresetChange">
                         <option v-for="(preset, id) in presets" :key="id" :value="id">
-                            {{ preset.name }}
+                            {{ preset?.name || id }}
                         </option>
                     </select>
-                    <div class="model-description" v-if="currentPreset">
+                    <div class="model-description" v-if="currentPreset?.name">
                         {{ getModelDescription(selectedPresetId) }}
                     </div>
                 </div>
 
                 <!-- API Key 输入 -->
-                <div class="ai-input-group">
+                <form class="ai-input-group" @submit.prevent v-if="currentPreset?.name">
                     <label :for="'apiKey_' + currentProvider">{{ currentPreset.name }} API Key:</label>
                     <input type="password" :id="'apiKey_' + currentProvider" v-model="providerApiKeys[currentProvider]"
                         @input="updateApiKey" :placeholder="`请输入 ${currentPreset.name} 的 API Key`">
-                </div>
+                </form>
 
-                <!-- 聊天区域 -->
-                <div class="ai-chat-area markdown-content" ref="chatArea">
-                    <template v-if="reasoningContent">
-                        <div class="reasoning-content" v-html="renderedReasoningContent"></div>
-                    </template>
-                    <div class="final-answer" v-html="renderedResponse"></div>
-                </div>
-
-                <!-- 输入区域 -->
-                <div class="tabs">
-                    <button class="tab" :class="{ active: activeTab === 'edit' }" @click="activeTab = 'edit'">
-                        编辑
-                    </button>
-                    <button class="tab" :class="{ active: activeTab === 'preview' }" @click="activeTab = 'preview'">
-                        预览
-                    </button>
-                </div>
-
-                <div v-show="activeTab === 'preview'" class="preview-area markdown-content" v-html="renderedPreview">
-                </div>
-
-                <div v-show="activeTab === 'edit'" class="ai-input-area">
-                    <textarea v-model="userMessage" placeholder="测试 AI 连通性... (支持 Markdown 语法)"
-                        @keydown.ctrl.enter="sendMessage"></textarea>
-                    <button class="primary" @click="sendMessage" :disabled="!hasValidApiKey || isProcessing">
-                        {{ isProcessing ? '发送中...' : '发送' }}
-                    </button>
+                <!-- 流式渲染测试 -->
+                <div class="ai-test-area">
+                    <div class="ai-input-group">
+                        <label for="testPrompt">测试提示词：</label>
+                        <textarea id="testPrompt" v-model="testPrompt" rows="3" 
+                            placeholder="输入测试提示词" class="test-prompt"></textarea>
+                        <button class="test-btn" @click="testStreaming" :disabled="isTestingStream">
+                            {{ isTestingStream ? '测试中...' : '测试流式渲染' }}
+                        </button>
+                    </div>
+                    <div v-if="testStreamContent" class="test-result markdown-content" v-html="renderedTestContent()"></div>
                 </div>
             </div>
         </div>
@@ -1172,25 +1247,6 @@
                 </h1>
                 <p v-if="chosenSet.description" class="pre-wrap" v-html="renderMarkdown(chosenSet.description)"></p>
 
-                <!-- 题库统计信息 -->
-                <!-- <div class="set-stats">
-                <div class="stats-grid">
-                    <div class="stats-item" tabindex="0">
-                        <div class="stats-value">{{ setStats.completedQuestions }}/{{ setStats.totalQuestions }}</div>
-                        <div class="stats-label">已练习题数</div>
-                    </div>
-                    <div class="stats-item" tabindex="0">
-                        <div class="stats-value">{{ setStats.averageAccuracy }}%</div>
-                        <div class="stats-label">平均正确率</div>
-                    </div>
-                    <div class="stats-item" tabindex="0">
-                        <div class="stats-value">{{ setStats.todayAttempts }}</div>
-                        <div class="stats-label">今日练习次数</div>
-                        <div class="stats-sublabel">正确: {{ setStats.todayCorrect }}</div>
-                    </div>
-                </div>
-            </div> -->
-
                 <!-- 练习模式选择 -->
                 <div class="mode-selection" role="group" aria-label="练习模式选择">
                     <button class="mode-btn" @click="enterQuizMode" @keydown.enter.prevent="enterQuizMode"
@@ -1333,13 +1389,6 @@
                     <!-- 简答题 -->
                     <textarea v-model="shortAnswerText" :disabled="showAnswer" rows="4" class="full-width-input"
                         placeholder="请输入你的答案"></textarea>
-                    <!-- 显示正确答案 -->
-                    <div v-if="showAnswer" class="correct-answer">
-                        <h4>参考答案：</h4>
-                        <div v-for="(answer, index) in currentQuestion.correct_answer" :key="index"
-                            v-html="renderMarkdownWithLatex(answer)" class="short-answer-content">
-                        </div>
-                    </div>
                 </div>
 
                 <div v-else-if="currentQuestion.type === 'fill-in-blank'">
@@ -1348,9 +1397,6 @@
                         <label :for="'blank-'+idx">空{{idx + 1}}：</label>
                         <input :id="'blank-'+idx" type="text" v-model="fillInAnswers[idx]" :disabled="showAnswer"
                             class="medium-input" :placeholder="'请填写空'+(idx+1)">
-                        <span v-if="showAnswer" class="answer-info">
-                            正确答案：{{ currentQuestion.correct_answer[idx] }}
-                        </span>
                     </div>
                 </div>
 
@@ -1374,19 +1420,69 @@
                     </button>
                 </div>
 
-                <!-- 解析 -->
-                <div v-if="showAnswer" class="analysis">
-                    <h3>解析</h3>
-                    <div v-if="(!isEditing || editingField !== 'analysis') && currentQuestion.analysis"
-                        @click="isEditing && !isPreviewMode ? enterEditMode('analysis', currentQuestion.analysis) : null"
-                        v-html="renderedAnalysis" :class="{ 'editable': isEditing && !isPreviewMode }"></div>
-                    <div v-if="(!isEditing || editingField !== 'analysis') && !currentQuestion.analysis"
-                        @click="isEditing && !isPreviewMode ? enterEditMode('analysis', '') : null"
-                        class="empty-analysis" :class="{ 'editable': isEditing && !isPreviewMode }">
-                        点击添加解析
+                <!-- 显示正确答案和AI评分 -->
+                <div v-if="showAnswer" class="answer-section">
+                    <!-- 显示正确答案 -->
+                    <div class="correct-answer">
+                        <h4>参考答案：</h4>
+                        <template v-if="currentQuestion.type === 'short-answer'">
+                            <div v-for="(answer, index) in currentQuestion.correct_answer" :key="index"
+                                v-html="renderMarkdownWithLatex(answer)" class="short-answer-content">
+                            </div>
+                        </template>
+                        <template v-else-if="currentQuestion.type === 'fill-in-blank'">
+                            <div v-for="(answer, idx) in currentQuestion.correct_answer" :key="idx" class="fill-blank-answer">
+                                空{{idx + 1}}：{{ answer }}
+                            </div>
+                        </template>
                     </div>
-                    <textarea v-else-if="editingField === 'analysis'" v-model="editingContent" @blur="exitEditMode"
-                        class="edit-textarea" rows="6" placeholder="请输入解析内容..."></textarea>
+
+                    <!-- AI评分区域 -->
+                    <div v-if="currentQuestion.type === 'fill-in-blank' || currentQuestion.type === 'short-answer'" class="ai-score-section">
+                        <h4>AI评分</h4>
+                        <div v-if="currentQuestion.aiScoreExplanation" class="markdown-content" v-html="renderMarkdownWithLatex(currentQuestion.aiScoreExplanation)"></div>
+                        <div v-else class="empty-message">等待 AI 评分...</div>
+                    </div>
+
+                    <!-- 解析 -->
+                    <div class="analysis">
+                        <!-- 默认解析 -->
+                        <div class="default-analysis-section">
+                            <div class="analysis-header">
+                                <h3>题目解析</h3>
+                            </div>
+                            
+                            <div v-if="(!isEditing || editingField !== 'analysis') && currentQuestion.analysis"
+                                @click="isEditing && !isPreviewMode ? enterEditMode('analysis', currentQuestion.analysis) : null"
+                                v-html="renderedAnalysis" :class="{ 'editable': isEditing && !isPreviewMode }"></div>
+                            <div v-if="(!isEditing || editingField !== 'analysis') && !currentQuestion.analysis"
+                                @click="isEditing && !isPreviewMode ? enterEditMode('analysis', '') : null"
+                                class="empty-analysis" :class="{ 'editable': isEditing && !isPreviewMode }">
+                                暂无解析
+                            </div>
+                            <textarea v-else-if="editingField === 'analysis'" v-model="editingContent" @blur="exitEditMode"
+                                class="edit-textarea" rows="6" placeholder="请输入解析内容..."></textarea>
+                        </div>
+
+                        <!-- AI解析区域 -->
+                        <div class="ai-analysis-section">
+                            <div class="analysis-header">
+                                <h3>AI解析</h3>
+                                <button class="ai-analysis-btn" @click="generateAIAnalysis" :disabled="isGeneratingAnalysis">
+                                    <span v-if="!aiAnalysis">生成解析</span>
+                                    <span v-else>重新生成</span>
+                                </button>
+                            </div>
+                            <div v-if="isGeneratingAnalysis" class="generating-message">
+                                <div v-if="streamingContent" class="markdown-content" v-html="renderMarkdownWithLatex(streamingContent)"></div>
+                                <div v-else>正在生成解析...</div>
+                            </div>
+                            <div v-else-if="aiAnalysis" class="markdown-content" v-html="renderMarkdownWithLatex(aiAnalysis)"></div>
+                            <div v-else class="empty-message">
+                                点击按钮生成 AI 解析
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
                 <p class="small-text">
@@ -1565,7 +1661,13 @@
                     presets: aiManager.getPresets(),
                     activeTab: 'edit',
                     reasoningContent: '',
-                    currentResponseType: null
+                    currentResponseType: null,
+                    // AI 解析相关
+                    aiAnalysis: null,
+                    testStreamContent: '',
+                    isTestingStream: false,
+                    testPrompt: '请解释TCP三次握手的过程。',
+                    isGeneratingAnalysis: false,
                 }
             },
             mounted() {
@@ -1576,6 +1678,9 @@
                 setInterval(() => {
                     this.logs = [...aiManager.getLogs()];
                 }, 1000);
+
+                // 初始化键盘事件监听
+                this.initKeyboardEvents();
             },
             beforeUnmount() {
                 // 清理事件监听器
@@ -1659,6 +1764,10 @@
                             });
                         }
                     });
+                },
+                // 监听显示答案状态
+                showAnswer(newVal) {
+                    // 不再在这里触发 AI 评分，因为已经在 submitAnswer 中处理了
                 }
             },
             async created() {
@@ -1667,6 +1776,7 @@
                 this.keyboardManager = new KeyboardManager(this);
                 this.questionManager = new QuestionManager(this.storageManager);
                 this.practiceManager = new PracticeManager(this.storageManager);
+                this.practiceManager.setAIManager(aiManager);
 
                 // 先加载题库列表
                 await this.loadBankList();
@@ -2542,13 +2652,33 @@
                             break;
                         case 'fill-in-blank':
                             answer = this.fillInAnswers;
-                            isCorrect = this.compareArrays(answer, q.correct_answer);
+                            // 对填空题使用 AI 评分
+                            if (this.practiceManager.aiManager) {
+                                console.log('[submitAnswer] Using AI scoring for fill-in-blank question');
+                                // 先显示答案
+                                this.showAnswer = true;
+                                // 然后进行 AI 评分
+                                isCorrect = await this.practiceManager.checkAnswerWithAI(answer.join('\n'), q);
+                            } else {
+                                console.log('[submitAnswer] AI not available, using basic comparison');
+                                isCorrect = this.compareArrays(answer, q.correct_answer);
+                            }
                             break;
                         case 'short-answer':
                             answer = this.shortAnswerText;
-                            isCorrect = q.correct_answer.some(ans =>
-                                answer.toLowerCase().includes(ans.toLowerCase())
-                            );
+                            // 对简答题使用 AI 评分
+                            if (this.practiceManager.aiManager) {
+                                console.log('[submitAnswer] Using AI scoring for short-answer question');
+                                // 先显示答案
+                                this.showAnswer = true;
+                                // 然后进行 AI 评分
+                                isCorrect = await this.practiceManager.checkAnswerWithAI(answer, q);
+                            } else {
+                                console.log('[submitAnswer] AI not available, using basic comparison');
+                                isCorrect = q.correct_answer.some(ans =>
+                                    answer.toLowerCase().includes(ans.toLowerCase())
+                                );
+                            }
                             break;
                     }
 
@@ -2556,43 +2686,44 @@
                     const questionIndex = this.practiceManager.currentIndex + 1;
                     this.currentSessionCompleted.add(questionIndex);
 
-                    // 只有在未显示答案时才更新题目完成状态
-                    if (!this.showAnswer) {
-                        if (this.chosenSet.isCrossPractice) {
-                            // 对于跨题练习，找到原题库并更新记录
-                            const originalBank = this.findOriginalBank(q);
-                            if (originalBank) {
-                                console.log('[submitAnswer] Updating cross practice record:', {
-                                    bank: originalBank.file,
-                                    questionIndex,
-                                    isCorrect
-                                });
-                                this.storageManager.updateQuestionCompletion(originalBank.file, questionIndex, isCorrect);
-                            }
-                        } else {
-                            // 确保有题库ID和题目序号
-                            const currentQuestion = this.practiceManager.getCurrentQuestion();
-                            if (this.chosenSet?.id && currentQuestion) {
-                                console.log('[submitAnswer] Updating completion:', {
-                                    setId: this.chosenSet.id,
-                                    questionIndex,
-                                    isCorrect
-                                });
-                                this.storageManager.updateQuestionCompletion(
-                                    this.chosenSet.id,
-                                    questionIndex,
-                                    isCorrect
-                                );
-                            } else {
-                                console.error('[submitAnswer] Missing setId or currentQuestion:', {
-                                    setId: this.chosenSet?.id,
-                                    currentQuestion
-                                });
-                            }
-                        }
+                    // 如果不是 AI 评分的题目，显示答案
+                    if (!(this.practiceManager.aiManager && (q.type === 'fill-in-blank' || q.type === 'short-answer'))) {
+                        this.showAnswer = true;
                     }
 
-                    this.showAnswer = true;
+                    // 更新题目完成状态
+                    if (this.chosenSet.isCrossPractice) {
+                        // 对于跨题练习，找到原题库并更新记录
+                        const originalBank = this.findOriginalBank(q);
+                        if (originalBank) {
+                            console.log('[submitAnswer] Updating cross practice record:', {
+                                bank: originalBank.file,
+                                questionIndex,
+                                isCorrect
+                            });
+                            this.storageManager.updateQuestionCompletion(originalBank.file, questionIndex, isCorrect);
+                        }
+                    } else {
+                        // 确保有题库ID和题目序号
+                        const currentQuestion = this.practiceManager.getCurrentQuestion();
+                        if (this.chosenSet?.id && currentQuestion) {
+                            console.log('[submitAnswer] Updating completion:', {
+                                setId: this.chosenSet.id,
+                                questionIndex,
+                                isCorrect
+                            });
+                            this.storageManager.updateQuestionCompletion(
+                                this.chosenSet.id,
+                                questionIndex,
+                                isCorrect
+                            );
+                        } else {
+                            console.error('[submitAnswer] Missing setId or currentQuestion:', {
+                                setId: this.chosenSet?.id,
+                                currentQuestion
+                            });
+                        }
+                    }
 
                     // 更新URL以反映答案已提交
                     this.updateUrlParams('quiz', {
@@ -3651,34 +3782,133 @@
                     // 普通练习模式
                     return this.practiceManager.currentIndex + 1;
                 },
-                // 初始化键盘事件监听
-                initKeyboardEvents() {
-                    this.$nextTick(() => {
-                        if (this.pageState === 'setDescription') {
-                            console.log('Page mounted in setDescription state');
-                            const buttons = document.querySelectorAll('.mode-btn');
-                            console.log('Initial mode buttons state:', {
-                                totalButtons: buttons.length,
-                                buttonElements: Array.from(buttons).map(btn => ({
-                                    text: btn.textContent.trim(),
-                                    tabIndex: btn.tabIndex,
-                                    hasClickHandler: btn.onclick !== null,
-                                    hasKeydownHandler: btn.onkeydown !== null
-                                }))
-                            });
+
+                // 生成AI解析
+                async generateAIAnalysis() {
+                    if (!this.practiceManager || !this.currentQuestion || this.isGeneratingAnalysis) return;
+
+                    try {
+                        this.isGeneratingAnalysis = true;
+                        console.log('[generateAIAnalysis] Starting AI analysis');
+                        
+                        // 设置回调函数来更新解析内容
+                        this.currentQuestion.onAnalysisUpdate = (content) => {
+                            console.log('[generateAIAnalysis] Received update:', content);
+                            this.aiAnalysis = content;
+                        };
+
+                        // 获取当前答案
+                        let answer;
+                        switch (this.currentQuestion.type) {
+                            case 'single-choice':
+                                answer = this.chosenAnswer;
+                                break;
+                            case 'multiple-choice':
+                                answer = this.chosenAnswers;
+                                break;
+                            case 'fill-in-blank':
+                                answer = this.fillInAnswers;
+                                break;
+                            case 'short-answer':
+                                answer = this.shortAnswerText;
+                                break;
                         }
-                    });
 
-                    // 添加浏览器前进/后退按钮支持
-                    window.addEventListener('popstate', this.handlePopState);
-
-                    // 添加 URL 变化监听
-                    window.addEventListener('hashchange', this.handleUrlChange);
-                    window.addEventListener('popstate', this.handleUrlChange);
-
-                    // 添加全局Alt+H返回快捷键
-                    window.addEventListener('keydown', this.handleGlobalBackShortcut);
+                        // 调用AI解析
+                        const analysis = await this.practiceManager.getAIAnalysis(answer, this.currentQuestion);
+                        console.log('[generateAIAnalysis] Received analysis', { analysis });
+                        
+                        if (analysis) {
+                            this.aiAnalysis = analysis;
+                        }
+                    } catch (error) {
+                        console.error('[generateAIAnalysis] Failed to generate AI analysis:', error);
+                        this.showToast('生成AI解析失败，请稍后重试', 'error');
+                    } finally {
+                        this.isGeneratingAnalysis = false;
+                        // 清理回调
+                        if (this.currentQuestion) {
+                            this.currentQuestion.onAnalysisUpdate = null;
+                        }
+                    }
                 },
+
+                // 渲染AI解析
+                renderedAIAnalysis() {
+                    try {
+                        if (!this.aiAnalysis) return '';
+                        
+                        // 尝试解析内容
+                        let content = '';
+                        if (typeof this.aiAnalysis === 'object') {
+                            content = this.aiAnalysis.analysis || '';
+                        } else if (typeof this.aiAnalysis === 'string') {
+                            try {
+                                const parsed = JSON.parse(this.aiAnalysis);
+                                content = parsed.analysis || this.aiAnalysis;
+                            } catch (e) {
+                                content = this.aiAnalysis;
+                            }
+                        }
+                        
+                        // 如果内容是空字符串，返回空
+                        if (!content || !content.trim()) return '';
+                        
+                        // 渲染 Markdown 和 LaTeX
+                        return this.renderMarkdownWithLatex(content);
+                    } catch (error) {
+                        console.error('[renderedAIAnalysis] Error rendering analysis:', error, {
+                            aiAnalysis: this.aiAnalysis,
+                            type: typeof this.aiAnalysis
+                        });
+                        return '';
+                    }
+                },
+
+                // AI 相关方法
+                initAIConfig() {
+                    try {
+                        console.log('[initAIConfig] Starting AI configuration initialization');
+                        
+                        // 确保 aiManager 已经被正确导入
+                        if (!aiManager) {
+                            throw new Error('AIManager instance not available');
+                        }
+                        
+                        this.presets = aiManager.getPresets();
+                        this.aiApiKey = aiManager.getApiKey();
+
+                        console.log('[initAIConfig] Current configuration', {
+                            presets: this.presets,
+                            selectedPresetId: this.selectedPresetId,
+                            hasApiKey: !!this.aiApiKey
+                        });
+
+                        // 设置默认预设
+                        if (this.presets[this.selectedPresetId]) {
+                            aiManager.setSelectedPreset(this.selectedPresetId);
+                            console.log('[initAIConfig] Set default preset:', this.selectedPresetId);
+                        }
+
+                        // 确保将 aiManager 实例传递给 practiceManager
+                        if (this.practiceManager) {
+                            this.practiceManager.setAIManager(aiManager);
+                            console.log('[initAIConfig] AIManager instance set to PracticeManager');
+                        }
+                    } catch (error) {
+                        console.error('[initAIConfig] Failed to initialize AI config:', error);
+                    }
+                },
+
+                updateApiKey() {
+                    if (this.currentProvider) {
+                        console.log('[updateApiKey] Updating API key for provider:', this.currentProvider);
+                        const key = this.providerApiKeys[this.currentProvider];
+                        aiManager.setApiKey(this.currentProvider, key);
+                        console.log('[updateApiKey] API key updated successfully');
+                    }
+                },
+
                 calculateBankPercentage(bank) {
                     if (!bank || typeof bank.questionCount !== 'number' || typeof bank.availableQuestions !== 'number' || bank.availableQuestions === 0) {
                         return 0;
@@ -3723,63 +3953,6 @@
                     this.showAIModal = false;
                 },
 
-                updateApiKey() {
-                    if (this.currentProvider) {
-                        const key = this.providerApiKeys[this.currentProvider];
-                        aiManager.setApiKey(this.currentProvider, key);
-                    }
-                },
-
-                async sendMessage() {
-                    if (!this.userMessage.trim() || this.isProcessing) return;
-
-                    this.isProcessing = true;
-                    const message = this.userMessage;
-                    this.userMessage = '';
-                    this.reasoningContent = '';
-                    this.aiResponse = '';
-
-                    try {
-                        // 使用流式输出
-                        for await (const chunk of aiManager.streamChat(message)) {
-                            if (chunk.type === 'reasoning') {
-                                this.reasoningContent += chunk.content;
-                                this.currentResponseType = 'reasoning';
-                            } else if (chunk.type === 'answer') {
-                                this.aiResponse += chunk.content;
-                                this.currentResponseType = 'answer';
-                            }
-
-                            // 自动滚动到底部
-                            this.$nextTick(() => {
-                                if (this.$refs.chatArea) {
-                                    this.$refs.chatArea.scrollTop = this.$refs.chatArea.scrollHeight;
-                                }
-                            });
-                        }
-                    } catch (error) {
-                        console.error('发送消息时出错:', error);
-                        this.aiResponse = '发送消息时出错: ' + error.message;
-                    } finally {
-                        this.isProcessing = false;
-                        this.currentResponseType = null;
-                    }
-                },
-                // AI 相关方法
-                initAIConfig() {
-                    try {
-                        this.presets = aiManager.getPresets();
-                        this.aiApiKey = aiManager.getApiKey();
-
-                        // 设置默认预设
-                        if (this.presets[this.selectedPresetId]) {
-                            aiManager.setSelectedPreset(this.selectedPresetId);
-                        }
-                    } catch (error) {
-                        console.error('Failed to initialize AI config:', error);
-                    }
-                },
-
                 handlePresetChange() {
                     try {
                         aiManager.setSelectedPreset(this.selectedPresetId);
@@ -3814,7 +3987,126 @@
                 },
                 log(level, message) {
                     aiManager.log(level, message);
-                }
+                },
+
+                // 初始化键盘事件监听
+                initKeyboardEvents() {
+                    this.$nextTick(() => {
+                        if (this.pageState === 'setDescription') {
+                            console.log('Page mounted in setDescription state');
+                            const buttons = document.querySelectorAll('.mode-btn');
+                            console.log('Initial mode buttons state:', {
+                                totalButtons: buttons.length,
+                                buttonElements: Array.from(buttons).map(btn => ({
+                                    text: btn.textContent.trim(),
+                                    tabIndex: btn.tabIndex,
+                                    hasClickHandler: btn.onclick !== null,
+                                    hasKeydownHandler: btn.onkeydown !== null
+                                }))
+                            });
+                        }
+                    });
+
+                    // 添加浏览器前进/后退按钮支持
+                    window.addEventListener('popstate', this.handlePopState);
+
+                    // 添加 URL 变化监听
+                    window.addEventListener('hashchange', this.handleUrlChange);
+                    window.addEventListener('popstate', this.handleUrlChange);
+
+                    // 添加全局Alt+H返回快捷键
+                    window.addEventListener('keydown', this.handleGlobalBackShortcut);
+                },
+
+                // AI 流式渲染测试
+                async testStreaming() {
+                    if (!aiManager || this.isTestingStream) return;
+                    
+                    this.isTestingStream = true;
+                    this.testStreamContent = '正在连接...';
+                    
+                    try {
+                        const systemPrompt = `你是一个专业的题目解析系统。你需要解释为什么给定的答案是正确的。
+你必须以JSON格式返回结果，包含以下字段：
+{
+    "analysis": "解析内容，需要：
+    1. 聚焦答案路径，说明如何最直接判断出正确答案
+    2. 解释题目中带「」的概念
+    3. 使用简短有力的语句
+    4. 语言朴实易懂
+    5. 控制篇幅"
+}`;
+
+                        const response = await aiManager.streamChat([
+                            { role: 'system', content: systemPrompt },
+                            { role: 'user', content: this.testPrompt }
+                        ], {
+                            response_format: { type: 'json_object' }
+                        });
+
+                        let fullContent = '';
+                        let partialContent = '';
+                        let isReasoningPhase = false;
+
+                        for await (const chunk of response) {
+                            switch (chunk.type) {
+                                case 'reasoning': {
+                                    isReasoningPhase = true;
+                                    this.testStreamContent = '正在思考中...\n' + chunk.content;
+                                    break;
+                                }
+                                case 'answer': {
+                                    fullContent += chunk.content;
+                                    try {
+                                        // 尝试解析完整的 JSON
+                                        const parsed = JSON.parse(fullContent);
+                                        if (parsed.analysis) {
+                                            this.testStreamContent = parsed.analysis;
+                                        }
+                                    } catch (error) {
+                                        // JSON 还不完整，尝试提取部分内容进行渲染
+                                        if (!isReasoningPhase) {
+                                            partialContent += chunk.content;
+                                            
+                                            // 尝试从部分内容中提取有意义的文本
+                                            let cleanContent = partialContent
+                                                .replace(/^{?\s*"analysis":\s*"?/, '')
+                                                .replace(/\\n/g, '\n')
+                                                .replace(/\\"/, '"');
+                                                    
+                                            // 如果内容看起来是完整的JSON结尾，移除它
+                                            if (cleanContent.endsWith('"}')) {
+                                                cleanContent = cleanContent.slice(0, -2);
+                                            }
+                                            
+                                            this.testStreamContent = cleanContent;
+                                        }
+                                    }
+                                    break;
+                                }
+                                case 'finish': {
+                                    console.log('[testStreaming] Stream finished:', chunk.reason);
+                                    break;
+                                }
+                                case 'tool_calls': {
+                                    console.log('[testStreaming] Tool calls received:', chunk.content);
+                                    break;
+                                }
+                            }
+                        }
+                    } catch (error) {
+                        console.error('[testStreaming] Error:', error);
+                        this.testStreamContent = '测试失败: ' + error.message;
+                    } finally {
+                        this.isTestingStream = false;
+                    }
+                },
+
+                // 渲染测试内容
+                renderedTestContent() {
+                    if (!this.testStreamContent) return '';
+                    return this.renderMarkdownWithLatex(this.testStreamContent);
+                },
             }
         };
 

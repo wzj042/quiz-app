@@ -1934,3 +1934,155 @@ code:not(pre code) {
         padding: 1px 4px;
     }
 }
+
+.analysis {
+    margin-top: 1rem;
+    padding: 1rem;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.default-analysis-section,
+.ai-analysis-section {
+    background-color: #fff;
+    border-radius: 8px;
+    padding: 1rem;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.analysis-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid #eee;
+}
+
+.analysis-header h3 {
+    margin: 0;
+    color: #333;
+    font-size: 1.1rem;
+}
+
+.ai-analysis-btn {
+    padding: 6px 12px;
+    background-color: #2196F3;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.2s ease;
+}
+
+.ai-analysis-btn:hover:not(:disabled) {
+    background-color: #1976D2;
+}
+
+.ai-analysis-btn:disabled {
+    background-color: #90CAF9;
+    cursor: not-allowed;
+}
+
+.generating-message {
+    color: #666;
+    padding: 1rem;
+    background-color: #f8f9fa;
+    border-radius: 4px;
+    min-height: 60px;
+}
+
+.generating-message .markdown-content {
+    animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0.7;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+.markdown-content {
+    line-height: 1.6;
+    color: #2c3e50;
+    transition: all 0.3s ease;
+}
+
+.markdown-content p {
+    margin: 0.5rem 0;
+}
+
+.markdown-content pre,
+.markdown-content code {
+    background: #f1f1f1;
+    padding: 0.2em 0.4em;
+    border-radius: 3px;
+    font-family: monospace;
+    white-space: pre-wrap;
+}
+
+.markdown-content pre {
+    padding: 1em;
+    overflow-x: auto;
+    margin: 1em 0;
+}
+
+.markdown-content pre code {
+    padding: 0;
+    background: none;
+}
+
+.markdown-content ul,
+.markdown-content ol {
+    padding-left: 1.5em;
+    margin: 0.5em 0;
+}
+
+.markdown-content blockquote {
+    margin: 0.5em 0;
+    padding-left: 1em;
+    border-left: 3px solid #ddd;
+    color: #666;
+}
+
+.empty-analysis {
+    color: #666;
+    font-style: italic;
+    padding: 1rem;
+    text-align: center;
+    background-color: #f8f9fa;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.empty-analysis:hover {
+    background-color: #e9ecef;
+}
+
+.editable {
+    cursor: pointer;
+}
+
+.editable:hover {
+    background-color: #e9ecef;
+}
+
+.edit-textarea {
+    width: 100%;
+    padding: 0.5rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-family: inherit;
+    font-size: inherit;
+    resize: vertical;
+}

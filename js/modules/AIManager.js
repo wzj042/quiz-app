@@ -1,6 +1,6 @@
 class AIManager {
     constructor() {
-        this.selectedPresetId = localStorage.getItem('AI_SELECTED_PRESET') || 'deepseek-chat';
+        this.selectedPresetId = localStorage.getItem('AI_SELECTED_PRESET') || 'glm-4-flash';
         this.logLevel = localStorage.getItem('AI_LOG_LEVEL') || 'info';
         this.logs = [];
         this.maxLogs = 100; // 最多保存100条日志
@@ -16,24 +16,37 @@ class AIManager {
                 model: 'deepseek-chat',
                 provider: 'deepseek'
             },
-            'deepseek-reasoner': {
-                name: 'DeepSeek Reasoner',
-                endpoint: 'https://api.deepseek.com/v1/chat/completions',
-                model: 'deepseek-reasoner',
-                provider: 'deepseek'
-            },
-            'glm-4-flash': {
-                name: 'GLM-4-Flash',
-                endpoint: 'https://open.bigmodel.cn/api/paas/v4/chat/completions',
-                model: 'glm-4-flash-250414',
-                provider: 'zhipu'
-            }
+            // 'deepseek-reasoner': {
+            //     name: 'DeepSeek Reasoner',
+            //     endpoint: 'https://api.deepseek.com/v1/chat/completions',
+            //     model: 'deepseek-reasoner',
+            //     provider: 'deepseek'
+            // },
+            // 'glm-4-flash': {
+            //     name: 'GLM-4-Flash',
+            //     endpoint: 'https://open.bigmodel.cn/api/paas/v4/chat/completions/v1',
+            //     model: 'glm-4-flash-250414',
+            //     provider: 'zhipu'
+            // }
         };
         this.log('Default presets initialized', 'debug', this.presets);
 
         // 从本地存储加载配置
         this.loadConfig();
         this.log('AIManager initialization completed', 'info');
+
+        // 添加一个标记来识别实例
+        Object.defineProperty(this, '_isAIManager', {
+            value: true,
+            writable: false,
+            enumerable: true,
+            configurable: false
+        });
+    }
+
+    // 检查是否是 AIManager 实例（包括 Vue Proxy）
+    static isAIManager(obj) {
+        return obj && obj._isAIManager === true;
     }
 
     // 日志相关方法
@@ -122,13 +135,20 @@ class AIManager {
             const savedConfig = JSON.parse(localStorage.getItem('AI_CONFIG') || '{}');
             this.log('Loading saved configuration', 'debug', savedConfig);
 
-            this.currentConfig = savedConfig.config || this.presets['deepseek-chat'];
-            this.API_KEY = savedConfig.apiKey || '';
+            // 确保使用当前选中的预设
+            const currentPreset = this.getCurrentPreset();
+            if (!currentPreset) {
+                throw new Error('Invalid preset selected');
+            }
+
+            this.currentConfig = currentPreset;
+            this.API_KEY = this.getApiKey(currentPreset.provider) || '';
 
             this.log('Configuration loaded successfully', 'info', {
                 currentModel: this.currentConfig?.model,
                 hasApiKey: !!this.API_KEY,
-                selectedPreset: this.currentConfig?.name
+                selectedPreset: this.currentConfig?.name,
+                provider: this.currentConfig?.provider
             });
         } catch (error) {
             this.log('Failed to load configuration', 'error', {
@@ -178,8 +198,10 @@ class AIManager {
     setSelectedPreset(presetId) {
         if (this.presets[presetId]) {
             this.selectedPresetId = presetId;
+            this.currentConfig = this.presets[presetId];
             localStorage.setItem('AI_SELECTED_PRESET', presetId);
-            this.log('debug', `Selected preset changed to ${presetId}`);
+            this.log('debug', `Selected preset changed to ${presetId}`, this.currentConfig);
+            this.saveConfig();
         } else {
             throw new Error('Invalid preset ID');
         }
@@ -191,7 +213,7 @@ class AIManager {
     }
 
     // 生成请求头
-    #generateHeaders() {
+    _generateHeaders() {
         if (!this.hasApiKey()) {
             throw new Error('API Key not set');
         }
@@ -211,7 +233,7 @@ class AIManager {
     }
 
     // 流式调用
-    async *streamChat(message) {
+    async *streamChat(messages, options = {}) {
         const preset = this.getCurrentPreset();
         if (!preset) {
             throw new Error('Invalid preset selected');
@@ -222,67 +244,137 @@ class AIManager {
             throw new Error(`API Key not set for provider: ${preset.provider}`);
         }
         
-        this.log('debug', `Streaming chat with ${preset.name}`);
-        
-        const messages = [{
-            role: 'user',
-            content: message
-        }];
-        
+        this.log('debug', `Streaming chat with ${preset.name}`, {
+            provider: preset.provider,
+            model: preset.model
+        });
+
+        const requestBody = {
+            model: preset.model,
+            messages: Array.isArray(messages) ? messages : [{ role: 'user', content: messages }],
+            stream: true,
+            ...options
+        };
+
         try {
             const response = await fetch(preset.endpoint, {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${apiKey}`
-                },
-                body: JSON.stringify({
-                    model: preset.model,
-                    messages: messages,
-                    stream: true
-                })
+                headers: this._generateHeaders(),
+                body: JSON.stringify(requestBody)
             });
-            
+
             if (!response.ok) {
-                const error = await response.json();
-                throw new Error(error.error?.message || 'API request failed');
+                const errorText = await response.text();
+                this.log('error', `API request failed: ${response.status} ${response.statusText}`, errorText);
+                throw new Error(`API request failed: ${response.status} ${response.statusText}`);
             }
-            
+
             const reader = response.body.getReader();
             const decoder = new TextDecoder();
             let buffer = '';
-            
+
             while (true) {
-                const { value, done } = await reader.read();
+                const { done, value } = await reader.read();
                 if (done) break;
-                
+
                 buffer += decoder.decode(value, { stream: true });
                 const lines = buffer.split('\n');
                 buffer = lines.pop() || '';
-                
+
                 for (const line of lines) {
                     if (line.trim() === '') continue;
-                    if (line.trim() === 'data: [DONE]') continue;
-                    
+                    if (!line.startsWith('data:')) continue;
+
+                    const data = line.slice(5).trim();
+                    if (data === '[DONE]') continue;
+
                     try {
-                        const data = JSON.parse(line.slice(6)); // 去掉 "data: " 前缀
-                        const delta = data.choices[0].delta;
+                        const json = JSON.parse(data);
                         
-                        // 分别处理思维链和最终答案
-                        if (delta.reasoning_content) {
-                            yield { type: 'reasoning', content: delta.reasoning_content };
+                        // 根据不同提供商处理流式响应
+                        switch (preset.provider) {
+                            case 'deepseek': {
+                                // DeepSeek的流式响应处理
+                                if (json.choices && json.choices[0]) {
+                                    const { delta } = json.choices[0];
+                                    if (delta) {
+                                        // 处理思维链内容
+                                        if (delta.reasoning_content) {
+                                            this.log('debug', 'Received reasoning content chunk', delta.reasoning_content);
+                                            yield {
+                                                type: 'reasoning',
+                                                content: delta.reasoning_content
+                                            };
+                                        }
+                                        // 处理最终答案内容
+                                        if (delta.content) {
+                                            this.log('debug', 'Received content chunk', delta.content);
+                                            yield {
+                                                type: 'answer',
+                                                content: delta.content
+                                            };
+                                        }
+                                    }
+                                }
+                                break;
+                            }
+                            case 'zhipu': {
+                                // 智谱AI的流式响应处理
+                                if (json.choices && json.choices[0]) {
+                                    const { delta, finish_reason } = json.choices[0];
+                                    
+                                    if (delta) {
+                                        // 处理内容
+                                        if (delta.content) {
+                                            this.log('debug', 'Received content chunk', delta.content);
+                                            yield {
+                                                type: 'answer',
+                                                content: delta.content
+                                            };
+                                        }
+                                        // 处理工具调用
+                                        if (delta.tool_calls) {
+                                            this.log('debug', 'Received tool calls', delta.tool_calls);
+                                            yield {
+                                                type: 'tool_calls',
+                                                content: delta.tool_calls
+                                            };
+                                        }
+                                    }
+                                    
+                                    // 处理结束原因
+                                    if (finish_reason) {
+                                        this.log('debug', 'Stream finished', { reason: finish_reason });
+                                        yield {
+                                            type: 'finish',
+                                            reason: finish_reason
+                                        };
+                                    }
+                                }
+                                break;
+                            }
+                            default: {
+                                // 默认处理方式
+                                if (json.choices && json.choices[0]) {
+                                    const { delta } = json.choices[0];
+                                    if (delta && delta.content) {
+                                        this.log('debug', 'Received content chunk', delta.content);
+                                        yield {
+                                            type: 'answer',
+                                            content: delta.content
+                                        };
+                                    }
+                                }
+                            }
                         }
-                        if (delta.content) {
-                            yield { type: 'answer', content: delta.content };
-                        }
-                    } catch (e) {
-                        this.log('warn', `Failed to parse streaming data: ${e.message}`);
+                    } catch (error) {
+                        this.log('warn', 'Failed to parse streaming response', { line, error });
                         continue;
                     }
                 }
             }
         } catch (error) {
-            this.log('error', `Streaming Error: ${error.message}`);
+            this.log('error', 'Stream chat error', error);
             throw error;
         }
     }
@@ -290,25 +382,67 @@ class AIManager {
     // 非流式调用
     async chat(messages, options = {}) {
         try {
-            const response = await fetch(this.currentConfig.endpoint, {
+            const preset = this.getCurrentPreset();
+            if (!preset) {
+                this.log('error', 'No preset selected');
+                throw new Error('No preset selected');
+            }
+
+            this.log('debug', 'Starting chat request', {
+                messages: messages,
+                options: options,
+                preset: preset,
+                hasApiKey: this.hasApiKey()
+            });
+
+            const apiKey = this.getApiKey(preset.provider);
+            if (!apiKey) {
+                this.log('error', `API Key not set for provider: ${preset.provider}`);
+                throw new Error(`API Key not set for provider: ${preset.provider}`);
+            }
+
+            // 处理 Vue Proxy 对象
+            const processedMessages = messages.map(msg => ({
+                role: msg.role,
+                content: msg.content
+            }));
+
+            const requestBody = {
+                model: preset.model,
+                messages: processedMessages,
+                stream: false,
+                ...options
+            };
+
+            // 如果是 JSON 输出模式，确保 response_format 正确设置
+            if (options.response_format?.type === 'json_object') {
+                requestBody.response_format = { type: 'json_object' };
+            }
+
+            const response = await fetch(preset.endpoint, {
                 method: 'POST',
-                headers: this.#generateHeaders(),
-                body: JSON.stringify({
-                    model: this.currentConfig.model,
-                    messages,
-                    stream: false,
-                    ...options
-                })
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${apiKey}`
+                },
+                body: JSON.stringify(requestBody)
             });
 
             if (!response.ok) {
+                const errorText = await response.text();
+                this.log('error', 'API request failed', {
+                    status: response.status,
+                    error: errorText
+                });
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
 
             const data = await response.json();
+            this.log('debug', 'Received API response', data);
+
             return data.choices[0]?.message?.content || '';
         } catch (error) {
-            console.error('Chat error:', error);
+            this.log('error', 'Chat error:', error);
             throw error;
         }
     }
@@ -361,9 +495,12 @@ class AIManager {
 
     // 检查是否已设置 API Key
     hasApiKey() {
-        return !!this.API_KEY;
+        const hasKey = !!this.API_KEY;
+        this.log('debug', `Checking API Key availability: ${hasKey}`);
+        return hasKey;
     }
 }
 
-// 导出单例实例
-export const aiManager = new AIManager(); 
+// 导出单例实例和类
+export const aiManager = new AIManager();
+export default AIManager;

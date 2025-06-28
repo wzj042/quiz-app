@@ -11,6 +11,7 @@ export default class QuestionManager {
         this.maxContentLength = 5000;
         this.maxAnswerLength = 1000;
         this.questions = [];
+        this.aiScoringThreshold = 0.9; // 默认AI评分阈值为90%
     }
 
     // 开始编辑题目
@@ -221,10 +222,20 @@ export default class QuestionManager {
             if (question.correct_answer.length !== question.blanks.length) return false;
 
             // 验证答案内容
-            return question.correct_answer.every(ans => 
+            const validAnswers = question.correct_answer.every(ans => 
                 typeof ans === 'string' &&
                 ans.length <= this.maxAnswerLength
             );
+
+            // 默认启用AI评分
+            question.useAIScoring = true;
+            if (typeof question.aiScoringThreshold !== 'number' || 
+                question.aiScoringThreshold < 0 || 
+                question.aiScoringThreshold > 1) {
+                question.aiScoringThreshold = this.aiScoringThreshold;
+            }
+
+            return validAnswers;
         } catch (error) {
             console.error('[validateFillInBlankQuestion] Failed:', error);
             return false;
@@ -239,10 +250,20 @@ export default class QuestionManager {
             if (question.correct_answer.length > this.maxOptionsLength) return false;
 
             // 验证答案内容
-            return question.correct_answer.every(ans => 
+            const validAnswers = question.correct_answer.every(ans => 
                 typeof ans === 'string' &&
                 ans.length <= this.maxAnswerLength
             );
+
+            // 默认启用AI评分
+            question.useAIScoring = true;
+            if (typeof question.aiScoringThreshold !== 'number' || 
+                question.aiScoringThreshold < 0 || 
+                question.aiScoringThreshold > 1) {
+                question.aiScoringThreshold = this.aiScoringThreshold;
+            }
+
+            return validAnswers;
         } catch (error) {
             console.error('[validateShortAnswerQuestion] Failed:', error);
             return false;
