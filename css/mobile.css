@@ -1240,7 +1240,6 @@ textarea:focus-visible {
     transition: all 0.3s ease;
     flex: 1;
     min-width: 280px;
-    max-width: 400px;
 }
 
 .quiz-item:hover {
