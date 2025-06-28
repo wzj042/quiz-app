@@ -305,7 +305,7 @@
                 "correct_answer": [
                     "错"
                 ],
-                "analysis": ""
+                "analysis": "聚集索引 (Clustered Index)会改变数据物理存储顺序的索引 "
             },
             {
                 "type": "single-choice",
@@ -317,7 +317,7 @@
                 "correct_answer": [
                     "对"
                 ],
-                "analysis": ""
+                "analysis": "GROUP BY 会把多行数据合并成一行，对于那些没有被「聚合」（如求和、计数）的普通列，数据库无法确定该显示哪一行的值。所以，这些列必须也作为分组的依据，才能确保每组数据的查询结果是确定的。"
             },
             {
                 "type": "single-choice",
@@ -329,7 +329,7 @@
                 "correct_answer": [
                     "错"
                 ],
-                "analysis": ""
+                "analysis": "多个排序标准之间应该用逗号（,）分隔，而不是分号。"
             },
             {
                 "type": "fill-in-blank",
