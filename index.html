@@ -266,11 +266,78 @@
         }
 
         .ai-input-group input {
-            
             padding: 10px;
             border: 1px solid #ddd;
             border-radius: 4px;
             font-size: 14px;
+        }
+
+        /* 自动评分开关样式 */
+        .custom-switch {
+            padding-left: 2.25rem;
+            padding-bottom: 1rem;
+            position: relative;
+            display: inline-block;
+        }
+
+        .custom-control-input {
+            position: absolute;
+            left: 0;
+            z-index: -1;
+            width: 1.5rem;
+            height: 1.5rem;
+            opacity: 0;
+        }
+
+        .custom-control-label {
+            position: relative;
+            margin-bottom: 0;
+            vertical-align: top;
+            cursor: pointer;
+            padding-left: 0.5rem;
+        }
+
+        .custom-control-label::before {
+            position: absolute;
+            top: 0.25rem;
+            left: -2.25rem;
+            display: block;
+            width: 1.75rem;
+            height: 1rem;
+            pointer-events: none;
+            content: "";
+            background-color: #fff;
+            border: 1px solid #adb5bd;
+            border-radius: 0.5rem;
+            transition: background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+        }
+
+        .custom-control-label::after {
+            position: absolute;
+            top: calc(0.25rem + 2px);
+            left: calc(-2.25rem + 2px);
+            display: block;
+            width: calc(1rem - 4px);
+            height: calc(1rem - 4px);
+            content: "";
+            background: #adb5bd;
+            border-radius: 0.5rem;
+            transition: transform 0.15s ease-in-out, background-color 0.15s ease-in-out;
+        }
+
+        .custom-control-input:checked ~ .custom-control-label::before {
+            color: #fff;
+            border-color: #B8C7AB;
+            background-color: #B8C7AB;
+        }
+
+        .custom-control-input:checked ~ .custom-control-label::after {
+            background-color: #fff;
+            transform: translateX(0.75rem);
+        }
+
+        .custom-control-input:focus ~ .custom-control-label::before {
+            box-shadow: 0 0 0 0.2rem rgba(184, 199, 171, 0.25);
         }
 
         .ai-chat-area {
@@ -1187,6 +1254,15 @@
                         @input="updateApiKey" :placeholder="`请输入 ${currentPreset.name} 的 API Key`">
                 </form>
 
+                <!-- AI 自动评分设置 -->
+                <div class="ai-input-group">
+                    <div class="custom-control custom-switch">
+                        <input type="checkbox" class="custom-control-input" id="autoScoring" 
+                            v-model="autoScoring" @change="updateAutoScoring">
+                        <label class="custom-control-label" for="autoScoring">自动AI评分</label>
+                    </div>
+                </div>
+
                 <!-- 流式渲染测试 -->
                 <div class="ai-test-area">
                     <div class="ai-input-group">
@@ -1576,7 +1652,14 @@
                     <div v-if="currentQuestion.type === 'fill-in-blank' || currentQuestion.type === 'short-answer'" class="ai-score-section">
                         <h4>AI评分</h4>
                         <div v-if="currentQuestion.aiScoreExplanation" class="markdown-content" v-html="renderMarkdownWithLatex(currentQuestion.aiScoreExplanation)"></div>
-                        <div v-else class="empty-message">等待 AI 评分...</div>
+                        <div v-else class="empty-message">
+                            <template v-if="!practiceManager.aiManager?.getAutoScoring()">
+                                <button @click="triggerAIScoring" class="btn btn-primary">AI评分</button>
+                            </template>
+                            <template v-else>
+                                等待 AI 评分...
+                            </template>
+                        </div>
                     </div>
 
                     <!-- 解析 -->
@@ -1790,6 +1873,7 @@
                     showAIModal: false, // 默认不显示 AI 配置窗口
                     showSoundModal: false, // 默认不显示音效配置窗口
                     providerApiKeys: {},
+                    autoScoring: aiManager.getAutoScoring(), // AI 自动评分设置
                     userMessage: '',
                     aiResponse: '',
                     isProcessing: false,
@@ -2852,8 +2936,14 @@
                                 console.log('[submitAnswer] Using AI scoring for fill-in-blank question');
                                 // 先显示答案
                                 this.showAnswer = true;
-                                // 然后进行 AI 评分
-                                isCorrect = await this.practiceManager.checkAnswerWithAI(answer.join('\n'), q);
+                                // 检查是否启用自动评分
+                                if (this.practiceManager.aiManager.getAutoScoring()) {
+                                    // 自动进行 AI 评分
+                                    isCorrect = await this.practiceManager.checkAnswerWithAI(answer.join('\n'), q);
+                                } else {
+                                    // 等待手动触发评分
+                                    isCorrect = false;
+                                }
                             } else {
                                 console.log('[submitAnswer] AI not available, using basic comparison');
                                 isCorrect = this.compareArrays(answer, q.correct_answer);
@@ -2866,8 +2956,14 @@
                                 console.log('[submitAnswer] Using AI scoring for short-answer question');
                                 // 先显示答案
                                 this.showAnswer = true;
-                                // 然后进行 AI 评分
-                                isCorrect = await this.practiceManager.checkAnswerWithAI(answer, q);
+                                // 检查是否启用自动评分
+                                if (this.practiceManager.aiManager.getAutoScoring()) {
+                                    // 自动进行 AI 评分
+                                    isCorrect = await this.practiceManager.checkAnswerWithAI(answer, q);
+                                } else {
+                                    // 等待手动触发评分
+                                    isCorrect = false;
+                                }
                             } else {
                                 console.log('[submitAnswer] AI not available, using basic comparison');
                                 isCorrect = q.correct_answer.some(ans =>
@@ -2879,6 +2975,9 @@
 
                     // 更新连杀状态
                     if (this.audioManager) {
+                        if (q.type === 'fill-in-blank' || q.type === 'short-answer') {
+                            return;
+                        }
                         if (isCorrect) {
                             this.audioManager.addPoints(1);
                         } else {
@@ -4148,6 +4247,10 @@
                             this.practiceManager.setAIManager(aiManager);
                             console.log('[initAIConfig] AIManager instance set to PracticeManager');
                         }
+
+                        // 初始化自动评分设置
+                        this.autoScoring = aiManager.getAutoScoring();
+                        console.log('[initAIConfig] Auto scoring initialized:', this.autoScoring);
                     } catch (error) {
                         console.error('[initAIConfig] Failed to initialize AI config:', error);
                     }
@@ -4190,12 +4293,7 @@
                 initSoundConfig() {
                     import('./js/modules/ComboAudioManager.js').then(module => {
                         const ComboAudioManager = module.default;
-                        this.audioManager = new ComboAudioManager({
-                            comboWindowMs: this.comboWindowMs,
-                            comboResetTimeoutMs: this.resetTimeoutMs,
-                            minScoreForSound: 1
-                        });
-
+                        
                         // 从本地存储加载配置
                         const savedConfig = JSON.parse(localStorage.getItem('SOUND_CONFIG') || '{}');
                         this.audioEnabled = savedConfig.audioEnabled ?? true;
@@ -4203,8 +4301,30 @@
                         this.comboWindowMs = savedConfig.comboWindowMs ?? 3000;
                         this.resetTimeoutMs = savedConfig.resetTimeoutMs ?? 5000;
 
-                        // 应用配置
-                        this.updateAudioConfig();
+                        // 创建音频管理器并应用配置
+                        this.audioManager = new ComboAudioManager({
+                            comboWindowMs: this.comboWindowMs,
+                            comboResetTimeoutMs: this.resetTimeoutMs,
+                            minScoreForSound: 1
+                        });
+
+                        // 应用音量和静音设置
+                        const volume = this.volumeValue / 100;
+                        this.audioManager.positiveAudios.forEach(audio => {
+                            audio.volume = volume;
+                            audio.muted = !this.audioEnabled;
+                        });
+                        this.audioManager.negativeAudios.forEach(audio => {
+                            audio.volume = volume;
+                            audio.muted = !this.audioEnabled;
+                        });
+
+                        console.log('[initSoundConfig] Loaded sound config:', {
+                            audioEnabled: this.audioEnabled,
+                            volumeValue: this.volumeValue,
+                            comboWindowMs: this.comboWindowMs,
+                            resetTimeoutMs: this.resetTimeoutMs
+                        });
                     });
                 },
 
@@ -4212,7 +4332,7 @@
                     if (!this.audioManager) return;
 
                     // 更新音频管理器配置
-                    this.audioManager = new ComboAudioManager({
+                    Object.assign(this.audioManager, {
                         comboWindowMs: this.comboWindowMs,
                         comboResetTimeoutMs: this.resetTimeoutMs,
                         minScoreForSound: 1
@@ -4230,12 +4350,14 @@
                     });
 
                     // 保存配置到本地存储
-                    localStorage.setItem('SOUND_CONFIG', JSON.stringify({
+                    const config = {
                         audioEnabled: this.audioEnabled,
                         volumeValue: this.volumeValue,
                         comboWindowMs: this.comboWindowMs,
                         resetTimeoutMs: this.resetTimeoutMs
-                    }));
+                    };
+                    localStorage.setItem('SOUND_CONFIG', JSON.stringify(config));
+                    console.log('[updateAudioConfig] Saved sound config:', config);
                 },
 
                 testSound(type, level) {
@@ -4323,6 +4445,10 @@
                 // AI 相关方法
                 closeAIModal() {
                     this.showAIModal = false;
+                },
+
+                updateAutoScoring() {
+                    aiManager.setAutoScoring(this.autoScoring);
                 },
 
                 handlePresetChange() {
@@ -4478,6 +4604,31 @@
                 renderedTestContent() {
                     if (!this.testStreamContent) return '';
                     return this.renderMarkdownWithLatex(this.testStreamContent);
+                },
+
+                // 添加手动触发AI评分的方法
+                async triggerAIScoring() {
+                    if (!this.practiceManager.aiManager) return;
+                    
+                    const q = this.currentQuestion;
+                    let answer;
+                    let isCorrect;
+                    
+                    if (q.type === 'fill-in-blank') {
+                        answer = this.fillInAnswers.join('\n');
+                    } else if (q.type === 'short-answer') {
+                        answer = this.shortAnswerText;
+                    } else {
+                        return;
+                    }
+                    
+                    isCorrect = await this.practiceManager.checkAnswerWithAI(answer, q);
+                    
+                    // 更新题目状态
+                    if (isCorrect !== null) {
+                        await this.practiceManager.updateQuestionStatus(q.id, isCorrect);
+                        this.updateLocalStats(isCorrect);
+                    }
                 },
             }
         };

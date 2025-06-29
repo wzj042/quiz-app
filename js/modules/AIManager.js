@@ -2,11 +2,13 @@ class AIManager {
     constructor() {
         this.selectedPresetId = localStorage.getItem('AI_SELECTED_PRESET') || 'glm-4-flash';
         this.logLevel = localStorage.getItem('AI_LOG_LEVEL') || 'info';
+        this.autoScoring = localStorage.getItem('AI_AUTO_SCORING') === 'true';
         this.logs = [];
         this.maxLogs = 100; // 最多保存100条日志
         
         this.log('Initializing AIManager...', 'info');
         this.log(`Log level set to ${this.logLevel}`, 'debug');
+        this.log(`Auto scoring set to ${this.autoScoring}`, 'debug');
 
         // 预设模型配置
         this.presets = {
@@ -498,6 +500,18 @@ class AIManager {
         const hasKey = !!this.API_KEY;
         this.log('debug', `Checking API Key availability: ${hasKey}`);
         return hasKey;
+    }
+
+    // 获取自动评分设置
+    getAutoScoring() {
+        return this.autoScoring;
+    }
+
+    // 设置自动评分
+    setAutoScoring(enabled) {
+        this.autoScoring = enabled;
+        localStorage.setItem('AI_AUTO_SCORING', enabled);
+        this.log(`Auto scoring set to ${enabled}`, 'info');
     }
 }
 
