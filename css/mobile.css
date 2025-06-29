@@ -874,10 +874,6 @@ kbd {
     border-color: var(--focus-color);
 }
 
-.tag-chip.active {
-    background: var(--focus-color);
-    color: white;
-}
 
 .tag-chip:focus-visible {
     outline: 2px solid var(--focus-color);
@@ -1479,7 +1475,6 @@ textarea:focus-visible {
 }
 
 .tag-chip.active {
-    background-color: var(--theme-color-light, rgba(176, 193, 162, 0.1));
     color: var(--theme-color, #B0C1A2);
     border-color: var(--theme-color, #B0C1A2);
 }
