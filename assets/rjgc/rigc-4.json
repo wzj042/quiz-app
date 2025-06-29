@@ -215,7 +215,7 @@
                 "对",
                 "错"
             ],
-            "correct_answer": ["对"]
+            "correct_answer": ["错"]
         },
         {
             "type": "single-choice",
@@ -242,7 +242,7 @@
                 "对",
                 "错"
             ],
-            "correct_answer": ["错"]
+            "correct_answer": ["对"]
         },
         {
             "type": "single-choice",
