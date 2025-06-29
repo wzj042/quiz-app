@@ -367,16 +367,17 @@
         },
         {
             "type": "single-choice",
-            "content": "下列哪个`CREATE TABLE`语句是不合法的？",
+            "content": "下列哪个`CREATE TABLE`语句是不合法的？（已知 T1.Name 并非主键）",
             "options": [
-                "CREATE TABLE T1 (ID INT PRIMARY KEY, Name VARCHAR(20) NOT NULL);",
+                "CREATE TABLE T0 (ID INT PRIMARY KEY, Name VARCHAR(20) NOT NULL);",
                 "CREATE TABLE T2 (ID INT, Name VARCHAR(20), PRIMARY KEY(ID, Name));",
                 "CREATE TABLE T3 (ID INT, Name VARCHAR(20) CHECK (Name IN ('A', 'B')));",
                 "CREATE TABLE T4 (ID INT PRIMARY KEY, Ref_ID INT, FOREIGN KEY (Ref_ID) REFERENCES T1(Name));"
             ],
             "correct_answer": [
                 "CREATE TABLE T4 (ID INT PRIMARY KEY, Ref_ID INT, FOREIGN KEY (Ref_ID) REFERENCES T1(Name));"
-            ]
+            ],
+            "analysis": "因为外键约束FOREIGN KEY (Ref_ID) REFERENCES T1(Name)引用了表T1的Name列，而Name列没有被指定为T1的主键或唯一键。在SQL中，外键必须引用目标表的主键或唯一键列。"
         },
         {
             "type": "single-choice",
@@ -447,14 +448,14 @@
             "type": "single-choice",
             "content": "查询语句 `SELECT A.*, B.* FROM TableA A RIGHT JOIN TableB B ON A.id = B.id;` 等价于？",
             "options": [
-                "SELECT A.*, B.* FROM TableB B LEFT JOIN TableA A ON A.id = B.id;",
-                "SELECT A.*, B.* FROM TableA A LEFT JOIN TableB B ON A.id = B.id;",
-                "SELECT A.*, B.* FROM TableA A INNER JOIN TableB B ON A.id = B.id;",
-                "SELECT A.*, B.* FROM TableA A, TableB B;"
+                "`SELECT A.*, B.* FROM TableB B LEFT JOIN TableA A ON A.id = B.id;`",
+                "`SELECT A.*, B.* FROM TableA A LEFT JOIN TableB B ON A.id = B.id;`",
+                "`SELECT A.*, B.* FROM TableA A INNER JOIN TableB B ON A.id = B.id;`",
+                "`SELECT A.*, B.* FROM TableA A, TableB B;`"
             ],
-            "correct_answer": [
-                "SELECT A.*, B.* FROM TableB B LEFT JOIN TableA A ON A.id = B.id;"
-            ]
+                "correct_answer": [
+        "`SELECT A.*, B.* FROM TableB B LEFT JOIN TableA A ON A.id = B.id;`"
+    ]
         },
         {
             "type": "single-choice",
@@ -486,13 +487,13 @@
             "type": "single-choice",
             "content": "要将`Employees`表中的`Department`列从表中移除，应该使用哪个DDL命令？",
             "options": [
-                "DELETE COLUMN Department FROM Employees;",
-                "ALTER TABLE Employees DROP COLUMN Department;",
-                "REMOVE COLUMN Department FROM Employees;",
-                "ALTER TABLE Employees MODIFY Department NULL;"
+                "`DELETE COLUMN Department FROM Employees;`",
+                "`ALTER TABLE Employees DROP COLUMN Department;`",
+                "`REMOVE COLUMN Department FROM Employees;`",
+                "`ALTER TABLE Employees MODIFY Department NULL;`"
             ],
             "correct_answer": [
-                "ALTER TABLE Employees DROP COLUMN Department;"
+                "`ALTER TABLE Employees DROP COLUMN Department;`"
             ]
         },
         {
@@ -512,13 +513,13 @@
             "type": "single-choice",
             "content": "假设有一个复合主键 `PRIMARY KEY (OrderID, ProductID)`。以下哪个外键定义是正确的，用于引用这个复合主键？",
             "options": [
-                "FOREIGN KEY (OrderID) REFERENCES Orders(OrderID), FOREIGN KEY (ProductID) REFERENCES Orders(ProductID)",
-                "FOREIGN KEY (OrderID, ProductID) REFERENCES Orders(OrderID, ProductID)",
-                "FOREIGN KEY REFERENCES Orders(OrderID, ProductID)",
-                "FOREIGN KEY (OrderID) REFERENCES Orders(OrderID, ProductID)"
+                "`FOREIGN KEY (OrderID) REFERENCES Orders(OrderID), FOREIGN KEY (ProductID) REFERENCES Orders(ProductID)`",
+                "`FOREIGN KEY (OrderID, ProductID) REFERENCES Orders(OrderID, ProductID)`",
+                "`FOREIGN KEY REFERENCES Orders(OrderID, ProductID)`",
+                "`FOREIGN KEY (OrderID) REFERENCES Orders(OrderID, ProductID)`"
             ],
             "correct_answer": [
-                "FOREIGN KEY (OrderID, ProductID) REFERENCES Orders(OrderID, ProductID)"
+                "`FOREIGN KEY (OrderID, ProductID) REFERENCES Orders(OrderID, ProductID)`"
             ]
         },
         {
@@ -623,7 +624,8 @@
             ],
             "correct_answer": [
                 "WHERE LastName = 'Smith'"
-            ]
+            ],
+            "analysis": "多列索引 INDEX(LastName, FirstName) 按照 LastName 和 FirstName 的顺序建立。查询时，索引最左前缀原则生效，即查询条件必须包含索引的最左边的列才能高效利用索引。WHERE LastName = 'Smith' 符合最左前缀原则，因此能最高效地利用这个索引。"
         },
         {
             "type": "single-choice",
