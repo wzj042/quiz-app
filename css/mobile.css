@@ -1271,7 +1271,6 @@ textarea:focus-visible {
     font-size: 12px;
     padding: 2px 8px;
     border-radius: 12px;
-    background-color: var(--theme-color-light);
     color: var(--theme-color);
     border: 1px solid var(--theme-color);
     display: inline-block;
@@ -1475,7 +1474,8 @@ textarea:focus-visible {
 }
 
 .tag-chip:hover {
-    background-color: #eee;
+    background-color: transparent;
+    color: #B0C1A2;
 }
 
 .tag-chip.active {
@@ -1499,7 +1499,6 @@ textarea:focus-visible {
 }
 
 .tags-button:hover, .tags-button.has-active {
-    background-color: var(--theme-color-light, rgba(176, 193, 162, 0.1));
     color: var(--theme-color, #B0C1A2);
     border-color: var(--theme-color, #B0C1A2);
 }
@@ -1508,7 +1507,6 @@ textarea:focus-visible {
     font-size: 12px;
     padding: 2px 8px;
     border-radius: 12px;
-    background-color: var(--theme-color-light);
     color: var(--theme-color);
     border: 1px solid var(--theme-color);
     display: inline-block;
@@ -1527,7 +1525,8 @@ textarea:focus-visible {
 
 :root {
     --theme-color: #B0C1A2;
-    --theme-color-light: rgba(176, 193, 162, 0.1);
+    --theme-color-light: #c8d4bd;
+    --theme-color-dark: #9aab8c;
 }
 
 .banner {
@@ -1970,7 +1969,7 @@ code:not(pre code) {
 
 .ai-analysis-btn {
     padding: 6px 12px;
-    background-color: #2196F3;
+    background-color: #B0C1A2;
     color: white;
     border: none;
     border-radius: 4px;
@@ -1983,11 +1982,11 @@ code:not(pre code) {
 }
 
 .ai-analysis-btn:hover:not(:disabled) {
-    background-color: #1976D2;
+    background-color: #91a881;
 }
 
 .ai-analysis-btn:disabled {
-    background-color: #90CAF9;
+    background-color: #adbac7;
     cursor: not-allowed;
 }
 
@@ -2085,4 +2084,134 @@ code:not(pre code) {
     font-family: inherit;
     font-size: inherit;
     resize: vertical;
+}
+
+/* 滚动条样式 */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--theme-color);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--theme-color-dark);
+}
+
+/* Checkbox样式 */
+input[type="checkbox"] {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 18px;
+    height: 18px;
+    border: 2px solid var(--theme-color);
+    border-radius: 3px;
+    outline: none;
+    cursor: pointer;
+    position: relative;
+    vertical-align: middle;
+    background: white;
+}
+
+input[type="checkbox"]:checked {
+    background: var(--theme-color);
+}
+
+input[type="checkbox"]:checked::after {
+    content: '';
+    position: absolute;
+    left: 5px;
+    top: 2px;
+    width: 4px;
+    height: 8px;
+    border: solid white;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+}
+
+input[type="checkbox"]:hover {
+    border-color: var(--theme-color-dark);
+}
+
+/* Radio button样式 */
+input[type="radio"] {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 18px;
+    height: 18px;
+    border: 2px solid var(--theme-color);
+    border-radius: 50%;
+    outline: none;
+    cursor: pointer;
+    position: relative;
+    vertical-align: middle;
+    background: white;
+}
+
+input[type="radio"]:checked {
+    border-color: var(--theme-color);
+}
+
+input[type="radio"]:checked::after {
+    content: '';
+    position: absolute;
+    left: 3px;
+    top: 3px;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--theme-color);
+}
+
+input[type="radio"]:hover {
+    border-color: var(--theme-color-dark);
+}
+
+/* 进度条样式 */
+progress {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 100%;
+    height: 8px;
+    border: none;
+    border-radius: 4px;
+    background-color: #f1f1f1;
+    overflow: hidden;
+}
+
+progress::-webkit-progress-bar {
+    background-color: #f1f1f1;
+    border-radius: 4px;
+}
+
+progress::-webkit-progress-value {
+    background-color: var(--theme-color);
+    border-radius: 4px;
+    transition: width 0.3s ease;
+}
+
+progress::-moz-progress-bar {
+    background-color: var(--theme-color);
+    border-radius: 4px;
+    transition: width 0.3s ease;
+}
+
+/* 标签样式调整为更浅的颜色 */
+.tag {
+    background-color: var(--theme-color-light) !important;
+    color: var(--theme-color-dark) !important;
+    border: 1px solid var(--theme-color-light) !important;
+}
+
+.tag:hover {
+    background-color: var(--theme-color) !important;
+    color: white !important;
 }

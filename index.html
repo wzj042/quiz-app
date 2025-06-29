@@ -899,6 +899,65 @@
             color: #B8C7AB;
         }
 
+        /* 计分显示和计时器样式 */
+        .score-display {
+            text-align: center;
+            margin: 20px 0;
+            font-size: 24px;
+        }
+
+        .timer-bar {
+            width: 100%;
+            height: 6px;
+            background: #eee;
+            border-radius: 3px;
+            overflow: hidden;
+            margin: 10px 0;
+        }
+
+        .timer-progress {
+            height: 100%;
+            background: #B8C7AB;
+            width: 100%;
+            transition: width 0.1s linear;
+        }
+
+        .score-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .score-button {
+            font-size: 20px;
+            padding: 10px 25px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .score-button.positive {
+            background: #B8C7AB;
+            color: white;
+        }
+
+        .score-button.negative {
+            background: #ff6b6b;
+            color: white;
+        }
+
+        .score-button:not(.positive):not(.negative) {
+            background: #f0f0f0;
+            color: #666;
+        }
+
+        .score-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
         /* 输入框样式统一 */
         .ai-modal input[type="text"],
         .ai-modal input[type="password"],
@@ -1029,6 +1088,77 @@
 <body>
     <div id="app" class="container">
 
+        <!-- 音效配置模态窗口 -->
+        <div v-if="showSoundModal" class="ai-modal-overlay" @click.self="closeSoundModal">
+            <div class="ai-modal">
+                <div class="ai-modal-header">
+                    <h3 class="ai-modal-title">音效配置</h3>
+                    <button class="ai-modal-close" @click="closeSoundModal">&times;</button>
+                </div>
+
+                <!-- 音效启用控制 -->
+                <div class="control-group">
+                    <label>
+                        <input type="checkbox" v-model="audioEnabled">
+                        启用音效
+                    </label>
+                </div>
+
+                <!-- 音量控制 -->
+                <div class="control-group">
+                    <label>
+                        音量控制: <span>{{ volumeValue }}%</span>
+                        <input type="range" v-model="volumeValue" min="0" max="100">
+                    </label>
+                </div>
+
+                <!-- 时间设置 -->
+                <div class="settings-group">
+                    <h3>时间设置</h3>
+                    <label>
+                        连击窗口时间(ms):
+                        <input type="number" v-model="comboWindowMs" min="1000" step="500">
+                    </label>
+                    <label>
+                        重置时间(ms):
+                        <input type="number" v-model="resetTimeoutMs" min="1000" step="500">
+                    </label>
+                </div>
+
+                <!-- 计分显示和操作区域 -->
+                <div class="settings-group">
+                    <h3>连续评分反馈测试</h3>
+                    <div class="score-display">
+                        <div>连续数: <span>{{ currentScore }}</span></div>
+                        <div class="timer-bar">
+                            <div class="timer-progress" :style="{ width: timerProgress + '%' }"></div>
+                        </div>
+                        <div>剩余时间: <span>{{ timeLeft.toFixed(1) }}</span>s</div>
+                    </div>
+                    <div class="score-buttons">
+                        <button class="score-button positive" @click="addScore">+1</button>
+                        <button class="score-button negative" @click="subtractScore">-1</button>
+                        <button class="score-button" @click="resetScore">重置</button>
+                    </div>
+                </div>
+
+                <!-- 音效测试区域 -->
+                <div class="settings-group">
+                    <h3>音效测试</h3>
+                    <div class="button-group">
+                        <button class="positive" @click="testSound('positive', 1)">播放+1</button>
+                        <button class="positive" @click="testSound('positive', 2)">播放+2</button>
+                        <button class="positive" @click="testSound('positive', 3)">播放+3</button>
+                    </div>
+                    <div class="button-group">
+                        <button class="negative" @click="testSound('negative', 1)">播放-1</button>
+                        <button class="negative" @click="testSound('negative', 2)">播放-2</button>
+                        <button class="negative" @click="testSound('negative', 3)">播放-3</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!-- AI 配置模态窗口 -->
         <div v-if="showAIModal" class="ai-modal-overlay" @click.self="closeAIModal">
             <div class="ai-modal">
@@ -1084,6 +1214,11 @@
                     <path
                         d="M23.748 4.482c-.254-.124-.364.113-.512.234-.051.039-.094.09-.137.136-.372.397-.806.657-1.373.626-.829-.046-1.537.214-2.163.848-.133-.782-.575-1.248-1.247-1.548-.352-.156-.708-.311-.955-.65-.172-.241-.219-.51-.305-.774-.055-.16-.11-.323-.293-.35-.2-.031-.278.136-.356.276-.313.572-.434 1.202-.422 1.84.027 1.436.633 2.58 1.838 3.393.137.093.172.187.129.323-.082.28-.18.552-.266.833-.055.179-.137.217-.329.14a5.526 5.526 0 01-1.736-1.18c-.857-.828-1.631-1.742-2.597-2.458a11.365 11.365 0 00-.689-.471c-.985-.957.13-1.743.388-1.836.27-.098.093-.432-.779-.428-.872.004-1.67.295-2.687.684a3.055 3.055 0 01-.465.137 9.597 9.597 0 00-2.883-.102c-1.885.21-3.39 1.102-4.497 2.623C.082 8.606-.231 10.684.152 12.85c.403 2.284 1.569 4.175 3.36 5.653 1.858 1.533 3.997 2.284 6.438 2.14 1.482-.085 3.133-.284 4.994-1.86.47.234.962.327 1.78.397.63.059 1.236-.03 1.705-.128.735-.156.684-.837.419-.961-2.155-1.004-1.682-.595-2.113-.926 1.096-1.296 2.746-2.642 3.392-7.003.05-.347.007-.565 0-.845-.004-.17.035-.237.23-.256a4.173 4.173 0 001.545-.475c1.396-.763 1.96-2.015 2.093-3.517.02-.23-.004-.467-.247-.588zM11.581 18c-2.089-1.642-3.102-2.183-3.52-2.16-.392.024-.321.471-.235.763.09.288.207.486.371.739.114.167.192.416-.113.603-.673.416-1.842-.14-1.897-.167-1.361-.802-2.5-1.86-3.301-3.307-.774-1.393-1.224-2.887-1.298-4.482-.02-.386.093-.522.477-.592a4.696 4.696 0 011.529-.039c2.132.312 3.946 1.265 5.468 2.774.868.86 1.525 1.887 2.202 2.891.72 1.066 1.494 2.082 2.48 2.914.348.292.625.514.891.677-.802.09-2.14.11-3.054-.614zm1-6.44a.306.306 0 01.415-.287.302.302 0 01.2.288.306.306 0 01-.31.307.303.303 0 01-.304-.308zm3.11 1.596c-.2.081-.399.151-.59.16a1.245 1.245 0 01-.798-.254c-.274-.23-.47-.358-.552-.758a1.73 1.73 0 01.016-.588c.07-.327-.008-.537-.239-.727-.187-.156-.426-.199-.688-.199a.559.559 0 01-.254-.078c-.11-.054-.2-.19-.114-.358.028-.054.16-.186.192-.21.356-.202.767-.136 1.146.016.352.144.618.408 1.001.782.391.451.462.576.685.914.176.265.336.537.445.848.067.195-.019.354-.25.452z">
                     </path>
+                </svg>
+            </button>
+            <button class="nav-icon-btn" @click="showSoundModal = true" title="音效配置">
+                <svg fill="currentColor" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/>
                 </svg>
             </button>
             <a href="https://github.com/wzj042/quiz-app" class="github-link" target="_blank" rel="noopener noreferrer"
@@ -1653,6 +1788,7 @@
                         { value: 'short-answer', label: '简答题' }
                     ],
                     showAIModal: false, // 默认不显示 AI 配置窗口
+                    showSoundModal: false, // 默认不显示音效配置窗口
                     providerApiKeys: {},
                     userMessage: '',
                     aiResponse: '',
@@ -1669,11 +1805,25 @@
                     testPrompt: '请解释TCP三次握手的过程。',
                     isGeneratingAnalysis: false,
                     aiAnalysisExplanation: '', // 添加用于流式渲染的状态
+                    // 音效配置相关
+                    audioEnabled: true,
+                    volumeValue: 100,
+                    comboWindowMs: 3000,
+                    resetTimeoutMs: 5000,
+                    audioManager: null,
+                    // 计分和计时相关
+                    currentScore: 0,
+                    timerProgress: 0,
+                    timeLeft: 0,
+                    timerInterval: null
                 }
             },
             mounted() {
                 // 初始化 AI 配置
                 this.initAIConfig();
+
+                // 初始化音效配置
+                this.initSoundConfig();
 
                 // 每秒更新一次日志显示
                 setInterval(() => {
@@ -1691,6 +1841,50 @@
                 window.removeEventListener('keydown', this.handleGlobalBackShortcut);
             },
             watch: {
+                // 音效配置相关的监听器
+                showSoundModal: {
+                    handler(newValue) {
+                        if (newValue) {
+                            // 打开模态时，开始计时器并同步分数
+                            if (this.audioManager) {
+                                this.currentScore = this.audioManager.getScore();
+                                this.startTimer();
+                            }
+                        } else {
+                            // 关闭模态时，停止计时器
+                            this.stopTimer();
+                        }
+                    }
+                },
+                audioEnabled: {
+                    handler(newValue) {
+                        if (this.audioManager) {
+                            this.audioManager.positiveAudios.forEach(audio => audio.muted = !newValue);
+                            this.audioManager.negativeAudios.forEach(audio => audio.muted = !newValue);
+                            this.updateAudioConfig();
+                        }
+                    }
+                },
+                volumeValue: {
+                    handler(newValue) {
+                        if (this.audioManager) {
+                            const volume = newValue / 100;
+                            this.audioManager.positiveAudios.forEach(audio => audio.volume = volume);
+                            this.audioManager.negativeAudios.forEach(audio => audio.volume = volume);
+                            this.updateAudioConfig();
+                        }
+                    }
+                },
+                comboWindowMs: {
+                    handler() {
+                        this.updateAudioConfig();
+                    }
+                },
+                resetTimeoutMs: {
+                    handler() {
+                        this.updateAudioConfig();
+                    }
+                },
                 selectedQuestionTypes: {
                     handler() {
                         console.log('[selectedQuestionTypes] Question types changed, updating distribution');
@@ -2681,6 +2875,15 @@
                                 );
                             }
                             break;
+                    }
+
+                    // 更新连杀状态
+                    if (this.audioManager) {
+                        if (isCorrect) {
+                            this.audioManager.addPoints(1);
+                        } else {
+                            this.audioManager.subtractPoints(1);
+                        }
                     }
 
                     // 记录完成状态
@@ -3981,6 +4184,125 @@
                 `;
                     document.body.appendChild(toast);
                     setTimeout(() => toast.remove(), 2000);
+                },
+
+                // 音效配置相关方法
+                initSoundConfig() {
+                    import('./js/modules/ComboAudioManager.js').then(module => {
+                        const ComboAudioManager = module.default;
+                        this.audioManager = new ComboAudioManager({
+                            comboWindowMs: this.comboWindowMs,
+                            comboResetTimeoutMs: this.resetTimeoutMs,
+                            minScoreForSound: 1
+                        });
+
+                        // 从本地存储加载配置
+                        const savedConfig = JSON.parse(localStorage.getItem('SOUND_CONFIG') || '{}');
+                        this.audioEnabled = savedConfig.audioEnabled ?? true;
+                        this.volumeValue = savedConfig.volumeValue ?? 100;
+                        this.comboWindowMs = savedConfig.comboWindowMs ?? 3000;
+                        this.resetTimeoutMs = savedConfig.resetTimeoutMs ?? 5000;
+
+                        // 应用配置
+                        this.updateAudioConfig();
+                    });
+                },
+
+                updateAudioConfig() {
+                    if (!this.audioManager) return;
+
+                    // 更新音频管理器配置
+                    this.audioManager = new ComboAudioManager({
+                        comboWindowMs: this.comboWindowMs,
+                        comboResetTimeoutMs: this.resetTimeoutMs,
+                        minScoreForSound: 1
+                    });
+
+                    // 应用音量和静音设置
+                    const volume = this.volumeValue / 100;
+                    this.audioManager.positiveAudios.forEach(audio => {
+                        audio.volume = volume;
+                        audio.muted = !this.audioEnabled;
+                    });
+                    this.audioManager.negativeAudios.forEach(audio => {
+                        audio.volume = volume;
+                        audio.muted = !this.audioEnabled;
+                    });
+
+                    // 保存配置到本地存储
+                    localStorage.setItem('SOUND_CONFIG', JSON.stringify({
+                        audioEnabled: this.audioEnabled,
+                        volumeValue: this.volumeValue,
+                        comboWindowMs: this.comboWindowMs,
+                        resetTimeoutMs: this.resetTimeoutMs
+                    }));
+                },
+
+                testSound(type, level) {
+                    if (!this.audioManager) return;
+                    
+                    if (type === 'positive') {
+                        this.audioManager.addPoints(level);
+                    } else {
+                        this.audioManager.subtractPoints(level);
+                    }
+                },
+
+                closeSoundModal() {
+                    this.showSoundModal = false;
+                    this.updateAudioConfig();
+                    this.stopTimer();
+                },
+
+                // 计分和计时相关方法
+                startTimer() {
+                    if (this.timerInterval) {
+                        clearInterval(this.timerInterval);
+                    }
+                    this.timerInterval = setInterval(() => {
+                        if (!this.audioManager) return;
+                        
+                        const now = Date.now();
+                        const comboEndTime = this.audioManager.comboEndTime;
+                        
+                        if (comboEndTime > now) {
+                            this.timeLeft = (comboEndTime - now) / 1000;
+                            this.timerProgress = (this.timeLeft / (this.comboWindowMs / 1000)) * 100;
+                        } else {
+                            this.timeLeft = 0;
+                            this.timerProgress = 0;
+                        }
+                    }, 100);
+                },
+
+                stopTimer() {
+                    if (this.timerInterval) {
+                        clearInterval(this.timerInterval);
+                        this.timerInterval = null;
+                    }
+                },
+
+                addScore() {
+                    if (!this.audioManager) return;
+                    this.audioManager.addPoints(1);
+                    this.currentScore = this.audioManager.getScore();
+                    this.startTimer();
+                },
+
+                subtractScore() {
+                    if (!this.audioManager) return;
+                    this.audioManager.subtractPoints(1);
+                    this.currentScore = this.audioManager.getScore();
+                    this.startTimer();
+                },
+
+                resetScore() {
+                    if (!this.audioManager) return;
+                    this.audioManager.reset();
+                    this.currentScore = 0;
+                    this.timeLeft = 0;
+                    this.timerProgress = 0;
+                    this.stopTimer();
                 },
                 // 添加 goHome 方法
                 goHome(event) {
