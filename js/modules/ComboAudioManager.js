@@ -55,6 +55,9 @@ class ComboAudioManager {
         } else {
             // 在连杀窗口内继续叠加连杀数
             this.killStreak = currentStreak + 1;
+            if (this.killStreak > 5) {
+                this.killStreak = 1;
+            }
             console.log('addPoints - 累加', {
                 新连杀数: this.killStreak
             });
@@ -105,7 +108,10 @@ class ComboAudioManager {
         } else {
             // 在连杀窗口内继续累减
             const oldStreak = currentStreak;
-            this.killStreak = Math.max(-5, oldStreak - 1);
+            this.killStreak =  oldStreak - 1;
+            if (this.killStreak < -5) {
+                this.killStreak = -1;
+            }
             console.log('subtractPoints - 累减', {
                 原连杀数: oldStreak,
                 新连杀数: this.killStreak,
