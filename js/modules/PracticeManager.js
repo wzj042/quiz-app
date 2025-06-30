@@ -58,6 +58,8 @@ export default class PracticeManager {
                     const j = Math.floor(Math.random() * (i + 1));
                     [this.questions[i], this.questions[j]] = [this.questions[j], this.questions[i]];
                 }
+                // Shuffle options for each question
+                this.shuffleQuestions();
             }
 
             this.initialized = true;
@@ -165,25 +167,12 @@ export default class PracticeManager {
                                     [shuffledOptions[k], shuffledOptions[l]] = [shuffledOptions[l], shuffledOptions[k]];
                                 }
                                 
-                                // 更新正确答案
-                                if (q.type === 'single-choice') {
-                                    const oldCorrectAnswer = originalCorrectAnswer[0];
-                                    const newIndex = shuffledOptions.indexOf(oldCorrectAnswer);
-                                    if (newIndex === -1) throw new Error('选项打乱后找不到正确答案');
-                                    q.correct_answer = [shuffledOptions[newIndex]];
-                                } else {
-                                    q.correct_answer = originalCorrectAnswer.map(ans => {
-                                        const newAns = shuffledOptions[originalOptions.indexOf(ans)];
-                                        if (newAns === undefined) throw new Error('选项打乱后找不到正确答案');
-                                        return newAns;
-                                    });
-                                }
+                                // 不更新正确答案，只更新选项的显示顺序
                                 q.options = shuffledOptions;
                             } catch (error) {
                                 console.error('[PracticeManager:shuffleQuestions] Failed to shuffle options:', error);
-                                // 如果打乱选项失败，恢复原始选项和答案
+                                // 如果打乱选项失败，恢复原始选项
                                 q.options = originalOptions;
-                                q.correct_answer = originalCorrectAnswer;
                             }
                         }
                     });
@@ -241,11 +230,16 @@ export default class PracticeManager {
             let isCorrect = false;
             switch (question.type) {
                 case 'single-choice':
+                    // 对单选题，我们需要找到用户选择的选项在原始选项中的索引
+                    const answerIndex = question.options.indexOf(answer);
+                    isCorrect = answerIndex !== -1 && question.correct_answer.includes(question.options[answerIndex]);
+                    break;
                 case 'multiple-choice':
-                    isCorrect = this.compareArrays(
-                        Array.isArray(answer) ? answer : [answer],
-                        question.correct_answer
-                    );
+                    // 对多选题，我们需要比较用户选择的选项索引集合是否与正确答案的索引集合相同
+                    const userAnswerIndices = answer.map(ans => question.options.indexOf(ans)).sort();
+                    const correctAnswerIndices = question.correct_answer.map(ans => question.options.indexOf(ans)).sort();
+                    isCorrect = userAnswerIndices.length === correctAnswerIndices.length && 
+                        userAnswerIndices.every((idx, i) => idx === correctAnswerIndices[i]);
                     break;
                 case 'fill-in-blank':
                 case 'short-answer':
@@ -288,8 +282,10 @@ export default class PracticeManager {
     compareArrays(arr1, arr2) {
         if (!Array.isArray(arr1) || !Array.isArray(arr2)) return false;
         if (arr1.length !== arr2.length) return false;
-        const set1 = new Set(arr1.map(String)); // Convert to strings for consistent comparison
-        return arr2.every(item => set1.has(String(item)));
+        // 对两个数组进行排序后比较
+        const sorted1 = [...arr1].sort();
+        const sorted2 = [...arr2].sort();
+        return sorted1.every((item, index) => item === sorted2[index]);
     }
 
     // 移动到下一题

@@ -1812,7 +1812,7 @@
                 <h1 class="title">答题完成</h1>
                 <p>本轮共 {{ quizList.length }} 题，已完成：{{ completedCount }}。</p>
                 <button type="button" class="btn" @click="pageState = 'home'">
-                    返回题目选择 (空格)
+                    返回题目选择 
                 </button>
             </div>
         </template>
@@ -2964,7 +2964,9 @@
 
                 isCorrectOptionMulti(opt) {
                     const ans = this.currentQuestion?.correct_answer || [];
-                    const isCorrect = ans.some(a => String(a) === String(opt));
+                    // 使用选项的索引来判断是否正确
+                    const optIndex = this.currentQuestion?.options.indexOf(opt);
+                    const isCorrect = optIndex !== -1 && ans.includes(this.currentQuestion.options[optIndex]);
                     console.log('Checking multi option correctness:', {
                         option: opt,
                         correctAnswers: ans,
@@ -3048,7 +3050,10 @@
                             break;
                         case 'multiple-choice':
                             answer = [...this.chosenAnswers].sort();
-                            isCorrect = this.compareArrays(answer, q.correct_answer);
+                            // For multiple choice, we need to compare the actual option texts
+                            const sortedCorrectAnswer = [...q.correct_answer].sort();
+                            isCorrect = answer.length === sortedCorrectAnswer.length && 
+                                answer.every((ans, idx) => ans === sortedCorrectAnswer[idx]);
                             break;
                         case 'fill-in-blank':
                             answer = this.fillInAnswers;
