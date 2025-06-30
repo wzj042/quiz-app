@@ -1737,10 +1737,13 @@
         </div>
 
         <!-- Cross Practice Modal -->
-        <div v-if="showCrossPracticeModal" class="modal-overlay" @click="showCrossPracticeModal = false" @keydown.stop>
+        <div v-if="showCrossPracticeModal" class="modal-overlay" @keydown.stop>
             <div class="modal-content cross-practice-modal" @click.stop @keydown.left.prevent @keydown.right.prevent
                 @keydown.up.prevent @keydown.down.prevent>
-                <h2>跨卷练习设置</h2>
+                <div class="modal-header">
+                    <h2>跨卷练习设置</h2>
+                    <button class="modal-close" @click="showCrossPracticeModal = false">&times;</button>
+                </div>
 
                 <!-- 题型筛选 -->
                 <div class="setting-section">

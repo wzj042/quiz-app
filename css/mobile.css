@@ -1649,6 +1649,34 @@ textarea:focus-visible {
     width: 90%;
 }
 
+.cross-practice-modal .modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #eee;
+}
+
+.cross-practice-modal .modal-header h2 {
+    margin: 0;
+    font-size: 1.2em;
+    font-weight: 600;
+}
+
+.cross-practice-modal .modal-close {
+    background: none;
+    border: none;
+    font-size: 1.5em;
+    cursor: pointer;
+    padding: 0;
+    color: #666;
+}
+
+.cross-practice-modal .modal-close:hover {
+    color: #333;
+}
+
 .setting-section {
     margin-bottom: 24px;
 }
