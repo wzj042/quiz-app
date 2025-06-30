@@ -1943,6 +1943,7 @@
                     keyboardManager: null,
                     questionManager: null,
                     practiceManager: null,
+                    aiManager: aiManager, // 添加 aiManager 实例
                     pageState: 'home',
                     isLoading: false,
                     loadError: null,
@@ -4355,18 +4356,30 @@
                         }
                         
                         this.presets = aiManager.getPresets();
-                        this.aiApiKey = aiManager.getApiKey();
+                        
+                        // 初始化所有 provider 的 API keys
+                        this.providerApiKeys = {};
+                        Object.values(this.presets).forEach(preset => {
+                            const provider = preset.provider;
+                            this.providerApiKeys[provider] = aiManager.getApiKey(provider) || '';
+                        });
+
+                        // 设置当前 provider
+                        this.currentProvider = aiManager.getCurrentProvider();
 
                         console.log('[initAIConfig] Current configuration', {
                             presets: this.presets,
                             selectedPresetId: this.selectedPresetId,
-                            hasApiKey: !!this.aiApiKey
+                            currentProvider: this.currentProvider,
+                            providerApiKeys: Object.keys(this.providerApiKeys)
                         });
 
                         // 设置默认预设
                         if (this.presets[this.selectedPresetId]) {
                             aiManager.setSelectedPreset(this.selectedPresetId);
-                            console.log('[initAIConfig] Set default preset:', this.selectedPresetId);
+                            // 更新当前 provider
+                            this.currentProvider = this.presets[this.selectedPresetId].provider;
+                            console.log('[initAIConfig] Set default preset:', this.selectedPresetId, 'with provider:', this.currentProvider);
                         }
 
                         // 确保将 aiManager 实例传递给 practiceManager
@@ -4388,7 +4401,14 @@
                         console.log('[updateApiKey] Updating API key for provider:', this.currentProvider);
                         const key = this.providerApiKeys[this.currentProvider];
                         aiManager.setApiKey(this.currentProvider, key);
+                        
+                        // 重新初始化 AI 配置以确保所有状态都被更新
+                        this.initAIConfig();
+                        
                         console.log('[updateApiKey] API key updated successfully');
+                        
+                        // 显示成功提示
+                        this.showToast('API Key 已更新');
                     }
                 },
 
@@ -4757,7 +4777,7 @@
 
                 // 添加手动触发AI评分的方法
                 async triggerAIScoring() {
-                    if (!this.checkApiKey()) return;
+                    // if (!this.checkApiKey()) return;
                     
                     try {
                         const q = this.currentQuestion;

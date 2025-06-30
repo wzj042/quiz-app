@@ -18,18 +18,18 @@ class AIManager {
                 model: 'deepseek-chat',
                 provider: 'deepseek'
             },
-            // 'deepseek-reasoner': {
-            //     name: 'DeepSeek Reasoner',
-            //     endpoint: 'https://api.deepseek.com/v1/chat/completions',
-            //     model: 'deepseek-reasoner',
-            //     provider: 'deepseek'
-            // },
-            // 'glm-4-flash': {
-            //     name: 'GLM-4-Flash',
-            //     endpoint: 'https://open.bigmodel.cn/api/paas/v4/chat/completions/v1',
-            //     model: 'glm-4-flash-250414',
-            //     provider: 'zhipu'
-            // }
+            'deepseek-reasoner': {
+                name: 'DeepSeek Reasoner',
+                endpoint: 'https://api.deepseek.com/v1/chat/completions',
+                model: 'deepseek-reasoner',
+                provider: 'deepseek'
+            },
+            'glm-4-flash': {
+                name: 'GLM-4-Flash',
+                endpoint: 'https://open.bigmodel.cn/api/paas/v4/chat/completions/v1',
+                model: 'glm-4-flash-250414',
+                provider: 'zhipu'
+            }
         };
         this.log('Default presets initialized', 'debug', this.presets);
 
@@ -187,6 +187,10 @@ class AIManager {
     // 设置指定 provider 的 API Key
     setApiKey(provider, key) {
         localStorage.setItem(`AI_API_KEY_${provider}`, key);
+        // 如果是当前选中的 provider，同时更新实例的 API_KEY
+        if (provider === this.getCurrentProvider()) {
+            this.API_KEY = key;
+        }
         this.log('debug', `API Key updated for provider: ${provider}`);
     }
 
