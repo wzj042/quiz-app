@@ -1,0 +1,280 @@
+{
+    
+        "questions": [
+            {
+                "type": "single-choice",
+                "content": "数据库设计中，确定数据库存储结构，即确定关系、索引、聚簇、日志、备份等数据的存储安排和存储结构，这是数据库设计的（   ）",
+                "options": [
+                    "物理设计阶段",
+                    "逻辑设计阶段",
+                    "概念设计阶段",
+                    "需求分析阶段"
+                ],
+                "correct_answer": [
+                    "物理设计阶段"
+                ],
+                "analysis": "物理设计阶段负责确定数据的存储结构和存取方法，如索引、聚簇等。"
+            },
+            {
+                "type": "single-choice",
+                "content": "数据库设计的第一阶段是：（）",
+                "options": [
+                    "逻辑设计",
+                    "概念设计",
+                    "物理设计",
+                    "需求分析"
+                ],
+                "correct_answer": [
+                    "需求分析"
+                ],
+                "analysis": "数据库设计的流程依次为需求分析 → 概念设计 → 逻辑设计 → 物理设计。"
+            },
+            {
+                "type": "single-choice",
+                "content": "在ER模型中，表示实体之间关系的图形是：（）",
+                "options": [
+                    "矩形",
+                    "菱形",
+                    "椭圆形",
+                    "三角形"
+                ],
+                "correct_answer": [
+                    "菱形"
+                ],
+                "analysis": "在E-R模型中，实体用矩形，属性用椭圆形，实体间的关系用菱形表示。"
+            },
+            {
+                "type": "single-choice",
+                "content": "在数据库设计中，“消除传递函数依赖”通常是为了满足：（）",
+                "options": [
+                    "1NF",
+                    "2NF",
+                    "3NF",
+                    "BCNF"
+                ],
+                "correct_answer": [
+                    "3NF"
+                ],
+                "analysis": "第三范式（3NF）要求消除非主属性对候选键的传递函数依赖。"
+            },
+            {
+                "type": "single-choice",
+                "content": "如果两个实体之间的关系是“多对多”，则在关系模型中通常需要：",
+                "options": [
+                    "外键",
+                    "中间表",
+                    "合并为一个表",
+                    "使用联合主键"
+                ],
+                "correct_answer": [
+                    "中间表"
+                ],
+                "analysis": "多对多关系需要通过中间表（关联表）来分解为两个一对多关系。"
+            },
+            {
+                "type": "single-choice",
+                "content": "以下哪种情况适合使用反规范化设计？",
+                "options": [
+                    "需要保证数据一致性",
+                    "需要提高查询性能",
+                    "需要减少数据冗余",
+                    "需要满足3NF"
+                ],
+                "correct_answer": [
+                    "需要提高查询性能"
+                ],
+                "analysis": "反规范化通过冗余数据减少表连接，提高查询性能，但会牺牲部分数据一致性。"
+            },
+            {
+                "type": "single-choice",
+                "content": "在E-R图中，矩形通常表示什么？",
+                "options": [
+                    "属性",
+                    "关系",
+                    "实体",
+                    "外键"
+                ],
+                "correct_answer": [
+                    "实体"
+                ],
+                "analysis": "E-R图中矩形表示实体，椭圆形表示属性，菱形表示关系。"
+            },
+            {
+                "type": "single-choice",
+                "content": "实体间的联系没有下面的哪种。",
+                "options": [
+                    "一对一",
+                    "一对多",
+                    "多对多",
+                    "以上都不是"
+                ],
+                "correct_answer": [
+                    "以上都不是"
+                ],
+                "analysis": "实体间的联系（如一对一、一对多、多对多）。"
+            },
+            {
+                "type": "single-choice",
+                "content": "以下哪种属性在E-R图中用椭圆形表示？",
+                "options": [
+                    "复合属性",
+                    "派生属性",
+                    "多值属性",
+                    "以上都是"
+                ],
+                "correct_answer": [
+                    "以上都是"
+                ],
+                "analysis": "椭圆形通常表示属性，包括复合、派生、多值等。"
+            },
+            {
+                "type": "single-choice",
+                "content": "在E-R图中，外键通常如何体现？",
+                "options": [
+                    "不直接显示，隐含在关系中",
+                    "通过菱形连接",
+                    "通过指向实体的箭头",
+                    "通过下划线标注"
+                ],
+                "correct_answer": [
+                    "不直接显示，隐含在关系中"
+                ],
+                "analysis": "外键在ER图中通常不直接显示，而是隐含在关系中。"
+            },
+            {
+                "type": "single-choice",
+                "content": "数据字典通常包括数据管理和数据结构两个部分。",
+                "options": [
+                    "对",
+                    "错"
+                ],
+                "correct_answer": [
+                    "错"
+                ],
+                "analysis": "数据字典包含数据项、数据结构、数据流、数据存储等描述。"
+            },
+            {
+                "type": "single-choice",
+                "content": "在数据库表的实际项目设计中，应该遵循所有表都规范为5NF（完美范式），以达到最优设计。",
+                "options": [
+                    "对",
+                    "错"
+                ],
+                "correct_answer": [
+                    "错"
+                ],
+                "analysis": "实际设计中需权衡规范化和性能，并非所有表都要达到5NF。"
+            },
+            {
+                "type": "single-choice",
+                "content": "数据库设计的需求分析阶段主要关注表的字段和数据类型定义。",
+                "options": [
+                    "对",
+                    "错"
+                ],
+                "correct_answer": [
+                    "错"
+                ],
+                "analysis": "需求分析阶段关注业务需求和数据流程，字段和数据类型在逻辑设计阶段定义。"
+            },
+            {
+                "type": "single-choice",
+                "content": "外键（Foreign Key）必须引用另一个表的主键（Primary Key）。",
+                "options": [
+                    "对",
+                    "错"
+                ],
+                "correct_answer": [
+                    "错"
+                ],
+                "analysis": "外键必须引用另一个表的主键或唯一约束。外键的核心在于**引用具有唯一性约束的字段**，而非必须是主键。这一设计提供了灵活性，允许数据库设计者根据实际需求选择引用目标字段。"
+            },
+            {
+                "type": "single-choice",
+                "content": "第三范式（3NF）要求消除非主属性对候选键的传递函数依赖。",
+                "options": [
+                    "对",
+                    "错"
+                ],
+                "correct_answer": [
+                    "对"
+                ],
+                "analysis": "3NF的核心是消除非主属性对候选键的传递依赖。"
+            },
+            {
+                "type": "single-choice",
+                "content": "在关系数据库中，超键（Super Key）一定包含候选键（Candidate Key）。",
+                "options": [
+                    "对",
+                    "错"
+                ],
+                "correct_answer": [
+                    "对"
+                ],
+                "analysis": "超键是能唯一标识实体的属性集合，候选键是极小的超键，因此超键包含候选键。"
+            },
+            {
+                "type": "single-choice",
+                "content": "索引越多，数据库的查询性能就越好。",
+                "options": [
+                    "对",
+                    "错"
+                ],
+                "correct_answer": [
+                    "错"
+                ],
+                "analysis": "索引过多会降低增删改操作的性能，需根据查询需求合理设计。"
+            },
+            {
+                "type": "single-choice",
+                "content": "BCNF（巴斯-科德范式）比3NF更严格，它要求所有决定因素都必须是候选键。",
+                "options": [
+                    "对",
+                    "错"
+                ],
+                "correct_answer": [
+                    "对"
+                ],
+                "analysis": "BCNF比3NF更严格，要求所有决定因素（左侧）必须是候选键。"
+            },
+            {
+                "type": "single-choice",
+                "content": "数据库事务的ACID特性中的“D”代表Durability（持久性）。",
+                "options": [
+                    "对",
+                    "错"
+                ],
+                "correct_answer": [
+                    "对"
+                ],
+                "analysis": "ACID中的D是持久性（Durability），即事务提交后修改永久保存。"
+            },
+            {
+                "type": "single-choice",
+                "content": "在ER模型中，弱实体（Weak Entity）必须依赖于其他实体独立存在。",
+                "options": [
+                    "对",
+                    "错"
+                ],
+                "correct_answer": [
+                    "对"
+                ],
+                "analysis": "弱实体必须依赖其他实体（所有者实体）存在，不能独立存在。"
+            }
+        ]
+    ,
+    "sets": [
+        {
+            "id": "sjk-11",
+            "name": "11-计科-数据库作业7",
+            "category": "数据库原理",
+            "tags": [
+                "数据库原理",
+                "计科"
+            ],
+            "createTime": "2025-06-30 21:27:00",
+            "updateTime": "2025-06-30 21:27:00",
+            "description": ""
+        }
+    ]
+}

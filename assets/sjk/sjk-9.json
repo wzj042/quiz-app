@@ -1,0 +1,280 @@
+{
+    
+        "questions": [
+            {
+                "type": "single-choice",
+                "content": "SQL中，和 AGE IN（20，22）语义相同的是（   ）。",
+                "options": [
+                    "AGE<=22 AND AGE >=20",
+                    "AGE <22 AND AGE >20",
+                    "AGE =20 AND AGE =22",
+                    "AGE =20 OR AGE =22"
+                ],
+                "correct_answer": [
+                    "AGE =20 OR AGE =22"
+                ],
+                "analysis": "`IN` 运算符用于匹配列表中的任意值，等同于多个 `OR` 条件。`AGE IN (20,22)` 等价于 `AGE = 20 OR AGE = 22`。"
+            },
+            {
+                "type": "single-choice",
+                "content": "设用户在某数据库中经常需要进行如下查询操作：SELECT * FROM T WHERE C1=’A’ ORDER BY C2   设T表中已在C1列上建立了主码约束，且该表只建有该约束。为提高该查询的执行效率，下列方法中可行的是：（   ）。",
+                "options": [
+                    "在C1列上建立一个聚集索引，在C2列上建立一个非聚集索引",
+                    "在C1和C2列上分别建立一个非聚集索引",
+                    "在C2列上建立一个非聚集索引",
+                    "在C1和C2列上建立一个组合的非聚集索引"
+                ],
+                "correct_answer": [
+                    "在C1和C2列上建立一个组合的非聚集索引"
+                ],
+                "analysis": "组合索引（C1, C2）可以同时满足 `WHERE C1='A'` 的过滤和 `ORDER BY C2` 的排序需求，避免额外排序操作，提升查询效率。"
+            },
+            {
+                "type": "single-choice",
+                "content": "欲将表“学生”中的信息先按“学号”升序排序，再按“成绩”降序排列，SQL 语句能正确完成的是：（   ）。",
+                "options": [
+                    "SELECT * FROM 学生 ORDER BY 学号 , 成绩",
+                    "SELECT * FROM 学生 ORDER BY 学号 , 成绩 DESC",
+                    "SELECT * FROM 学生 ORDER BY 学号 ASC, AND 成绩 DESC",
+                    "SELECT * FROM 学生 ORDER BY 成绩 DESC，学号 ASC"
+                ],
+                "correct_answer": [
+                    "SELECT * FROM 学生 ORDER BY 学号 , 成绩 DESC"
+                ],
+                "analysis": "默认排序为升序（`ASC`），降序需显式指定 `DESC`。正确语法为 `学号 ASC`（可省略）和 `成绩 DESC`，用逗号分隔字段。"
+            },
+            {
+                "type": "single-choice",
+                "content": "下列聚合函数中不忽略空值 (null) 的是：（   ）。",
+                "options": [
+                    "SUM (列名)",
+                    "MAX (列名)",
+                    "COUNT (*)",
+                    "AVG (列名)"
+                ],
+                "correct_answer": [
+                    "COUNT (*)"
+                ],
+                "analysis": "`COUNT(*)` 统计所有行数（包括含空值的行），而其他聚合函数如 `SUM`、`MAX`、`AVG` 均忽略 `NULL` 值。"
+            },
+            {
+                "type": "single-choice",
+                "content": "对表中数据进行删除的操作是（   ）。",
+                "options": [
+                    "DELETE",
+                    "DROP",
+                    "ALTER",
+                    "UPDATE"
+                ],
+                "correct_answer": [
+                    "DELETE"
+                ],
+                "analysis": "`DELETE` 删除表中数据，`DROP` 删除表结构，`ALTER` 修改表结构，`UPDATE` 更新数据。"
+            },
+            {
+                "type": "single-choice",
+                "content": "在SQL查询中使用WHERE子句指出的是（   ）。",
+                "options": [
+                    "查询目标",
+                    "查询结果",
+                    "查询视图",
+                    "查询条件"
+                ],
+                "correct_answer": [
+                    "查询条件"
+                ],
+                "analysis": "`WHERE` 子句用于指定过滤数据的条件。"
+            },
+            {
+                "type": "single-choice",
+                "content": "下面对子查询描述错误的是（   ）。",
+                "options": [
+                    "子查询的结果可以是一个值",
+                    "子查询的结果可以是多个值",
+                    "子查询和父查询只能使用不同的表",
+                    "子查询和父查询可以使用同一张表"
+                ],
+                "correct_answer": [
+                    "子查询和父查询只能使用不同的表"
+                ],
+                "analysis": "子查询和父查询可以使用同一张表（如自连接场景）。"
+            },
+            {
+                "type": "single-choice",
+                "content": "Select语句中，和Having语句同时使用的是（   ）。",
+                "options": [
+                    "Order by",
+                    "Group by",
+                    "Where",
+                    "Or"
+                ],
+                "correct_answer": [
+                    "Group by"
+                ],
+                "analysis": "`HAVING` 必须与 `GROUP BY` 一起使用，用于对分组后的结果进行过滤。"
+            },
+            {
+                "type": "single-choice",
+                "content": "在员工基本信息表employees中，字段salary代表薪水，以下（   ）语句返回员工最低薪水。",
+                "options": [
+                    "select min(salary) from employees",
+                    "select bottom 1 salary from employees order by salary",
+                    "select min 1 salary from employees order by salary",
+                    "select getmin(salary) from employees"
+                ],
+                "correct_answer": [
+                    "select min(salary) from employees"
+                ],
+                "analysis": "`MIN()` 函数直接返回最小值，其他选项语法错误（如 `BOTTOM 1` 不是标准 SQL 语法）。"
+            },
+            {
+                "type": "single-choice",
+                "content": "关于SQL语句，以下哪项能正确查询“年龄大于20岁的学生姓名”?",
+                "options": [
+                    "SELECT * FROM Student WHERE Age > 20;",
+                    "SELECT Name FROM Student HAVING Age > 20;",
+                    "SELECT Name FROM Student WHERE Age > 20;",
+                    "SELECT Name WHERE Age > 20 FROM Student; "
+                ],
+                "correct_answer": [
+                    "SELECT Name FROM Student WHERE Age > 20;"
+                ],
+                "analysis": "正确语法为 `SELECT 列 FROM 表 WHERE 条件`，选项 C 符合要求。"
+            },
+            {
+                "type": "single-choice",
+                "content": "嵌套查询(子查询)必须返回单行单列结果，否则会报错。",
+                "options": [
+                    "对",
+                    "错"
+                ],
+                "correct_answer": [
+                    "错"
+                ],
+                "analysis": "子查询可以返回多行多列（如 `IN` 子句接受多值，`EXISTS` 不限制列数）。"
+            },
+            {
+                "type": "single-choice",
+                "content": "在SQL命令的短语中，WHERE子句中允许使用聚集函数。",
+                "options": [
+                    "对",
+                    "错"
+                ],
+                "correct_answer": [
+                    "错"
+                ],
+                "analysis": "`WHERE` 子句不允许直接使用聚合函数（如 `SUM`、`AVG`），聚合函数需在 `HAVING` 子句中使用。"
+            },
+            {
+                "type": "single-choice",
+                "content": "子查询的SELECT 语句中不能使用ORDER BY子句。",
+                "options": [
+                    "对",
+                    "错"
+                ],
+                "correct_answer": [
+                    "对"
+                ],
+                "analysis": "子查询中一般不能使用 `ORDER BY`（除非配合 `TOP`、`LIMIT` 等限制行数）。"
+            },
+            {
+                "type": "single-choice",
+                "content": "使用ANY和ALL谓词时，必须与比较运算符同时使用。",
+                "options": [
+                    "对",
+                    "错"
+                ],
+                "correct_answer": [
+                    "对"
+                ],
+                "analysis": "`ANY` 和 `ALL` 必须与比较运算符（如 `>`, `<`）结合使用，如 `Salary > ALL (子查询)`。"
+            },
+            {
+                "type": "single-choice",
+                "content": "SELECT 语句中的条件可以用WHERE或HAVING引出，但HAVING必须在GROUP BY之后使用。",
+                "options": [
+                    "对",
+                    "错"
+                ],
+                "correct_answer": [
+                    "对"
+                ],
+                "analysis": "`HAVING` 必须在 `GROUP BY` 之后使用，用于过滤分组后的结果。"
+            },
+            {
+                "type": "single-choice",
+                "content": "外连接可以保留主表中与从表不匹配的记录。",
+                "options": [
+                    "对",
+                    "错"
+                ],
+                "correct_answer": [
+                    "对"
+                ],
+                "analysis": "外连接（左/右连接）会保留主表中与从表不匹配的记录。"
+            },
+            {
+                "type": "single-choice",
+                "content": "使用Drop Table命令删除一个表的时候，表中的数据不会被删除。",
+                "options": [
+                    "对",
+                    "错"
+                ],
+                "correct_answer": [
+                    "错"
+                ],
+                "analysis": "`DROP TABLE` 会删除表结构和所有数据。"
+            },
+            {
+                "type": "single-choice",
+                "content": "可以使用update语句，一次只能更新数据库表中1行数据。。",
+                "options": [
+                    "对",
+                    "错"
+                ],
+                "correct_answer": [
+                    "错"
+                ],
+                "analysis": "`UPDATE` 可以一次更新多行数据（如 `UPDATE 表 SET 列=值 WHERE 条件`）。"
+            },
+            {
+                "type": "single-choice",
+                "content": "自连接查询指相互连接的表在物理上为同一个表，但逻辑上分为两个表。。",
+                "options": [
+                    "对",
+                    "错"
+                ],
+                "correct_answer": [
+                    "对"
+                ],
+                "analysis": "自连接通过别名将同一物理表逻辑上分为两个表进行关联。"
+            },
+            {
+                "type": "single-choice",
+                "content": "SQL Server中为所有字段插入记录时,若省略字段名称,则必须严格按照数据表结构插入对应的值。",
+                "options": [
+                    "对",
+                    "错"
+                ],
+                "correct_answer": [
+                    "对"
+                ],
+                "analysis": "插入语句若省略字段名，必须严格按照表结构顺序提供所有字段的值。"
+            }
+        ]
+    ,
+    "sets": [
+        {
+            "id": "sjk-9",
+            "name": "09-计科-数据库作业3",
+            "category": "数据库原理",
+            "tags": [
+                "数据库原理",
+                "计科"
+            ],
+            "createTime": "2025-06-30 21:27:00",
+            "updateTime": "2025-06-30 21:27:00",
+            "description": ""
+        }
+    ]
+}

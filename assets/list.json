@@ -1,5 +1,5 @@
 {
-  "updateTime": "2025-06-30 16:05:29",
+  "updateTime": "2025-06-30 21:55:32",
   "banks": [
     {
       "file": "demo.json",
@@ -52,6 +52,16 @@
       "category": "数据库原理"
     },
     {
+      "file": "sjk/sjk-10.json",
+      "name": "10-计科-数据库作业4",
+      "category": "数据库原理"
+    },
+    {
+      "file": "sjk/sjk-11.json",
+      "name": "11-计科-数据库作业7",
+      "category": "数据库原理"
+    },
+    {
       "file": "sjk/sjk-2.json",
       "name": "02-数据库作业2",
       "category": "数据库原理"
@@ -77,8 +87,23 @@
       "category": "数据库原理"
     },
     {
+      "file": "sjk/sjk-7.json",
+      "name": "07-计科-数据库作业1",
+      "category": "数据库原理"
+    },
+    {
+      "file": "sjk/sjk-8.json",
+      "name": "08-计科-数据库作业2",
+      "category": "数据库原理"
+    },
+    {
+      "file": "sjk/sjk-9.json",
+      "name": "09-计科-数据库作业3",
+      "category": "数据库原理"
+    },
+    {
       "file": "sjk/sjk-x.json",
-      "name": "0x-数据库期末考点",
+      "name": "xx-数据库期末考点",
       "category": "数据库原理"
     }
   ]

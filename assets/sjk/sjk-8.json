@@ -1,0 +1,280 @@
+{
+    
+        "questions": [
+            {
+                "type": "single-choice",
+                "content": "在关系数据库中，下列哪项描述了基本表的特点？",
+                "options": [
+                    "由用户定义，存储实际数据",
+                    "由系统生成，存储临时数据",
+                    "由用户定义，存储虚拟数据",
+                    "由系统生成，存储统计信息"
+                ],
+                "correct_answer": [
+                    "由用户定义，存储实际数据"
+                ],
+                "analysis": "基本表（基表）是用户定义的、存储实际数据的表，与视图（虚拟表）相对。"
+            },
+            {
+                "type": "single-choice",
+                "content": "在关系代数中，表达式![](https://p.ananas.chaoxing.com/star3/origin/1bfdca22652035edfe5090bc9d0dba1f.png)表示的是什么操作？",
+                "options": [
+                    "选择操作，选取属性A和B的值",
+                    "投影操作，只保留属性A和B",
+                    "连接操作，基于属性A和B进行连接",
+                    "笛卡尔积操作，将两个关系的所有组合形成新的关系"
+                ],
+                "correct_answer": [
+                    "投影操作，只保留属性A和B"
+                ],
+                "analysis": "投影操作![](https://p.ananas.chaoxing.com/star3/origin/d85fca29b3ec89304ed69fae5dba94e5.png)用于从关系R中选取指定的属性列，形成一个新的关系。关系代数中的 **投影（Projection）** 操作用于选择关系的特定列，语法为 `π_{A,B}(R)`。"
+            },
+            {
+                "type": "single-choice",
+                "content": "给定两个关系R(A,B)和S(B,C)，其中A和B是R的属性，B和C是S的属性。执行R和S的自然连接运算后，结果关系的属性集是什么？",
+                "options": [
+                    "{B,C}",
+                    "{A,B}",
+                    "{A,B,C}",
+                    "{A,C}"
+                ],
+                "correct_answer": [
+                    "{A,B,C}"
+                ],
+                "analysis": "自然连接运算会保留两个关系中共同的属性，并将它们合并在一起，因此结果关系的属性集是{A,B,C}。自然连接（Natural Join）基于公共属性（B），合并后结果包含所有唯一属性（A, B, C）。"
+            },
+            {
+                "type": "single-choice",
+                "content": "给定关系R(A,B,C)和S(B,C,D)，执行R和S的θ连接运算，其中θ为B=S.B AND C=S.C，结果关系的属性集是什么？",
+                "options": [
+                    "{A,B,D}",
+                    "{A,B,C}",
+                    "{B,C,D}",
+                    "{A,B,C,D} "
+                ],
+                "correct_answer": [
+                    "{A,B,C,D} "
+                ],
+                "analysis": "θ连接运算会保留两个关系中的所有属性，并根据给定的条件进行匹配，因此结果关系的属性集是{A,B,C,D}。θ连接（Theta Join）保留两个关系的所有属性，结果为两关系的并集（A,B,C,D）。"
+            },
+            {
+                "type": "single-choice",
+                "content": "设有关系R(A,B,C)和S(B,C,D)，下列哪个表达式表示的是R和S的自然连接？",
+                "options": [
+                    "![](https://p.ananas.chaoxing.com/star3/origin/409c21f4c138146aea5ad9b45a388fa5.png)",
+                    "![](https://p.ananas.chaoxing.com/star3/origin/fc0aa6f4fe44db7615898b20a4f79b3f.png)",
+                    "![](https://p.ananas.chaoxing.com/star3/origin/c5865502a860890691e5000f91d5f587.png)",
+                    "![](https://p.ananas.chaoxing.com/star3/origin/91db9de58348e3d1aabf034337966947.png)"
+                ],
+                "correct_answer": [
+                    "![](https://p.ananas.chaoxing.com/star3/origin/409c21f4c138146aea5ad9b45a388fa5.png)"
+                ],
+                "analysis": "自然连接是一种特殊的等值连接，它要求两个关系中有相同的属性，并且在结果中只保留一个。"
+            },
+            {
+                "type": "single-choice",
+                "content": "在数据库设计中，为了确保数据的准确性和一致性，通常会使用哪种类型的完整性约束？",
+                "options": [
+                    "实体完整性",
+                    "参照完整性",
+                    "用户定义完整性",
+                    "以上都是"
+                ],
+                "correct_answer": [
+                    "以上都是"
+                ],
+                "analysis": "为了确保数据的准确性和一致性，通常会使用实体完整性、参照完整性和用户定义完整性这三种类型的完整性约束。实体完整性（主键约束）、参照完整性（外键约束）、用户定义完整性（如 CHECK 约束）共同保障数据准确性。"
+            },
+            {
+                "type": "single-choice",
+                "content": "当一个外键引用另一个表的主键时，如果主键值被删除，外键应该如何处理以保持参照完整性？",
+                "options": [
+                    "自动删除对应的外键值",
+                    "不允许删除主键值",
+                    "更新外键值为NULL",
+                    "不做任何处理"
+                ],
+                "correct_answer": [
+                    "不允许删除主键值"
+                ],
+                "analysis": "为了保持参照完整性，当主键值被删除时，外键值应该更新为NULL或者采取其他策略，如级联删除。默认情况下，若外键存在引用，删除主键值会被拒绝（RESTRICT），除非设置级联删除（CASCADE）或置空（SET NULL）。"
+            },
+            {
+                "type": "single-choice",
+                "content": "在数据库设计中，完整性约束的目的是什么？",
+                "options": [
+                    "提高数据的安全性",
+                    "确保数据的准确性和一致性",
+                    "优化查询性能",
+                    "简化数据操作"
+                ],
+                "correct_answer": [
+                    "确保数据的准确性和一致性"
+                ],
+                "analysis": "完整性约束的主要目的是确保数据的准确性和一致性，防止无效或不合理的数据进入数据库。完整性约束的核心目标是防止无效数据破坏逻辑一致性。"
+            },
+            {
+                "type": "single-choice",
+                "content": "在数据库设计中，为了保证数据的一致性和准确性，需要实施多种完整性约束。下列哪一项不属于数据库完整性约束？",
+                "options": [
+                    "实体完整性",
+                    "参照完整性",
+                    "用户自定义完整性",
+                    "数据冗余性"
+                ],
+                "correct_answer": [
+                    "数据冗余性"
+                ],
+                "analysis": "数据库完整性包括实体完整性、参照完整性和用户自定义完整性，而数据冗余性是数据库设计中的一个考虑因素，但不是完整性约束的一部分。数据冗余是设计问题，不属于完整性约束范畴。"
+            },
+            {
+                "type": "single-choice",
+                "content": "在数据库设计中，域完整性用于确保什么？",
+                "options": [
+                    "主键的唯一性",
+                    "外键引用的有效性",
+                    "数据类型和取值范围的正确性",
+                    "数据的非空性"
+                ],
+                "correct_answer": [
+                    "数据类型和取值范围的正确性"
+                ],
+                "analysis": "域完整性确保了数据类型和取值范围的正确性，防止无效数据进入数据库。域完整性通过数据类型、CHECK 约束等确保字段值的合法性。"
+            },
+            {
+                "type": "single-choice",
+                "content": "笛卡尔积操作会将两个关系的所有可能组合形成一个新的关系，因此会减少两个关系中的属性数量。",
+                "options": [
+                    "对",
+                    "错"
+                ],
+                "correct_answer": [
+                    "错"
+                ],
+                "analysis": "笛卡尔积的属性数量为两关系属性之和（如 R(A,B) × S(C,D) → 结果属性为 A,B,C,D）。"
+            },
+            {
+                "type": "single-choice",
+                "content": "自然连接要求两个关系具有相同的公共属性，这些属性上的值可以不相等。",
+                "options": [
+                    "对",
+                    "错"
+                ],
+                "correct_answer": [
+                    "错"
+                ],
+                "analysis": "自然连接要求公共属性上的值相等，否则元组不匹配。"
+            },
+            {
+                "type": "single-choice",
+                "content": "连接操作![](https://p.ananas.chaoxing.com/star3/origin/d259bd34044fd5be6694e65f678c907b.png)用于基于特定条件（如A=B）将两个关系中的元组进行匹配，形成一个新的关系。",
+                "options": [
+                    "对",
+                    "错"
+                ],
+                "correct_answer": [
+                    "对"
+                ],
+                "analysis": "连接操作通过条件（如 A=B）匹配两关系的元组，生成新关系。"
+            },
+            {
+                "type": "single-choice",
+                "content": "除法操作可以用于找出一个关系中所有不满足另一个关系条件的元组，是一种高级的关系操作。",
+                "options": [
+                    "对",
+                    "错"
+                ],
+                "correct_answer": [
+                    "错"
+                ],
+                "analysis": "除法操作（如 R ÷ S）用于找出 R 中满足与 S 所有元组关联的元组，而非“不满足”。"
+            },
+            {
+                "type": "single-choice",
+                "content": "在数据库设计中，如果一个字段被定义为外键，那么它必须引用另一个表的主键值。",
+                "options": [
+                    "对",
+                    "错"
+                ],
+                "correct_answer": [
+                    "对"
+                ],
+                "analysis": "外键必须引用另一表的主键或唯一约束字段。"
+            },
+            {
+                "type": "single-choice",
+                "content": "一个关系模式只能有一个“主键”。",
+                "options": [
+                    "对",
+                    "错"
+                ],
+                "correct_answer": [
+                    "对"
+                ],
+                "analysis": "主键是唯一的，一个表只能定义一个主键（但可包含多列的复合主键）。"
+            },
+            {
+                "type": "single-choice",
+                "content": "实体完整性确保每个实体具有唯一可以为空且不可重复的标识符，即主键。",
+                "options": [
+                    "对",
+                    "错"
+                ],
+                "correct_answer": [
+                    "错"
+                ],
+                "analysis": "主键必须唯一且 **不可为空**（NOT NULL），题目中“可以为空”错误。"
+            },
+            {
+                "type": "single-choice",
+                "content": "域完整性通过数据类型定义来实现，确保数据类型和取值范围的正确性。",
+                "options": [
+                    "对",
+                    "错"
+                ],
+                "correct_answer": [
+                    "对"
+                ],
+                "analysis": "域完整性通过定义字段的数据类型（如 INT, VARCHAR）和约束（如 CHECK）实现。"
+            },
+            {
+                "type": "single-choice",
+                "content": "用户定义完整性可以通过唯一性约束来实现，确保数据满足特定的业务规则。",
+                "options": [
+                    "对",
+                    "错"
+                ],
+                "correct_answer": [
+                    "错"
+                ],
+                "analysis": "唯一性约束属于 **实体完整性**，用户定义完整性通常通过 CHECK 约束或触发器实现。"
+            },
+            {
+                "type": "single-choice",
+                "content": "完整性约束的主要目的是确保数据的准确性和一致性，防止无效或不合理的数据进入数据库。",
+                "options": [
+                    "对",
+                    "错"
+                ],
+                "correct_answer": [
+                    "对"
+                ],
+                "analysis": "完整性约束的核心目标是防止无效数据（如重复主键、外键引用不存在值）进入数据库。"
+            }
+        ]
+    ,
+    "sets": [
+        {
+            "id": "sjk-8",
+            "name": "08-计科-数据库作业2",
+            "category": "数据库原理",
+            "tags": [
+                "数据库原理",
+                "计科"
+            ],
+            "createTime": "2025-06-30 21:27:00",
+            "updateTime": "2025-06-30 21:27:00",
+            "description": ""
+        }
+    ]
+}

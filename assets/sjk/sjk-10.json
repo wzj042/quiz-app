@@ -1,0 +1,280 @@
+{
+    
+        "questions": [
+            {
+                "type": "single-choice",
+                "content": "在数据库中删除触发器使用（   ）。",
+                "options": [
+                    "ROLLBACK",
+                    "DROP",
+                    "DELALLOCATE",
+                    "DELETE"
+                ],
+                "correct_answer": [
+                    "DROP"
+                ],
+                "analysis": "删除触发器使用`DROP TRIGGER`语句，`DROP`用于删除数据库对象。"
+            },
+            {
+                "type": "single-choice",
+                "content": "数据库中建立索引的目的是为了（   ）。",
+                "options": [
+                    "加快建表速度",
+                    "加快查询速度",
+                    "提高安全性",
+                    "节省存储空间"
+                ],
+                "correct_answer": [
+                    "加快查询速度"
+                ],
+                "analysis": "索引的主要作用是加速数据检索，提高查询效率。"
+            },
+            {
+                "type": "single-choice",
+                "content": "视图是数据库系统三级模式中的（   ）。",
+                "options": [
+                    "外模式",
+                    "模式",
+                    "内模式",
+                    "模式映像"
+                ],
+                "correct_answer": [
+                    "外模式"
+                ],
+                "analysis": "视图属于数据库三级模式中的外模式，面向用户的数据逻辑表示。"
+            },
+            {
+                "type": "single-choice",
+                "content": "下列说法不正确的是（ ）。",
+                "options": [
+                    "基本表和视图一样，都是关系",
+                    "可以使用SQL对基本表和视图进行操作",
+                    "可以从基本表或视图上定义视图",
+                    "基本表和视图中都存储数据"
+                ],
+                "correct_answer": [
+                    "基本表和视图中都存储数据"
+                ],
+                "analysis": "视图不存储数据，仅保存查询定义，数据仍存储在基表中。"
+            },
+            {
+                "type": "single-choice",
+                "content": "在SQL中，以下关于视图的描述，正确的是（   ）。",
+                "options": [
+                    "视图是一个虚拟表，其数据并不真实存放数据库中。",
+                    "视图中包含的列，只能来源同一个基本表。",
+                    "视图的运用会增加数据库的安全风险。",
+                    "使用视图对数据进行更改时候，只改变视图数据，对基本表数据没有影响。"
+                ],
+                "correct_answer": [
+                    "视图是一个虚拟表，其数据并不真实存放数据库中。"
+                ],
+                "analysis": ""
+            },
+            {
+                "type": "single-choice",
+                "content": "在SQL Server中创建视图的正确语法是？",
+                "options": [
+                    "CREATE VIEW view_name AS SELECT column1, column2 FROM table_name WHERE condition;",
+                    "MAKE VIEW view_name FROM SELECT column1, column2 WHERE condition;",
+                    "NEW VIEW view_name WITH (column1, column2) FROM table_name;",
+                    "DEFINE VIEW view_name USING table_name COLUMNS (column1, column2);"
+                ],
+                "correct_answer": [
+                    "CREATE VIEW view_name AS SELECT column1, column2 FROM table_name WHERE condition;"
+                ],
+                "analysis": "标准语法为`CREATE VIEW ... AS SELECT ...`。"
+            },
+            {
+                "type": "single-choice",
+                "content": "要修改SQL Server中已存在的视图定义，应该使用？",
+                "options": [
+                    "UPDATE VIEW view_name AS SELECT...",
+                    "MODIFY VIEW view_name AS SELECT...",
+                    "ALTER VIEW view_name AS SELECT...",
+                    "CHANGE VIEW view_name AS SELECT..."
+                ],
+                "correct_answer": [
+                    "ALTER VIEW view_name AS SELECT..."
+                ],
+                "analysis": "修改视图定义使用`ALTER VIEW`语句。"
+            },
+            {
+                "type": "single-choice",
+                "content": "在SQL Server中，关于聚集索引(Clustered Index)的说法正确的是？",
+                "options": [
+                    "一个表可以创建多个聚集索引",
+                    "聚集索引会改变表中数据的物理存储顺序",
+                    "聚集索引适合频繁更新的列",
+                    "创建聚集索引不会影响插入性能"
+                ],
+                "correct_answer": [
+                    "聚集索引会改变表中数据的物理存储顺序"
+                ],
+                "analysis": "聚集索引决定数据的物理存储顺序，一个表只能有一个聚集索引。"
+            },
+            {
+                "type": "single-choice",
+                "content": "要在SQL Server中为\"Employees\"表的\"LastName\"列创建非聚集索引，正确的语句是？",
+                "options": [
+                    "CREATE CLUSTERED INDEX IX_LastName ON Employees(LastName);",
+                    "MAKE INDEX IX_LastName ON Employees COLUMN LastName;",
+                    "ADD NONCLUSTERED INDEX IX_LastName FOR Employees(LastName);",
+                    "CREATE INDEX IX_LastName ON Employees(LastName);"
+                ],
+                "correct_answer": [
+                    "CREATE INDEX IX_LastName ON Employees(LastName);"
+                ],
+                "analysis": "默认创建非聚集索引，语法为`CREATE INDEX ... ON ...`。"
+            },
+            {
+                "type": "single-choice",
+                "content": "关于SQL Server视图的特点，以下说法错误的是？",
+                "options": [
+                    "视图可以简化复杂查询",
+                    "视图实际存储数据",
+                    "视图可以基于一个或多个表创建",
+                    "视图可以控制用户访问的数据列"
+                ],
+                "correct_answer": [
+                    "视图实际存储数据"
+                ],
+                "analysis": ""
+            },
+            {
+                "type": "single-choice",
+                "content": "触发器主要是通过事件进行触发而被执行的，而存储过程可以通过存储过程名字而被直接调用。",
+                "options": [
+                    "对",
+                    "错"
+                ],
+                "correct_answer": [
+                    "对"
+                ],
+                "analysis": ""
+            },
+            {
+                "type": "single-choice",
+                "content": "视图是一个虚拟表，并不表示任何物理数据，而只是用来查看数据的窗口而已。",
+                "options": [
+                    "对",
+                    "错"
+                ],
+                "correct_answer": [
+                    "对"
+                ],
+                "analysis": ""
+            },
+            {
+                "type": "single-choice",
+                "content": "可以在临时表上创建视图。",
+                "options": [
+                    "对",
+                    "错"
+                ],
+                "correct_answer": [
+                    "错"
+                ],
+                "analysis": "临时表无法用于创建视图，视图需持久化定义。"
+            },
+            {
+                "type": "single-choice",
+                "content": "数据库存储过程不能调用函数，但是函数可以调用存储过程。",
+                "options": [
+                    "对",
+                    "错"
+                ],
+                "correct_answer": [
+                    "错"
+                ],
+                "analysis": "函数不能调用存储过程（因函数要求无副作用）。"
+            },
+            {
+                "type": "single-choice",
+                "content": "在SQL Server数据库中，主键索引就是非聚集索引，其索引顺序和数据表的物理顺序不相同。",
+                "options": [
+                    "对",
+                    "错"
+                ],
+                "correct_answer": [
+                    "错"
+                ],
+                "analysis": "主键默认是聚集索引（除非显式指定为非聚集）。"
+            },
+            {
+                "type": "single-choice",
+                "content": "对于用户要执行定义好的触发器，需要执行exec命令调用目标触发器。",
+                "options": [
+                    "对",
+                    "错"
+                ],
+                "correct_answer": [
+                    "错"
+                ],
+                "analysis": ""
+            },
+            {
+                "type": "single-choice",
+                "content": "通过视图可以修改表的属性。",
+                "options": [
+                    "对",
+                    "错"
+                ],
+                "correct_answer": [
+                    "错"
+                ],
+                "analysis": "视图不能修改表结构（如列属性），仅支持数据操作。"
+            },
+            {
+                "type": "single-choice",
+                "content": "视图是物理存储数据的数据库对象。",
+                "options": [
+                    "对",
+                    "错"
+                ],
+                "correct_answer": [
+                    "错"
+                ],
+                "analysis": ""
+            },
+            {
+                "type": "single-choice",
+                "content": "通过视图可以更新基表数据，但必须满足特定条件（如视图不包含聚合函数）。",
+                "options": [
+                    "对",
+                    "错"
+                ],
+                "correct_answer": [
+                    "对"
+                ],
+                "analysis": "若视图满足单表、无聚合等条件，可通过视图更新基表数据。"
+            },
+            {
+                "type": "single-choice",
+                "content": "创建视图时必须指定所有列名，不能使用SELECT 。",
+                "options": [
+                    "对",
+                    "错"
+                ],
+                "correct_answer": [
+                    "错"
+                ],
+                "analysis": "创建视图时可以使用`SELECT *`，但需注意基表结构变化的影响。"
+            }
+        ]
+    ,
+    "sets": [
+        {
+            "id": "sjk-10",
+            "name": "10-计科-数据库作业4",
+            "category": "数据库原理",
+            "tags": [
+                "数据库原理",
+                "计科"
+            ],
+            "createTime": "2025-06-30 21:27:00",
+            "updateTime": "2025-06-30 21:27:00",
+            "description": ""
+        }
+    ]
+}
