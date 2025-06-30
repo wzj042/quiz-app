@@ -391,6 +391,11 @@ export default class PracticeManager {
                 throw new Error('AI Manager not initialized');
             }
 
+            if (!this.aiManager.hasApiKey()) {
+                console.error('[PracticeManager:checkAnswerWithAI] API Key not set');
+                throw new Error('API Key not set');
+            }
+
             const systemPrompt = `你是一个专业的教育评分系统。你需要根据提供的题目、参考答案和学生答案进行评分。
 你必须以JSON格式返回结果，包含以下字段：
 {
@@ -508,7 +513,7 @@ export default class PracticeManager {
             return result.score >= threshold;
         } catch (error) {
             console.error('[PracticeManager:checkAnswerWithAI] Error:', error);
-            return false;
+            throw error;
         }
     }
 
@@ -524,6 +529,11 @@ export default class PracticeManager {
             if (!AIManager.isAIManager(this.aiManager)) {
                 console.error('[PracticeManager:getAIAnalysis] Invalid AIManager instance');
                 throw new Error('Invalid AIManager instance');
+            }
+
+            if (!this.aiManager.hasApiKey()) {
+                console.error('[PracticeManager:getAIAnalysis] API Key not set');
+                throw new Error('API Key not set');
             }
 
             const systemPrompt = `你是一个专业的题目解析系统。你需要解释为什么给定的答案是正确的。

@@ -190,6 +190,16 @@ class AIManager {
         this.log('debug', `API Key updated for provider: ${provider}`);
     }
 
+    // 删除指定 provider 的 API Key
+    deleteApiKey(provider) {
+        localStorage.removeItem(`AI_API_KEY_${provider}`);
+        // 如果删除的是当前 provider 的 key，同时禁用自动评分
+        if (provider === this.getCurrentProvider()) {
+            this.setAutoScoring(false);
+        }
+        this.log('debug', `API Key deleted for provider: ${provider}`);
+    }
+
     // 获取当前选中预设的 provider
     getCurrentProvider() {
         const preset = this.getCurrentPreset();

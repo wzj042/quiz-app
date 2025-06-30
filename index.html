@@ -400,9 +400,8 @@
         }
 
         .test-prompt {
-            width: 70%;
+            width: 100%;
             min-height: 80px;
-            padding: 8px;
             border: 1px solid #ddd;
             border-radius: 4px;
             resize: vertical;
@@ -411,7 +410,7 @@
         }
 
         .test-btn {
-            padding: 8px 16px;
+            width: 100%;
             background: #A5B596;
             color: white;
             border: none;
@@ -1031,7 +1030,6 @@
         .ai-modal textarea {
             border: 1px solid #DDD;
             border-radius: 4px;
-            padding: 8px 12px;
             font-size: 14px;
             transition: border-color 0.3s ease;
         }
@@ -1149,11 +1147,97 @@
             color: #999;
             font-style: italic;
         }
+
+        .api-key-input-container {
+            display: flex;
+            gap: 8px;
+        }
+        .api-key-input-container input {
+            flex: 4;
+        }
+        .delete-api-key-btn {
+            flex: 1;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            background: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+        .delete-api-key-btn:hover {
+            background: #f5f5f5;
+            border-color: #ccc;
+        }
+
+        /* Toast notification styles */
+        .toast-container {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 9999;
+        }
+
+        .toast {
+            background-color: #333;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 4px;
+            margin-bottom: 10px;
+            min-width: 250px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            animation: slideIn 0.3s ease-out;
+        }
+
+        .toast.success {
+            background-color: #4caf50;
+        }
+
+        .toast.error {
+            background-color: #f44336;
+        }
+
+        .toast.info {
+            background-color: #2196f3;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes fadeOut {
+            from {
+                transform: translateX(0);
+                opacity: 1;
+            }
+            to {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+        }
     </style>
 </head>
 
 <body>
     <div id="app" class="container">
+        <!-- Toast container -->
+        <div class="toast-container">
+            <div v-for="toast in toasts" :key="toast.id" :class="['toast', toast.type]" :data-toast-id="toast.id">
+                {{ toast.message }}
+            </div>
+        </div>
 
         <!-- 音效配置模态窗口 -->
         <div v-if="showSoundModal" class="ai-modal-overlay" @click.self="closeSoundModal">
@@ -1249,10 +1333,25 @@
 
                 <!-- API Key 输入 -->
                 <form class="ai-input-group" @submit.prevent v-if="currentPreset?.name">
-                    <label :for="'apiKey_' + currentProvider">{{ currentPreset.name }} API Key:</label>
-                    <input type="password" :id="'apiKey_' + currentProvider" v-model="providerApiKeys[currentProvider]"
-                        @input="updateApiKey" :placeholder="`请输入 ${currentPreset.name} 的 API Key`">
+                    <label :for="'apiKey_' + currentProvider">{{ currentPreset.name }} API Key</label>
+                    <div class="api-key-input-container">
+                        <input type="password" :id="'apiKey_' + currentProvider" v-model="providerApiKeys[currentProvider]"
+                            @input="updateApiKey" :placeholder="`请输入 ${currentPreset.name} 的 API Key，仅本地存储`">
+                        <button type="button" class="delete-api-key-btn" @click="deleteProviderApiKey" title="删除 API Key">
+                            <svg viewBox="0 0 24 24" width="16" height="16">
+                                <path fill="currentColor" d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
+                            </svg>
+                        </button>
+                    </div>
                 </form>
+                <div class="api-key-help">
+                    <p class="help-text">
+                        {{ providerApiKeys[currentProvider] ? '🐳' : '🐋' }} <strong>获取 API Key：</strong> 
+                        <a href="https://platform.deepseek.com/usage" target="_blank" rel="noopener noreferrer">
+                            deepseek
+                        </a>
+                    </p>
+                </div>
 
                 <!-- AI 自动评分设置 -->
                 <div class="ai-input-group">
@@ -1270,7 +1369,7 @@
                         <textarea id="testPrompt" v-model="testPrompt" rows="3" 
                             placeholder="输入测试提示词" class="test-prompt"></textarea>
                         <button class="test-btn" @click="testStreaming" :disabled="isTestingStream">
-                            {{ isTestingStream ? '测试中...' : '测试流式渲染' }}
+                            {{ isTestingStream ? '测试中...' : '测试连通性' }}
                         </button>
                     </div>
                     <div v-if="testStreamContent" class="test-result markdown-content" v-html="renderedTestContent()"></div>
@@ -1813,6 +1912,17 @@
                 </div>
             </div>
         </div>
+
+        <!-- 在 template 中更新 banner 的 HTML 结构 -->
+        <div v-if="banner.show" :class="['banner', banner.type]" role="alert">
+            <div class="banner-content">{{ banner.content }}</div>
+            <button v-if="banner.closeable" 
+                    class="banner-close" 
+                    @click="closeBanner"
+                    aria-label="关闭提示">
+                ×
+            </button>
+        </div>
     </div>
 
     <script type="module">
@@ -1893,7 +2003,7 @@
                     isGeneratingAnalysis: false,
                     aiAnalysisExplanation: '', // 添加用于流式渲染的状态
                     // 音效配置相关
-                    audioEnabled: true,
+                    audioEnabled: false,
                     volumeValue: 100,
                     comboWindowMs: 3000,
                     resetTimeoutMs: 5000,
@@ -1902,7 +2012,15 @@
                     currentScore: 0,
                     timerProgress: 0,
                     timeLeft: 0,
-                    timerInterval: null
+                    timerInterval: null,
+                    toasts: [], // Array to store active toasts
+                    banner: {
+                        show: false,
+                        content: '',
+                        type: 'info',
+                        closeable: true
+                    },
+                    bannerTimer: null,
                 }
             },
             mounted() {
@@ -3181,14 +3299,29 @@
                     return false;
                 },
                 showBanner(content, type = 'info', closeable = true) {
+                    // 如果已有定时器，先清除
+                    if (this.bannerTimer) {
+                        clearTimeout(this.bannerTimer);
+                        this.bannerTimer = null;
+                    }
+                    
                     this.banner = {
                         show: true,
                         content,
                         type,
                         closeable
                     };
+
+                    // 3秒后自动隐藏
+                    this.bannerTimer = setTimeout(() => {
+                        this.closeBanner();
+                    }, 3000);
                 },
                 closeBanner() {
+                    if (this.bannerTimer) {
+                        clearTimeout(this.bannerTimer);
+                        this.bannerTimer = null;
+                    }
                     this.banner.show = false;
                 },
                 formatUpdateTime(isoString) {
@@ -4181,7 +4314,7 @@
 
                     } catch (error) {
                         console.error('[generateAIAnalysis] Failed to generate AI analysis:', error);
-                        this.showToast('生成AI解析失败，请稍后重试', 'error');
+                        this.showToast('生成AI解析失败，点击右上角鲸鱼图标检查配置，或稍后重试', 'error');
                     } finally {
                         this.isGeneratingAnalysis = false;
                         this.aiAnalysisExplanation = '';
@@ -4451,7 +4584,24 @@
                 },
 
                 updateAutoScoring() {
+                    // 如果要启用自动评分，先检查是否有 API key
+                    if (this.autoScoring && !aiManager.hasApiKey()) {
+                        this.showBanner('请先配置 API Key 再启用自动评分', 'warning');
+                        this.autoScoring = false;
+                        return;
+                    }
                     aiManager.setAutoScoring(this.autoScoring);
+                },
+
+                deleteProviderApiKey() {
+                    if (this.currentProvider) {
+                        // 清除输入框中的值
+                        this.providerApiKeys[this.currentProvider] = '';
+                        // 从 localStorage 中删除
+                        aiManager.deleteApiKey(this.currentProvider);
+                        // 显示提示
+                        this.showBanner(`已删除 ${this.currentPreset.name} 的 API Key`, 'info');
+                    }
                 },
 
                 handlePresetChange() {
@@ -4521,7 +4671,7 @@
 
                 // AI 流式渲染测试
                 async testStreaming() {
-                    if (!aiManager || this.isTestingStream) return;
+                    if (!this.checkApiKey()) return;
                     
                     this.isTestingStream = true;
                     this.testStreamContent = '正在连接...';
@@ -4538,7 +4688,7 @@
     5. 控制篇幅"
 }`;
 
-                        const response = await aiManager.streamChat([
+                        const response = await this.aiManager.streamChat([
                             { role: 'system', content: systemPrompt },
                             { role: 'user', content: this.testPrompt }
                         ], {
@@ -4597,6 +4747,11 @@
                         }
                     } catch (error) {
                         console.error('[testStreaming] Error:', error);
+                        if (error.message === 'API Key not set') {
+                            this.showToast('先配置 API Key 再测试', 'info');
+                        } else {
+                            this.showToast('测试失败: ' + error.message, 'error');
+                        }
                         this.testStreamContent = '测试失败: ' + error.message;
                     } finally {
                         this.isTestingStream = false;
@@ -4611,27 +4766,70 @@
 
                 // 添加手动触发AI评分的方法
                 async triggerAIScoring() {
-                    if (!this.practiceManager.aiManager) return;
+                    if (!this.checkApiKey()) return;
                     
-                    const q = this.currentQuestion;
-                    let answer;
-                    let isCorrect;
-                    
-                    if (q.type === 'fill-in-blank') {
-                        answer = this.fillInAnswers.join('\n');
-                    } else if (q.type === 'short-answer') {
-                        answer = this.shortAnswerText;
-                    } else {
-                        return;
+                    try {
+                        const q = this.currentQuestion;
+                        let answer;
+                        let isCorrect;
+                        
+                        if (q.type === 'fill-in-blank') {
+                            answer = this.fillInAnswers.join('\n');
+                        } else if (q.type === 'short-answer') {
+                            answer = this.shortAnswerText;
+                        } else {
+                            return;
+                        }
+                        
+                        isCorrect = await this.practiceManager.checkAnswerWithAI(answer, q);
+                        
+                        // 更新题目状态
+                        if (isCorrect !== null) {
+                            await this.practiceManager.updateQuestionStatus(q.id, isCorrect);
+                            this.updateLocalStats(isCorrect);
+                        }
+                    } catch (error) {
+                        if (error.message === 'API Key not set') {
+                            this.showToast('请点击右上角的鲸鱼图标设置 API Key', 'info');
+                        } else {
+                            this.showToast('AI 评分失败: ' + error.message, 'error');
+                        }
                     }
-                    
-                    isCorrect = await this.practiceManager.checkAnswerWithAI(answer, q);
-                    
-                    // 更新题目状态
-                    if (isCorrect !== null) {
-                        await this.practiceManager.updateQuestionStatus(q.id, isCorrect);
-                        this.updateLocalStats(isCorrect);
+                },
+
+                // Show a toast notification
+                showToast(message, type = 'info', duration = 3000) {
+                    const toast = {
+                        id: Date.now(),
+                        message,
+                        type
+                    };
+                    this.toasts.push(toast);
+
+                    // Remove the toast after duration
+                    setTimeout(() => {
+                        const index = this.toasts.findIndex(t => t.id === toast.id);
+                        if (index > -1) {
+                            const toastElement = document.querySelector(`[data-toast-id="${toast.id}"]`);
+                            if (toastElement) {
+                                toastElement.style.animation = 'fadeOut 0.3s ease-out';
+                                setTimeout(() => {
+                                    this.toasts.splice(index, 1);
+                                }, 300);
+                            } else {
+                                this.toasts.splice(index, 1);
+                            }
+                        }
+                    }, duration);
+                },
+
+                // Check if API key is set before AI operations
+                checkApiKey() {
+                    if (!this.aiManager?.hasApiKey()) {
+                        this.showToast('请点击右上角的鲸鱼图标设置 API Key', 'info');
+                        return false;
                     }
+                    return true;
                 },
             }
         };

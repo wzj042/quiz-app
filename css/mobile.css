@@ -1526,20 +1526,42 @@ textarea:focus-visible {
 
 .banner {
     position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    padding: 10px;
-    background-color: var(--theme-color);
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 12px 20px;
+    border-radius: 8px;
     color: white;
     display: flex;
     justify-content: space-between;
     align-items: center;
     z-index: 1000;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    min-width: 200px;
+    max-width: 90%;
+    animation: slideDown 0.3s ease-out;
+}
+
+.banner.info {
+    background-color: var(--theme-color);
+}
+
+.banner.warning {
+    background-color: #f0ad4e;
+}
+
+.banner.error {
+    background-color: #d9534f;
+}
+
+.banner.success {
+    background-color: #5cb85c;
 }
 
 .banner-content {
     flex: 1;
+    margin-right: 10px;
+    font-size: 14px;
 }
 
 .banner-close {
@@ -1548,6 +1570,24 @@ textarea:focus-visible {
     color: white;
     font-size: 16px;
     cursor: pointer;
+    padding: 4px;
+    opacity: 0.8;
+    transition: opacity 0.2s;
+}
+
+.banner-close:hover {
+    opacity: 1;
+}
+
+@keyframes slideDown {
+    from {
+        transform: translate(-50%, -100%);
+        opacity: 0;
+    }
+    to {
+        transform: translate(-50%, 0);
+        opacity: 1;
+    }
 }
 
 .category-header {
