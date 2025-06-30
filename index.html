@@ -1812,7 +1812,7 @@
                 <h1 class="title">答题完成</h1>
                 <p>本轮共 {{ quizList.length }} 题，已完成：{{ completedCount }}。</p>
                 <button type="button" class="btn" @click="pageState = 'home'">
-                    返回题目选择 
+                    返回题目选择 （空格）
                 </button>
             </div>
         </template>
@@ -2964,9 +2964,8 @@
 
                 isCorrectOptionMulti(opt) {
                     const ans = this.currentQuestion?.correct_answer || [];
-                    // 使用选项的索引来判断是否正确
-                    const optIndex = this.currentQuestion?.options.indexOf(opt);
-                    const isCorrect = optIndex !== -1 && ans.includes(this.currentQuestion.options[optIndex]);
+                    // 直接检查选项是否在正确答案数组中
+                    const isCorrect = ans.includes(opt);
                     console.log('Checking multi option correctness:', {
                         option: opt,
                         correctAnswers: ans,
@@ -3970,22 +3969,9 @@
                             // 如果是单选或多选题，打乱选项
                             if ((questionCopy.type === 'single-choice' || questionCopy.type === 'multiple-choice') && Array.isArray(questionCopy.options)) {
                                 const originalOptions = [...questionCopy.options];
-                                const originalCorrectAnswer = [...questionCopy.correct_answer];
                                 const shuffledOptions = this.shuffleArray([...originalOptions]);
-
-                                // 更新正确答案
-                                if (questionCopy.type === 'single-choice') {
-                                    const oldCorrectAnswer = originalCorrectAnswer[0];
-                                    const newIndex = shuffledOptions.indexOf(oldCorrectAnswer);
-                                    if (newIndex !== -1) {
-                                        questionCopy.correct_answer = [shuffledOptions[newIndex]];
-                                    }
-                                } else {
-                                    questionCopy.correct_answer = originalCorrectAnswer.map(ans => {
-                                        const newAns = shuffledOptions[originalOptions.indexOf(ans)];
-                                        return newAns;
-                                    });
-                                }
+                                
+                                // 只更新选项的显示顺序，不修改正确答案
                                 questionCopy.options = shuffledOptions;
                             }
                             return {

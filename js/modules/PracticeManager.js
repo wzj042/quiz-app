@@ -153,12 +153,11 @@ export default class PracticeManager {
                 }
 
                 if (isDifferent) {
-                    // 打乱选项
+                    // 打乱选项顺序，但保持正确答案不变
                     this.questions.forEach(q => {
                         if ((q.type === 'single-choice' || q.type === 'multiple-choice') && Array.isArray(q.options)) {
                             try {
                                 const originalOptions = [...q.options];
-                                const originalCorrectAnswer = [...q.correct_answer];
                                 const shuffledOptions = [...originalOptions];
                                 
                                 // 打乱选项
@@ -167,7 +166,7 @@ export default class PracticeManager {
                                     [shuffledOptions[k], shuffledOptions[l]] = [shuffledOptions[l], shuffledOptions[k]];
                                 }
                                 
-                                // 不更新正确答案，只更新选项的显示顺序
+                                // 只更新选项的显示顺序，不修改正确答案
                                 q.options = shuffledOptions;
                             } catch (error) {
                                 console.error('[PracticeManager:shuffleQuestions] Failed to shuffle options:', error);

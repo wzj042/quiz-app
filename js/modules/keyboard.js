@@ -171,9 +171,11 @@ export default class KeyboardManager {
                 return;
             }
 
-            // 空格键提交/下一题
+            // 空格键提交/下一题/返回题目选择
             if (e.key === ' ' || e.key === 'Spacebar') {
-                if (!this.app.showAnswer) {
+                if (this.app.pageState === 'result') {
+                    this.app.pageState = 'home';
+                } else if (!this.app.showAnswer) {
                     // 检查是否已选择选项
                     if (this.app.hasAnswer()) {
                         this.app.submitAnswer();
