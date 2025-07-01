@@ -1,5 +1,5 @@
 {
-  "updateTime": "2025-06-30 21:55:32",
+  "updateTime": "2025-07-01 13:02:41",
   "banks": [
     {
       "file": "demo.json",
@@ -7,8 +7,18 @@
       "category": "未分类"
     },
     {
+      "file": "jw/jw-01.json",
+      "name": "01-计网复习题重构",
+      "category": "计算机网络"
+    },
+    {
+      "file": "jw/jw-02.json",
+      "name": "02-计网考点生成习题",
+      "category": "计算机网络"
+    },
+    {
       "file": "jw/jw-all.json",
-      "name": "00-计网-复习题",
+      "name": "xx-计网-复习题",
       "category": "计算机网络"
     },
     {
