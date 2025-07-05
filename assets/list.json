@@ -1,120 +1,15 @@
 {
-  "updateTime": "2025-07-01 13:02:41",
+  "updateTime": "2025-07-05 13:01:44",
   "banks": [
+    {
+      "file": "byyl_bank.json",
+      "name": "编译原理复习",
+      "category": "未分类"
+    },
     {
       "file": "demo.json",
       "name": "题型演示",
       "category": "未分类"
-    },
-    {
-      "file": "jw/jw-01.json",
-      "name": "01-计网复习题重构",
-      "category": "计算机网络"
-    },
-    {
-      "file": "jw/jw-02.json",
-      "name": "02-计网考点生成习题",
-      "category": "计算机网络"
-    },
-    {
-      "file": "jw/jw-all.json",
-      "name": "xx-计网-复习题",
-      "category": "计算机网络"
-    },
-    {
-      "file": "rjgc/rigc-4.json",
-      "name": "04-软工-期中",
-      "category": "软件工程"
-    },
-    {
-      "file": "rjgc/rjgc-1.json",
-      "name": "01-软件工程-概述",
-      "category": "软件工程"
-    },
-    {
-      "file": "rjgc/rjgc-2.json",
-      "name": "02-软件项目管理",
-      "category": "软件工程"
-    },
-    {
-      "file": "rjgc/rjgc-3.json",
-      "name": "03-结构化编码和测试",
-      "category": "软件工程"
-    },
-    {
-      "file": "rjgc/rjgc-5.json",
-      "name": "05-软工-作业4",
-      "category": "软件工程"
-    },
-    {
-      "file": "rjgc/rjgc-6.json",
-      "name": "06-软工-作业5",
-      "category": "软件工程"
-    },
-    {
-      "file": "rjgc/rjgc-x.json",
-      "name": "x-软工期末知识点",
-      "category": "软件工程"
-    },
-    {
-      "file": "sjk/sjk-1.json",
-      "name": "01-数据库作业1",
-      "category": "数据库原理"
-    },
-    {
-      "file": "sjk/sjk-10.json",
-      "name": "10-计科-数据库作业4",
-      "category": "数据库原理"
-    },
-    {
-      "file": "sjk/sjk-11.json",
-      "name": "11-计科-数据库作业7",
-      "category": "数据库原理"
-    },
-    {
-      "file": "sjk/sjk-2.json",
-      "name": "02-数据库作业2",
-      "category": "数据库原理"
-    },
-    {
-      "file": "sjk/sjk-3.json",
-      "name": "03-数据库期中",
-      "category": "数据库原理"
-    },
-    {
-      "file": "sjk/sjk-4.json",
-      "name": "04-数据库作业2",
-      "category": "数据库原理"
-    },
-    {
-      "file": "sjk/sjk-5.json",
-      "name": "05-数据库作业5",
-      "category": "数据库原理"
-    },
-    {
-      "file": "sjk/sjk-6.json",
-      "name": "06-数据库语法练习",
-      "category": "数据库原理"
-    },
-    {
-      "file": "sjk/sjk-7.json",
-      "name": "07-计科-数据库作业1",
-      "category": "数据库原理"
-    },
-    {
-      "file": "sjk/sjk-8.json",
-      "name": "08-计科-数据库作业2",
-      "category": "数据库原理"
-    },
-    {
-      "file": "sjk/sjk-9.json",
-      "name": "09-计科-数据库作业3",
-      "category": "数据库原理"
-    },
-    {
-      "file": "sjk/sjk-x.json",
-      "name": "xx-数据库期末考点",
-      "category": "数据库原理"
     }
   ]
 }

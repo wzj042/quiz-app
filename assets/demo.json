@@ -46,6 +46,10 @@
         {
             "id": "demo-set",
             "name": "题型演示",
+            "category": "未分类",
+            "tags": ["未分类"],
+            "createTime": "2025-05-09 15:50:00",
+            "updateTime": "2025-06-26 15:50:00",
             "description": "**使用单选题适配判断题，不需要加题目序号和选项的字幕序号。**\n这个题库演示了系统支持的所有题型和渲染特性 ![示例图片](https://img20.360buyimg.com/openfeedback/jfs/t1/316849/31/11431/16081/68591208Fefbbf1b0/c67e77126634cdaa.png)"
         }
     ]
